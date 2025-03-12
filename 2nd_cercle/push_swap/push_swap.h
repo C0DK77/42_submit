@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/02/10 18:32:32 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/03/12 18:01:49 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,13 @@ typedef struct s_list
 	struct s_list	*next;
 	struct s_list	*prev;
 }					t_list;
+
+void	ft_append_node(t_list **head, int nbr);
+void	ft_list_swap(t_list **pile);
+void	ft_list_push(t_list **pile_1, t_list **pile_2);
+void	ft_list_rotate(t_list **pile);
+void	ft_list_reverse_rotate(t_list **pile);
+void	ft_print_pile(t_list *pile_a, t_list *pile_b);
+void	push_swap(int ac, char **av);
 
 #endif
