@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:35:56 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/12 17:56:55 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/15 14:31:56 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 //	FONCTION LISTE
 
-void	ft_append_node(t_list **head, int nbr)
+void	ft_append_node(t_list **head, int nbr, int target_node)
 {
 	t_list	*new_node;
 	t_list	*t;
@@ -23,6 +23,7 @@ void	ft_append_node(t_list **head, int nbr)
 	if (!new_node)
 		return ;
 	new_node->nbr = nbr;
+	new_node->target_node = target_node;
 	new_node->next = NULL;
 	if (!*head)
 		*head = new_node;
@@ -63,7 +64,7 @@ void	ft_list_push(t_list **pile_1, t_list **pile_2)
 	t1 = *pile_1;
 	first_node_pile_1 = t1->next;
 	*pile_1 = first_node_pile_1;
-	ft_append_node(&*pile_2, t1->nbr);
+	ft_append_node(&*pile_2, t1->nbr, t1->target_node);
 	ft_list_reverse_rotate(&*pile_2);
 }
 
@@ -114,7 +115,7 @@ void	ft_print_pile(t_list *pile_a, t_list *pile_b)
 	printf("PILE_A\n");
 	while (pile_a)
 	{
-		printf("noeud : %i -> entier : %i -> adresse : %p \n", i, pile_a->nbr,
+		printf("noeud : %i -> entier : %i -> adresse : %p \n", pile_a->target_node, pile_a->nbr,
 			pile_a);
 		pile_a = pile_a->next;
 		i++;
@@ -123,7 +124,7 @@ void	ft_print_pile(t_list *pile_a, t_list *pile_b)
 	printf("PILE_B\n");
 	while (pile_b)
 	{
-		printf("noeud : %i -> entier : %i -> adresse : %p \n", i, pile_b->nbr,
+		printf("noeud : %i -> entier : %i -> adresse : %p \n", pile_b->target_node, pile_b->nbr,
 			pile_b);
 		pile_b = pile_b->next;
 		i++;
