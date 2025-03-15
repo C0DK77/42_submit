@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/03/15 16:24:44 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/15 17:23:37 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void				ft_list_swap(t_list **pile);
 void				ft_list_push(t_list **pile_1, t_list **pile_2);
 void				ft_list_rotate(t_list **pile);
 void				ft_list_reverse_rotate(t_list **pile);
-void				ft_print_pile(t_list *pile_a, t_list *pile_b);
+void				ft_print_pile(t_list *pile_a, t_list *pile_b, int ac);
 void				push_swap(int ac, char **av);
 void				ft_append_target_node(t_list **pile);
 

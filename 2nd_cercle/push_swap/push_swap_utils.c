@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:35:56 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/15 16:29:33 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/15 17:07:30 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,23 +132,30 @@ void	ft_list_reverse_rotate(t_list **pile)
 
 //	FONCTION PRINT PILE
 
-void	ft_print_pile(t_list *pile_a, t_list *pile_b)
+void	ft_print_pile(t_list *pile_a, t_list *pile_b, int ac)
 {
 	int i;
+	int low_value;
+	int medium_value;
+	int high_value;
 
 	i = 1;
-	printf("PILE_A\n");
+	low_value = (ac - 1) / 3;
+	medium_value = (ac - 1) / 3 * 2;
+	high_value = ac - 1;
+	printf("low value : %i\nmedium value : %i\nhigh value : %i\n\n", low_value, medium_value, high_value);
+	printf("PILE_A\n\n");
 	while (pile_a)
 	{
-		printf("noeud : %i -> entier : %i -> valeur de trie : %i -> adresse : %p \n", i, pile_a->nbr, pile_a->target_node, pile_a);
+		printf("noeud : %i -> entier : %i -> valeur de trie : %i -> adresse : %p \n\n", i, pile_a->nbr, pile_a->target_node, pile_a);
 		pile_a = pile_a->next;
 		i++;
 	}
-	i = 0;
-	printf("PILE_B\n");
+	i = 1;
+	printf("PILE_B\n\n");
 	while (pile_b)
 	{
-		printf("noeud : %i -> entier : %i -> valeur de trie : %i -> adresse : %p \n", i, pile_b->nbr, pile_b->target_node, pile_b);
+		printf("noeud : %i -> entier : %i -> valeur de trie : %i -> adresse : %p \n\n", i, pile_b->nbr, pile_b->target_node, pile_b);
 		pile_b = pile_b->next;
 		i++;
 	}
