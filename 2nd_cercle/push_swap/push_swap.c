@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/03/15 14:54:06 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/15 16:27:15 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,7 @@ void	push_swap(int ac, char **av)
 		ft_append_node(&pile_b, atoi(av[i]), i);
 		i++;
 	}
-	ft_print_pile(pile_a, pile_b);
-	printf("GGGGGGGGGG\n");
-	t_list *tmp;
-	int t_target_node;
-	tmp = pile_a;
-	while (tmp->next)
-	{
-		if(tmp->nbr > tmp->next->nbr)
-		{
-			t_target_node = tmp->target_node;
-			tmp->target_node = tmp->next->target_node;
-			tmp->next->target_node = t_target_node;
-			printf("%i -> %i\n", tmp->target_node, tmp->nbr);
-		}
-		tmp = tmp->next;
-	}
+	ft_append_target_node(&pile_a);
 	ft_print_pile(pile_a, pile_b);
 	ft_list_swap(&pile_a);
 	ft_print_pile(pile_a, pile_b);

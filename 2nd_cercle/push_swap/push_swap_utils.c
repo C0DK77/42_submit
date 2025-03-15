@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:35:56 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/15 14:31:56 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/15 16:29:33 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,31 @@ void	ft_append_node(t_list **head, int nbr, int target_node)
 		while (t->next)
 			t = t->next;
 		t->next = new_node;
+	}
+}
+
+//	FONCTION POUR TROUVER LE CLASSEMENT DES NOMBRES
+
+void	ft_append_target_node(t_list **pile)
+{
+	t_list	*tmp1;
+	t_list	*tmp2;
+	int		t_target_node;
+	int		i;
+
+	tmp1 = *pile;
+	while (tmp1)
+	{
+		i = 1;
+		tmp2 = *pile;
+		while (tmp2)
+		{
+			if (tmp1->nbr > tmp2->nbr)
+				i++;
+			tmp2 = tmp2->next;
+		}
+		tmp1->target_node = i;
+		tmp1 = tmp1->next;
 	}
 }
 
@@ -111,12 +136,11 @@ void	ft_print_pile(t_list *pile_a, t_list *pile_b)
 {
 	int i;
 
-	i = 0;
+	i = 1;
 	printf("PILE_A\n");
 	while (pile_a)
 	{
-		printf("noeud : %i -> entier : %i -> adresse : %p \n", pile_a->target_node, pile_a->nbr,
-			pile_a);
+		printf("noeud : %i -> entier : %i -> valeur de trie : %i -> adresse : %p \n", i, pile_a->nbr, pile_a->target_node, pile_a);
 		pile_a = pile_a->next;
 		i++;
 	}
@@ -124,8 +148,7 @@ void	ft_print_pile(t_list *pile_a, t_list *pile_b)
 	printf("PILE_B\n");
 	while (pile_b)
 	{
-		printf("noeud : %i -> entier : %i -> adresse : %p \n", pile_b->target_node, pile_b->nbr,
-			pile_b);
+		printf("noeud : %i -> entier : %i -> valeur de trie : %i -> adresse : %p \n", i, pile_b->nbr, pile_b->target_node, pile_b);
 		pile_b = pile_b->next;
 		i++;
 	}
