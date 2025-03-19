@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:35:56 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/19 19:58:09 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/19 20:32:57 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void ft_split_list_between_a_and_b(t_list **pile_a, t_list **pile_b, int ac)
 	i = 1;
 	while (i < ac)
 	{
-		tmp = (*pile_a)->next;
+		//tmp = (*pile_a)->next;
 
 		if ((*pile_a)->target_node <= (ac - 1) / 3)
 		{
@@ -158,6 +158,22 @@ void ft_split_list_between_a_and_b(t_list **pile_a, t_list **pile_b, int ac)
 		i++;
 	}
 }
+
+//	FONCTION VERIFICATION TRIE
+
+// void ft_verif_classement (t_list **pile_a, int ac)
+// {
+// 	t_list *tmp;
+// 	int i;
+
+// 	i = 0;
+// 	while (i < ac)
+// 	{
+// 		tmp = (*pile_a)->next;
+// 		if 
+// 	}
+// 	tmp = pile_a;
+// }
 
 //	FONCTION PRINT PILE
 

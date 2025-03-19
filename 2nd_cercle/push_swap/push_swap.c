@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/03/19 19:59:44 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/19 20:33:40 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	push_swap(int ac, char **av)
 		ft_append_node(&pile_a, atoi(av[i]), i);
 		i++;
 	}
-	ft_print_pile(pile_a, pile_b, ac);
+	//ft_print_pile(pile_a, pile_b, ac);
 	ft_append_target_node(&pile_a);
 	ft_split_list_between_a_and_b(&pile_a, &pile_b, ac);
 	ft_print_pile(pile_a, pile_b, ac);
