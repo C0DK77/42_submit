@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/03/15 17:25:09 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/19 19:59:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,7 @@ void	push_swap(int ac, char **av)
 	}
 	ft_print_pile(pile_a, pile_b, ac);
 	ft_append_target_node(&pile_a);
-	while (pile_a)
-	{
-		if (pile_a->target_node <= (ac - 1) / 3 * 2)
-			ft_list_push(&pile_a, &pile_b);
-		pile_a = pile_a->next;
-	}
+	ft_split_list_between_a_and_b(&pile_a, &pile_b, ac);
 	ft_print_pile(pile_a, pile_b, ac);
 	// ft_list_swap(&pile_a);
 	// ft_print_pile(pile_a, pile_b);

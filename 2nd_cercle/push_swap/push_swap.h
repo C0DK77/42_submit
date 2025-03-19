@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/03/15 19:21:24 by codk             ###   ########.fr       */
+/*   Updated: 2025/03/19 19:58:55 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ void				ft_list_push(t_list **pile_1, t_list **pile_2);
 void				ft_list_rotate(t_list **pile);
 void				ft_list_reverse_rotate(t_list **pile);
 void				ft_print_pile(t_list *pile_a, t_list *pile_b, int ac);
+
+//	FONCTION CLASSEMENT ENTRE A ET B
+
+void ft_split_list_between_a_and_b(t_list **pile_a, t_list **pile_b, int ac);
 
 //	FONCTION PUSH_SWAP
 

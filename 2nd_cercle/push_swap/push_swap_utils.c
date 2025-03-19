@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:35:56 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/15 17:07:30 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/19 19:58:09 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,35 @@ void	ft_list_reverse_rotate(t_list **pile)
 	prev_last_node->next = NULL;
 	last_node->next = *pile;
 	*pile = last_node;
+}
+
+//	FONCTION DE CLASSEMENT ENTRE A ET B
+
+void ft_split_list_between_a_and_b(t_list **pile_a, t_list **pile_b, int ac)
+{
+	int i;
+	t_list *tmp;
+
+	i = 1;
+	while (i < ac)
+	{
+		tmp = (*pile_a)->next;
+
+		if ((*pile_a)->target_node <= (ac - 1) / 3)
+		{
+			ft_list_push(pile_a, pile_b);
+			ft_list_rotate(pile_b);
+		}
+		else if ((ac - 1) / 3 < (*pile_a)->target_node && (*pile_a)->target_node <= ((ac - 1) / 3) * 2)
+		{
+			ft_list_push(pile_a, pile_b);
+		}
+		else if (((ac - 1) / 3) * 2 < (*pile_a)->target_node)
+		{
+			ft_list_rotate(pile_a);
+		}
+		i++;
+	}
 }
 
 //	FONCTION PRINT PILE
