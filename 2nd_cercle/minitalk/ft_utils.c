@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:18:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/24 19:39:46 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/24 21:46:06 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,21 +72,24 @@ char ft_convert_bit_to_char(char *s)
 {
 	int	i;
 	int j;
-    int	c;
+    char	c;
 
 	i = 0;
 	j = 128;
-	while (i > 0)
+	while (j > 0)
 	{
-		c += (s[i] - 48) * i;
-		i++;
+		c += (s[i] - 48) * j;
 		j /= 2;
+		i++;
 	}
-	return ((char)c);
+	return (c);
 }
 
 int	main(void)
 {
-	printf("%c\n", ft_convert_bit_to_char("01100001"));
+	char a;
+	a = ft_convert_bit_to_char("01100001");
+	printf("%c\n", a);
+	printf("%i\n", a);
 	return (0);
 }
