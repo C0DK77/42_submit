@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:35:56 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/19 20:32:57 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/20 00:24:11 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,22 +132,20 @@ void	ft_list_reverse_rotate(t_list **pile)
 
 //	FONCTION DE CLASSEMENT ENTRE A ET B
 
-void ft_split_list_between_a_and_b(t_list **pile_a, t_list **pile_b, int ac)
+void	ft_split_list_between_a_and_b(t_list **pile_a, t_list **pile_b, int ac)
 {
-	int i;
-	t_list *tmp;
+	int	i;
 
 	i = 1;
 	while (i < ac)
 	{
-		//tmp = (*pile_a)->next;
-
 		if ((*pile_a)->target_node <= (ac - 1) / 3)
 		{
 			ft_list_push(pile_a, pile_b);
 			ft_list_rotate(pile_b);
 		}
-		else if ((ac - 1) / 3 < (*pile_a)->target_node && (*pile_a)->target_node <= ((ac - 1) / 3) * 2)
+		else if ((ac - 1) / 3 < (*pile_a)->target_node
+			&& (*pile_a)->target_node <= ((ac - 1) / 3) * 2)
 		{
 			ft_list_push(pile_a, pile_b);
 		}
@@ -159,21 +157,41 @@ void ft_split_list_between_a_and_b(t_list **pile_a, t_list **pile_b, int ac)
 	}
 }
 
-//	FONCTION VERIFICATION TRIE
+//	FONCTION VERIFICATION NBR
 
-// void ft_verif_classement (t_list **pile_a, int ac)
+// int	ft_verif_nbr(t_list **pile_a, int ac)
 // {
-// 	t_list *tmp;
-// 	int i;
+// 	int	i;
+// 	int	j;
 
 // 	i = 0;
+// 	j = 0;
 // 	while (i < ac)
 // 	{
-// 		tmp = (*pile_a)->next;
-// 		if 
+// 		if ((*pile_a)->nbr < (*pile_a)->next->nbr)
+// 			j = 1;
+// 		i++;
 // 	}
-// 	tmp = pile_a;
+// 	return (j);
 // }
+
+//	FONCTION VERIFICATION TRIE
+
+int	ft_verif_classement(t_list **pile_a, int ac)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (i < ac)
+	{
+		if ((*pile_a)->nbr < (*pile_a)->next->nbr)
+			j = 1;
+		i++;
+	}
+	return (j);
+}
 
 //	FONCTION PRINT PILE
 
@@ -188,7 +206,8 @@ void	ft_print_pile(t_list *pile_a, t_list *pile_b, int ac)
 	low_value = (ac - 1) / 3;
 	medium_value = (ac - 1) / 3 * 2;
 	high_value = ac - 1;
-	printf("low value : %i\nmedium value : %i\nhigh value : %i\n\n", low_value, medium_value, high_value);
+	printf("low value : %i\nmedium value : %i\nhigh value : %i\n\n", low_value,
+		medium_value, high_value);
 	printf("PILE_A\n\n");
 	while (pile_a)
 	{

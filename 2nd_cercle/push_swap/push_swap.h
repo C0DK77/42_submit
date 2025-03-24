@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/03/19 20:01:12 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/20 00:15:24 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_list
 	struct s_list	*prev;
 }					t_list;
 
-// 	FONCTIONS UTILS 
+// 	FONCTIONS UTILS
 
 void				ft_append_node(t_list **head, int nbr, int target_node);
 void				ft_append_target_node(t_list **pile);
@@ -42,7 +42,11 @@ void				ft_print_pile(t_list *pile_a, t_list *pile_b, int ac);
 
 //	FONCTION CLASSEMENT ENTRE A ET B
 
-void ft_split_list_between_a_and_b(t_list **pile_a, t_list **pile_b, int ac);
+void				ft_split_list_between_a_and_b(t_list **pile_a, t_list **pile_b, int ac);
+
+//	FONCTION VERIFICATION TRIE
+
+int					ft_verif_classement(t_list **pile_a, int ac);
 
 //	FONCTION PUSH_SWAP
 
