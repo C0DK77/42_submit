@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 19:11:23 by corentindes       #+#    #+#             */
-/*   Updated: 2024/11/20 16:28:39 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/25 11:59:28 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-int	ft_intlen(int nb)
-{
-	int	len;
-
-	len = 0;
-	if (nb <= 0)
-		len++;
-	while (nb != 0)
-	{
-		nb /= 10;
-		len++;
-	}
-	return (len);
-}
 
 char	*ft_itoa(int n)
 {

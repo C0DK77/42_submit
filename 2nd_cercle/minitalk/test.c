@@ -6,12 +6,17 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 21:54:54 by codk              #+#    #+#             */
-/*   Updated: 2025/03/24 23:16:09 by codk             ###   ########.fr       */
+/*   Updated: 2025/03/25 11:50:43 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <unistd.h>
+
+void ft_putchar (char c)
+{
+    write(1, &c, 1);
+}
 
 int ft_strlen (char *str)
 {
@@ -24,33 +29,25 @@ int ft_strlen (char *str)
 
 void ft_putstr(char *str)
 {
-    int i;
-    i = 0;
-    while (str[i])
-    {
-        write(1, &str[i], 1);
-        i++;
-    }
+    while (*str)
+        ft_putchar(*str++);
 }
 
 void	ft_putnbr(int n)
 {
-	int	a;
-
 	if (n == -2147483648)
 	{
-		write(1, "-2147483648", 11);
+		ft_putstr("-2147483648");
 		return ;
 	}
 	if (n < 0)
 	{
-		write(1, "-", 1);
+		ft_putchar("-");
 		n = -n;
 	}
 	if (n >= 10)
 		ft_putnbr(n / 10);
-	a = (n % 10) + 48;
-	write(1, &a, 1);
+	ft_putchar((n % 10) + 48);
 }
 
 void handler (int sig)

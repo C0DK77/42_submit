@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_intlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 12:26:23 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/25 11:54:33 by codk             ###   ########.fr       */
+/*   Created: 2025/03/25 11:57:17 by codk              #+#    #+#             */
+/*   Updated: 2025/03/25 11:59:09 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <libft.h>
 
-void	ft_putnbr_fd(int n, int fd)
+int	ft_intlen(int nb)
 {
-	if (n == -2147483648)
+	int	len;
+
+	len = 0;
+	if (nb <= 0)
+		len++;
+	while (nb != 0)
 	{
-		ft_putstr_fd("-2147483648", fd);
-		return ;
+		nb /= 10;
+		len++;
 	}
-	if (n < 0)
-	{
-		ft_putchar_fd("-", fd);
-		n = -n;
-	}
-	if (n >= 10)
-		ft_putnbr_fd(n / 10, fd);
-	ft_putchar_fd((n % 10) + 48, fd);
+	return (len);
 }
