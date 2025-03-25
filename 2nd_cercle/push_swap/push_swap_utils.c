@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:35:56 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/20 00:24:11 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/25 18:46:25 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,18 +179,16 @@ void	ft_split_list_between_a_and_b(t_list **pile_a, t_list **pile_b, int ac)
 
 int	ft_verif_classement(t_list **pile_a, int ac)
 {
-	int	i;
-	int	j;
+	t_list *tmp;
 
-	i = 0;
-	j = 0;
-	while (i < ac)
+	tmp = *pile_a;
+	while (tmp->next)
 	{
-		if ((*pile_a)->nbr < (*pile_a)->next->nbr)
-			j = 1;
-		i++;
+		if (tmp->nbr > tmp->next->nbr)
+			return 1;
+		tmp = tmp->next;
 	}
-	return (j);
+	return 0;
 }
 
 //	FONCTION PRINT PILE

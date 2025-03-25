@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/03/20 00:24:01 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/03/25 18:46:04 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	push_swap(int ac, char **av)
 	}
 	//ft_print_pile(pile_a, pile_b, ac);
 	ft_append_target_node(&pile_a);
-	if (ft_verif_classement(&pile_a, ac) == 1)
+	if (ft_verif_classement(&pile_a, ac) == 0)
 	{
 		printf("La liste est classee !\n");
 		return;
