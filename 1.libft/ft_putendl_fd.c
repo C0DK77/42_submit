@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 21:19:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/25 11:56:08 by codk             ###   ########.fr       */
+/*   Updated: 2025/03/25 16:04:30 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,5 @@ void	ft_putendl_fd(char *s, int fd)
 {
 	while (*s)
 		ft_putchar_fd(*s++, fd);
-	ft_putchar_fd("\n", fd);
+	ft_putchar_fd('\n', fd);
 }

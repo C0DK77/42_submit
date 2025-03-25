@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 12:26:23 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/25 11:54:33 by codk             ###   ########.fr       */
+/*   Updated: 2025/03/25 16:05:09 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_putnbr_fd(int n, int fd)
 	}
 	if (n < 0)
 	{
-		ft_putchar_fd("-", fd);
+		ft_putchar_fd('-', fd);
 		n = -n;
 	}
 	if (n >= 10)
