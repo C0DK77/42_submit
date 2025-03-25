@@ -30,33 +30,38 @@ SRC_BONUS = ft_lstnew_bonus.c ft_lstadd_front_bonus.c \
 	ft_lstclear_bonus.c ft_lstiter_bonus.c \
 	ft_lstmap_bonus.c
 
-OBJ = ${SRC:.c=.o}
-OBJ_BONUS = ${SRC_BONUS:.c=.o}
+OBJ_DIR = obj
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
+OBJ_BONUS = $(addprefix $(OBJ_DIR)/, $(SRC_BONUS:.c=.o))
 
 # ==== RULES ==== #
 
-all: ${NAME}
+all: $(OBJ_DIR) $(NAME)
 	@echo "✅ Compilation terminée !"
 
-${NAME}: ${OBJ}
+$(OBJ_DIR):
+	@echo "📦 Création du repertoire $(OBJ_DIR)"
+	@mkdir -p $(OBJ_DIR)
+
+$(NAME): $(OBJ)
 	@echo "📦 Création de l'archive $(NAME)..."
 	@$(AR) $(NAME) $(OBJ)
 
-.c.o:
+$(OBJ_DIR)/%.o: %.c
 	@echo "🔧 Compilation de $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-bonus: $(OBJ_BONUS)
+bonus: all $(OBJ_BONUS)
 	@echo "➕ Ajout des bonus à $(NAME)..."
 	@$(AR) $(NAME) $(OBJ_BONUS)
 
 clean:
 	@echo "🧹 Suppression des fichiers objets..."
-	@rm -f ${OBJ} ${OBJ_BONUS}
+	@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	@echo "🧨 Suppression des exécutables..."
-	@rm -f ${NAME} ${bonus} 
+	@echo "💥 Suppression de $(NAME)..."
+	@rm -f $(NAME) 
 
 re: fclean all
 

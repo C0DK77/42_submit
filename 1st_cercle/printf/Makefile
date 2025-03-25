@@ -1,26 +1,46 @@
 
+# ==== PROGRAM NAME ==== #
+
 NAME = libftprintf.a
 
-CC = gcc
+# ==== COMPILER AND FLAGS ==== #
+
+CC = cc
 CFLAGS = -Wall -Werror -Wextra
+
+# ==== CREATE STATIC ARCHIVE ==== #
+
 AR = ar rcs
 
+# ==== FILES ==== #
+
 SRC = ft_printf.c ft_printf_utils.c
-OBJ = ${SRC:.c=.o}
 
-all : ${NAME}
+OBJ_DIR  = obj
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
-${NAME} : ${OBJ}
-	${AR} ${NAME} ${OBJ}
+# ==== RULES ==== #
 
-%.o: %.c 
-	$(CC) $(CFAGS) -c $< -o $@
+all : $(OBJ_DIR) $(NAME)
+
+obj :
+	@mkdir -p $(OBJ_DIR)
+
+$(NAME) : $(OBJ)
+	@echo "📦 Création de $(NAME)..."
+	@$(AR) $(NAME) $(OBJ)
+
+$(OBJ_DIR)/%.o: %.c 
+	@echo "🔧 Compilation de $<"
+	@$(CC) $(CFAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
+	@echo "🧹 Suppression des fichiers objets..."
+	@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	rm -f $(NAME)
+	@echo "🧨 Suppression des exécutables..."
+	@rm -f $(NAME)
 
 re: fclean all
 
