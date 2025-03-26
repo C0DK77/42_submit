@@ -11,8 +11,8 @@ CC = cc
 
 # ==== FILES ==== #
 
-SRC_SERVER = server.c ft_utils.c 
-SRC_CLIENT = client.c ft_utils.c 
+SRC_SERVER = server.c
+SRC_CLIENT = client.c
 
 OBJ_DIR = obj
 OBJ_SERVER = $(addprefix $(OBJ_DIR)/, $(SRC_SERVER:.c=.o))
@@ -35,11 +35,11 @@ $(LIBFT_A) :
 	@echo "📚 Compilation de la libft..."
 	@make -s -C $(LIBFT_DIR)
 
-$(NAME_SERVER) : $(OBJ_SERVER)
+$(NAME_SERVER) : $(OBJ_SERVER) $(LIBFT_A)
 	@echo "🔧 Link du binaire 'server'..."
 	@$(CC) $(CFLAGS) -o $(NAME_SERVER) $(OBJ_SERVER) $(LIBFT_A)
 
-$(NAME_CLIENT) : $(OBJ_CLIENT)
+$(NAME_CLIENT) : $(OBJ_CLIENT) $(LIBFT_A)
 	@echo "🔧 Link du binaire 'client'..."
 	@$(CC) $(CFLAGS) -o $(NAME_CLIENT) $(OBJ_CLIENT) $(LIBFT_A)
 

@@ -6,60 +6,23 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:18:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/25 23:25:38 by codk             ###   ########.fr       */
+/*   Updated: 2025/03/26 14:36:13 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "ft_minitalk.h"
+#include "libft.h"
 
-void ft_putchar (char c)
-{
-    write(1, &c, 1);
-}
+volatile sig_atomic_t	g_ack_received = 0;
 
-void ft_putstr(char *str)
+void	handle_ack(int sig)
 {
-    while (*str)
-        ft_putchar(*str++);
-}
-
-void	ft_putnbr(int n)
-{
-	if (n == -2147483648)
+	if (sig == SIGUSR1)
 	{
-		ft_putstr("-2147483648");
-		return ;
+		g_ack_received = 1;
+		ft_putstr("✅ Message reçu par le serveur !\n");
 	}
-	if (n < 0)
-	{
-		ft_putchar('-');
-		n = -n;
-	}
-	if (n >= 10)
-		ft_putnbr(n / 10);
-	ft_putchar((n % 10) + 48);
 }
-
-// char	ft_convert_char_to_bit(char c)
-// {
-// 	int		i;
-// 	char	*s;
-
-// 	i = 0;
-// 	s = (char *)malloc(sizeof(char) * 9);
-// 	if (!s)
-// 		return (NULL);
-// 	while (i < 8)
-// 	{
-// 		s[i] = (c * 2) + 48;
-// 		c /= 2;
-// 		i--;
-// 	}
-// }
 
 void	ft_send_char(pid_t pid, char c)
 {
@@ -71,7 +34,7 @@ void	ft_send_char(pid_t pid, char c)
 			kill(pid, SIGUSR2);
 		else
 			kill(pid, SIGUSR1);
-		usleep(100);
+		usleep(200);
 	}
 }
 
@@ -84,8 +47,26 @@ void	ft_send_string(pid_t pid, char *str)
 
 int main (int ac, char **av)
 {
+	struct sigaction sa;
     pid_t server_pid;
-    server_pid = atoi(av[1]);
+
+	sa.sa_handler = handle_ack;
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGUSR1, &sa, NULL);
+
+	if (ac != 3)
+	{
+		ft_putstr(" ⛔ Client must take 2 arguments\n");
+		ft_putstr(" ================================\n");
+		ft_putstr(" EXEXUTABLE     PID    \"STRING\"\n");
+		return 1;
+	}
+	
+    server_pid = ft_atoi(av[1]);
     ft_send_string(server_pid, av[2]);
-    return 0;
+    while (!g_ack_received)
+		pause();
+
+	return (0);
 }

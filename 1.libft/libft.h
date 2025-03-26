@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:38:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/25 12:03:25 by codk             ###   ########.fr       */
+/*   Updated: 2025/03/26 13:50:45 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,10 @@ void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 						void (*del)(void *));
+
+//	FONCTION AJOUTEES 
+
+char				ft_convert_bit_to_char(char *s);
+char				*ft_convert_char_to_bit(char c);
 
 #endif
