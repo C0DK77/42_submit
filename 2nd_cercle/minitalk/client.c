@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:18:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/03/26 14:36:13 by codk             ###   ########.fr       */
+/*   Updated: 2025/03/27 14:37:22 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,28 +45,23 @@ void	ft_send_string(pid_t pid, char *str)
 	ft_send_char(pid, '\0');
 }
 
-int main (int ac, char **av)
+int	main(int ac, char **av)
 {
-	struct sigaction sa;
-    pid_t server_pid;
+	struct sigaction	sa;
 
 	sa.sa_handler = handle_ack;
 	sa.sa_flags = 0;
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGUSR1, &sa, NULL);
-
 	if (ac != 3)
 	{
 		ft_putstr(" ⛔ Client must take 2 arguments\n");
 		ft_putstr(" ================================\n");
 		ft_putstr(" EXEXUTABLE     PID    \"STRING\"\n");
-		return 1;
+		return (1);
 	}
-	
-    server_pid = ft_atoi(av[1]);
-    ft_send_string(server_pid, av[2]);
-    while (!g_ack_received)
+	ft_send_string(ft_atoi(av[1]), av[2]);
+	while (!g_ack_received)
 		pause();
-
 	return (0);
 }

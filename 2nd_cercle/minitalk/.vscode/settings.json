@@ -1,5 +1,7 @@
 {
     "C_Cpp.errorSquiggles": "disabled",
+    "42c.formatCommand": "norminette",
+    "editor.formatOnSave": true,
     "files.associations": {
         "ft_minitalk.h": "c"
     }
