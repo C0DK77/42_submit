@@ -6,48 +6,38 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/03/25 18:46:04 by codk             ###   ########.fr       */
+/*   Updated: 2025/03/28 15:36:53 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "push_swap.h"
 
 void	push_swap(int ac, char **av)
 {
-	int		i;
-	t_list	*pile_a;
-	t_list	*pile_b;
+	int			i;
+	t_ps_list	*pile_a;
+	t_ps_list	*pile_b;
 
+	i = 1;
 	pile_a = NULL;
 	pile_b = NULL;
-	// error if no args
-	if (ac == 1)
-		printf(" Error\n");
-	// error if not int
-	i = 1;
-	// APPENDS NODES FOR EACH VALUE
+	if (ft_verification_args(ac) == 0)
+		return(ft_putstr("Error\n"));
 	while (i < ac)
 	{
 		ft_append_node(&pile_a, atoi(av[i]), i);
 		i++;
 	}
-	//ft_print_pile(pile_a, pile_b, ac);
 	ft_append_target_node(&pile_a);
-	if (ft_verif_classement(&pile_a, ac) == 0)
+	if (ft_verif_classement(&pile_a) == 0)
 	{
 		printf("La liste est classee !\n");
-		return;
+		return ;
 	}
+	ft_print_pile(pile_a, pile_b, ac);
 	ft_split_list_between_a_and_b(&pile_a, &pile_b, ac);
 	ft_print_pile(pile_a, pile_b, ac);
-	// ft_list_swap(&pile_a);
-	// ft_print_pile(pile_a, pile_b);
-	// ft_list_rotate(&pile_a);
-	// ft_print_pile(pile_a, pile_b);
-	// ft_list_reverse_rotate(&pile_a);
-	// ft_print_pile(pile_a, pile_b);
-	// ft_list_push(&pile_a, &pile_b);
-	// ft_print_pile(pile_a, pile_b);
 }
 
 int	main(int ac, char **av)

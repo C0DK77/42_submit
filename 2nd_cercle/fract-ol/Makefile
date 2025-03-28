@@ -1,9 +1,19 @@
-NAME = fractol
 
-CC = gcc
+# ==== PROGRAM NAME ==== #
+
+NAME = FRACTOL_H
+
+# ==== COMPILER AND FLAGS ==== #
+
+CC = cc
 CFLAGS = -Wall -marche=native
-LIBFT = libft/
+
+# ==== FILES ==== #
+
+LIBFT_DIR = libft/
 MLX = mlx/
+
+
 
 all : libft ${NAME}
 
