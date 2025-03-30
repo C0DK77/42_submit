@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:23:04 by codk              #+#    #+#             */
-/*   Updated: 2025/03/28 15:34:23 by codk             ###   ########.fr       */
+/*   Updated: 2025/03/29 15:44:41 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,29 @@ int	ft_verification_args(int ac)
 		return (0);
 	return (1);
 }
+
+int	ft_verif_int(int ac, char **av)
+{
+	int	i;
+	int j;
+
+	i = 1;
+	while (i < ac)
+	{
+		j = 0;
+		if ((av[i][0] == '-' || av[i][0] == '+') && av[i][1])
+			j++;
+		while (av[i][j])
+		{
+			if (ft_isdigit(av[i][j]) == 0)
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	return (1);
+}
+
 int	ft_verif_classement(t_ps_list **pile_a)
 {
 	t_ps_list	*tmp;

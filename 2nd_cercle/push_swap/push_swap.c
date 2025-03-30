@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/03/28 15:36:53 by codk             ###   ########.fr       */
+/*   Updated: 2025/03/29 15:33:46 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,19 @@ void	push_swap(int ac, char **av)
 	pile_a = NULL;
 	pile_b = NULL;
 	if (ft_verification_args(ac) == 0)
+		return;
+	if (ft_verif_int(ac, av) == 0)
 		return(ft_putstr("Error\n"));
 	while (i < ac)
 	{
-		ft_append_node(&pile_a, atoi(av[i]), i);
+		ft_append_node(&pile_a, ft_atoi(av[i]), i);
 		i++;
 	}
 	ft_append_target_node(&pile_a);
 	if (ft_verif_classement(&pile_a) == 0)
 	{
 		printf("La liste est classee !\n");
-		return ;
+		return;
 	}
 	ft_print_pile(pile_a, pile_b, ac);
 	ft_split_list_between_a_and_b(&pile_a, &pile_b, ac);
