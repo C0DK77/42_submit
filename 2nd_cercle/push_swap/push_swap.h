@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/03/30 15:06:46 by codk             ###   ########.fr       */
+/*   Updated: 2025/04/01 15:28:05 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void					ft_print_pile(t_ps_list *pile_a, t_ps_list *pile_b,
 
 void					ft_split_list_between_a_and_b(t_ps_list **pile_a,
 							t_ps_list **pile_b, int ac);
+void					ft_rules_2_elements(t_ps_list **pile);
+void					ft_push_in_a(t_ps_list **pile_a, t_ps_list **pile_b);
 
 //	FONCTION PUSH_SWAP
 
