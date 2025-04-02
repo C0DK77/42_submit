@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:35:56 by corentindes       #+#    #+#             */
-/*   Updated: 2025/04/01 15:27:55 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/02 22:21:58 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,15 @@ void	ft_split_list_between_a_and_b(t_ps_list **pile_a, t_ps_list **pile_b, int a
 	}
 }
 
+// NE MARCHE PAS 
+
 void	ft_push_in_a (t_ps_list **pile_a, t_ps_list **pile_b)
 {
-	int	i;
-	int count_b;
-
-	i = 1;
-	count_b = 0;
-	while (*pile_a)
-	{
-		ft_list_push(pile_b, pile_a);
-		(*pile_b) = (*pile_b)->next;
-	}
+	t_ps_list *temp;
+	temp = *pile_b;
+	*pile_b = (*pile_b)->next;
+	temp->next = *pile_a;
+	*pile_a = temp;
 }
 
 //	FONCTIONS POUR AC EN DESSOUS DE 4
@@ -75,4 +72,23 @@ void ft_rules_2_elements (t_ps_list **pile)
 		return;
 	else
 		ft_list_swap(pile);
+}
+
+//	FONCTIONS POUR AC EN DESSOUS DE 5
+
+void ft_rules_3_elements (t_ps_list **pile)
+{
+	t_ps_list *temp;
+	int max_value;
+	temp = *pile;
+	//int min_value;
+	if (ft_verif_classement(pile)==0)
+		return;
+	while (temp->next)
+	{
+		if (temp->nbr < temp->next->nbr)
+			max_value = temp->next->nbr;
+			temp = temp->next;
+	}
+	printf("max_value : %i\n", max_value);
 }
