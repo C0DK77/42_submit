@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3_verifications.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:23:04 by codk              #+#    #+#             */
-/*   Updated: 2025/03/29 15:44:41 by codk             ###   ########.fr       */
+/*   Updated: 2025/04/13 12:39:27 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,26 @@ int	ft_verif_classement(t_ps_list **pile_a)
 		if (tmp->nbr > tmp->next->nbr)
 			return (1);
 		tmp = tmp->next;
+	}
+	return (0);
+}
+
+int	ft_verif_doublons(t_ps_list **pile_a)
+{
+	t_ps_list	*t;
+	t_ps_list	*tmp;
+
+	t = *pile_a;
+	while (t->next)
+	{
+		tmp = *pile_a;
+		while (tmp->next)
+		{
+			if (t->nbr == tmp->next->nbr)
+				return (1);
+			tmp = tmp->next;
+		}
+		t = t->next;
 	}
 	return (0);
 }

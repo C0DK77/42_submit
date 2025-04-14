@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/02 22:15:30 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/13 12:40:06 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	push_swap(int ac, char **av)
 	ft_append_target_node(&pile_a);
 	if (ft_verif_classement(&pile_a) == 0)
 		return (ft_putstr("La liste est classee !\n"));
+	if (ft_verif_doublons(&pile_a) == 1)
+		return(ft_putstr("Doublons\n"));
 	ft_rules_3_elements(&pile_a);
 	ft_print_pile(pile_a, pile_b, ac);
 	// ft_split_list_between_a_and_b(&pile_a, &pile_b, ac);

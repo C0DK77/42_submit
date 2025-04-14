@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/02 13:47:46 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/13 12:36:06 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int						ft_verif_int(int ac, char **av);
 int						ft_verif_classement(t_ps_list **pile_a);
 void					ft_print_pile(t_ps_list *pile_a, t_ps_list *pile_b,
 							int ac);
+int						ft_verif_doublons(t_ps_list **pile_a);
 
 //	RULES
 

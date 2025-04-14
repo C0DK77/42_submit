@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:35:56 by corentindes       #+#    #+#             */
-/*   Updated: 2025/04/02 22:56:33 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/13 12:44:58 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,21 +91,12 @@ void	ft_rules_3_elements(t_ps_list **pile)
 		return ;
 	while (temp->next)
 	{
-		if (temp->nbr < temp->next->nbr)
+		if (max_value < temp->next->nbr)
 			max_value = temp->next->nbr;
-		if (temp->nbr > temp->next->nbr)
-			min_value = temp->next->nbr;
+		else if (min_value > temp->next->nbr)
+			min_value = temp->nbr;
 		temp = temp->next;
 	}
 	printf("max_value : %i\n", max_value);
 	printf("min_value : %i\n", min_value);
-	temp = *pile;
-	while (temp->next)
-	{
-		if (max_value = temp->nbr && )
-			max_value = temp->nbr;
-		if (temp->nbr > temp->next->nbr)
-			min_value = temp->next->nbr;
-		temp = temp->next;
-	}
 }
