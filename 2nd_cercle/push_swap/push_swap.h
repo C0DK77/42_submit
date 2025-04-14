@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/14 17:40:54 by codk             ###   ########.fr       */
+/*   Updated: 2025/04/14 22:48:45 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void					ft_split_list_between_a_and_b(t_ps_list **pile_a,
 							t_ps_list **pile_b, int ac);
 void					ft_rules_2_elements(char a, t_ps_list **pile);
 void					ft_push_in_a(t_ps_list **pile_a, t_ps_list **pile_b);
+void					ft_rules_3_elements(t_ps_list **pile);
 
 //	FONCTION PUSH_SWAP
 
