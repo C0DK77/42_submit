@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/13 12:36:06 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/14 17:40:54 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,17 @@ void					ft_append_target_node(t_ps_list **pile);
 
 int						ft_verification_args(int ac);
 int						ft_verif_int(int ac, char **av);
-int						ft_verif_classement(t_ps_list **pile_a);
-void					ft_print_pile(t_ps_list *pile_a, t_ps_list *pile_b,
+int						ft_verif_classement(t_ps_list **pile);
+void					ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b,
 							int ac);
-int						ft_verif_doublons(t_ps_list **pile_a);
+int						ft_verif_doublons(t_ps_list **pile);
 
 //	RULES
 
 void					ft_split_list_between_a_and_b(t_ps_list **pile_a,
 							t_ps_list **pile_b, int ac);
-void					ft_rules_2_elements(t_ps_list **pile);
+void					ft_rules_2_elements(char a, t_ps_list **pile);
 void					ft_push_in_a(t_ps_list **pile_a, t_ps_list **pile_b);
-void					ft_rules_3_elements(t_ps_list **pile);
 
 //	FONCTION PUSH_SWAP
 

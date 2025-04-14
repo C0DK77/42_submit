@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3_verifications.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:23:04 by codk              #+#    #+#             */
-/*   Updated: 2025/04/13 12:39:27 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/14 17:32:36 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,29 +42,29 @@ int	ft_verif_int(int ac, char **av)
 	return (1);
 }
 
-int	ft_verif_classement(t_ps_list **pile_a)
+int	ft_verif_classement(t_ps_list **pile)
 {
 	t_ps_list	*tmp;
 
-	tmp = *pile_a;
+	tmp = *pile;
 	while (tmp->next)
 	{
-		if (tmp->nbr > tmp->next->nbr)
+		if (tmp->nbr >= tmp->next->nbr)
 			return (1);
 		tmp = tmp->next;
 	}
 	return (0);
 }
 
-int	ft_verif_doublons(t_ps_list **pile_a)
+int	ft_verif_doublons(t_ps_list **pile)
 {
 	t_ps_list	*t;
 	t_ps_list	*tmp;
 
-	t = *pile_a;
+	t = *pile;
 	while (t->next)
 	{
-		tmp = *pile_a;
+		tmp = t;
 		while (tmp->next)
 		{
 			if (t->nbr == tmp->next->nbr)
@@ -76,36 +76,40 @@ int	ft_verif_doublons(t_ps_list **pile_a)
 	return (0);
 }
 
-void	ft_print_pile(t_ps_list *pile_a, t_ps_list *pile_b, int ac)
+void	ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b, int ac)
 {
 	int i;
 	int low_value;
 	int medium_value;
 	int high_value;
-
+	t_ps_list *t1;
+	t_ps_list *t2;
+	
 	i = 1;
+	t1 = *pile_a;
+	t2 = *pile_b;
 	low_value = (ac - 1) / 3;
 	medium_value = (ac - 1) / 3 * 2;
 	high_value = ac - 1;
 	printf("low value : %i\nmedium value : %i\nhigh value : %i\n\n", low_value,
 		medium_value, high_value);
 	printf("PILE_A\n\n");
-	while (pile_a)
+	while (t1)
 	{
-		printf("noeud : %i -> entier : %i ", i, pile_a->nbr);
-		printf("-> valeur de trie : %i", pile_a->target_node);
-		printf("-> adresse : %p \n\n", pile_a);
-		pile_a = pile_a->next;
+		printf("noeud : %i -> entier : %i ", i, t1->nbr);
+		printf("-> valeur de trie : %i", t1->target_node);
+		printf("-> adresse : %p \n\n", t1);
+		t1 = t1->next;
 		i++;
 	}
 	i = 1;
 	printf("PILE_B\n\n");
-	while (pile_b)
+	while (t2)
 	{
-		printf("noeud : %i -> entier : %i ", i, pile_b->nbr);
-		printf("-> valeur de trie : %i", pile_b->target_node);
-		printf("-> adresse : %p \n\n", pile_b);
-		pile_b = pile_b->next;
+		printf("noeud : %i -> entier : %i ", i, t2->nbr);
+		printf("-> valeur de trie : %i", t2->target_node);
+		printf("-> adresse : %p \n\n", t2);
+		t2 = t2->next;
 		i++;
 	}
 }
