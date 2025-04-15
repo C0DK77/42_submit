@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/15 15:43:44 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/15 16:58:37 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,10 @@ void	push_swap(int ac, char **av)
 	t_ps_list	*pile_a;
 	t_ps_list	*pile_b;
 
-	i = 1;
+	i = 0;
 	pile_a = NULL;
 	pile_b = NULL;
-	if (ft_verification_args(ac) == 0)
-		return ;
-	if (ft_verif_int(ac, av) == 0)
+	if (ft_verif_args_int(ac, av) == 0 || ft_verif_doublons(ac, av) == 0)
 		return (ft_putstr("Error\n"));
 	while (i < ac)
 	{
@@ -32,19 +30,17 @@ void	push_swap(int ac, char **av)
 		i++;
 	}
 	ft_append_target_node(&pile_a);
-	if (ft_verif_classement_a(&pile_a) == 0)
-		return (ft_putstr("La liste est classee !\n"));
-	if (ft_verif_doublons(&pile_a) == 1)
-		return (ft_putstr("Doublons\n"));
+
+	while (ft_verif_classement('a', &pile_a) == 0 && !(*pile_b))
+	{
+		
+	}
+	
 	//ft_split_list_between_a_and_b(&pile_a, &pile_b, ac);
 	//ft_push_in_a(&pile_a, &pile_b);
 	ft_print_pile(&pile_a, &pile_b, ac);
-	//while (ft_verif_classement(&pile_a) == 0 && !(*pile_b))
-	//{
-	//	
-	//}
-	ft_rules_3_elements_a(&pile_a);
-	ft_print_pile(&pile_a, &pile_b, ac);
+	//ft_rules_3_elements_a(&pile_a);
+	//ft_print_pile(&pile_a, &pile_b, ac);
 
 }
 

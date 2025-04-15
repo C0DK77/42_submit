@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/15 15:43:04 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/15 16:57:13 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,13 @@ void					ft_append_target_node(t_ps_list **pile);
 
 // 	FONCTIONS VERIFICATION
 
-int						ft_verification_args(int ac);
-int						ft_verif_int(int ac, char **av);
-int						ft_verif_classement_a(t_ps_list **pile);
+int						ft_verif_args_int(int ac, char **av);
+int						ft_verif_doublons(int ac, char **av);
+int						ft_verif_classement(char a, t_ps_list **pile);
+
+
 void					ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b,
 							int ac);
-int						ft_verif_doublons(t_ps_list **pile);
 int						ft_verif_classement_3_a(t_ps_list **pile);
 
 //	RULES
