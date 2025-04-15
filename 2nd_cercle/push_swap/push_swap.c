@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/14 23:20:53 by codk             ###   ########.fr       */
+/*   Updated: 2025/04/15 15:43:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,20 @@ void	push_swap(int ac, char **av)
 		i++;
 	}
 	ft_append_target_node(&pile_a);
-	if (ft_verif_classement(&pile_a) == 0)
+	if (ft_verif_classement_a(&pile_a) == 0)
 		return (ft_putstr("La liste est classee !\n"));
 	if (ft_verif_doublons(&pile_a) == 1)
 		return (ft_putstr("Doublons\n"));
-	ft_split_list_between_a_and_b(&pile_a, &pile_b, ac);
-	ft_push_in_a(&pile_a, &pile_b);
+	//ft_split_list_between_a_and_b(&pile_a, &pile_b, ac);
+	//ft_push_in_a(&pile_a, &pile_b);
 	ft_print_pile(&pile_a, &pile_b, ac);
+	//while (ft_verif_classement(&pile_a) == 0 && !(*pile_b))
+	//{
+	//	
+	//}
+	ft_rules_3_elements_a(&pile_a);
+	ft_print_pile(&pile_a, &pile_b, ac);
+
 }
 
 int	main(int ac, char **av)

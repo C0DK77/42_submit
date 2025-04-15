@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3_verifications.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:23:04 by codk              #+#    #+#             */
-/*   Updated: 2025/04/14 17:32:36 by codk             ###   ########.fr       */
+/*   Updated: 2025/04/15 16:01:08 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,33 @@ int	ft_verif_int(int ac, char **av)
 	return (1);
 }
 
-int	ft_verif_classement(t_ps_list **pile)
+int	ft_verif_classement_a(t_ps_list **pile)
 {
 	t_ps_list	*tmp;
 
 	tmp = *pile;
 	while (tmp->next)
 	{
-		if (tmp->nbr >= tmp->next->nbr)
+		if (tmp->nbr > tmp->next->nbr)
 			return (1);
 		tmp = tmp->next;
+	}
+	return (0);
+}
+
+int	ft_verif_classement_3_a(t_ps_list **pile)
+{
+	int i;
+	t_ps_list	*tmp;
+
+	i = 1;
+	tmp = *pile;
+	while (i < 3)
+	{
+		if (tmp->nbr > tmp->next->nbr)
+			return (1);
+		tmp = tmp->next;
+		i++;
 	}
 	return (0);
 }
