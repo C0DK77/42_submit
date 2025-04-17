@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/17 18:36:44 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/17 19:56:18 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,13 @@ void	push_swap(int ac, char **av)
 		ft_append_node(&pile_a, ft_atoi(av[size]));
 		size++;
 	}
+	ft_printf("OK\n");
 	ft_append_rank(&pile_a);
+	ft_printf("OK\n");
+	if (!ft_verif_ranking('a', &pile_a))
+		return ;
 	if (size <= 5)
-		ft_sort(size, pile_a, pile_b);
+		ft_sort(size, &pile_a, &pile_b);
 	while (!ft_verif_ranking('a', &pile_a) && pile_b && ac > 2)
 	{
 		ft_sortin_a(size, &pile_a, &pile_b);

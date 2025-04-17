@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:24:53 by codk              #+#    #+#             */
-/*   Updated: 2025/04/17 19:18:50 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/17 19:45:01 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,14 @@
 #include "libft.h"
 #include "push_swap.h"
 
-int	ft_list_size(t_ps_list **pile)
+int	ft_list_size(t_ps_list *pile)
 {
 	int	i;
-	t_ps_list tp;
 
 	i = 0;
-	tp = *pile;
-	while (tp)
+	while (pile)
 	{
-		tp = tp->next;
+		pile = pile->next;
 		i++;
 	}
 	return (i);
@@ -56,7 +54,7 @@ void	ft_append_rank(t_ps_list **pile)
 	t_ps_list	*node1;
 	t_ps_list	*node2;
 
-	
+	node1 = *pile;
 	while (node1)
 	{
 		rank = 1;
@@ -72,10 +70,10 @@ void	ft_append_rank(t_ps_list **pile)
 	}
 }
 
-int	ft_max_rank(t_ps_list **pile)
+int	ft_max_min_rank(char a, t_ps_list *pile)
 {
 	int	max;
-	int min;
+	int	min;
 
 	max = pile->rank;
 	min = pile->rank;
@@ -87,10 +85,13 @@ int	ft_max_rank(t_ps_list **pile)
 			min = pile->rank;
 		pile = pile->next;
 	}
-	return (max, min);
+	if (a == 'x')
+		return (max);
+	else
+		return (min);
 }
 
-int	ft_get_position(t_ps_list **pile, int target)
+int	ft_get_position(t_ps_list *pile, int target)
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:20:14 by codk              #+#    #+#             */
-/*   Updated: 2025/04/17 19:17:34 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/17 19:43:25 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,14 +108,15 @@ void	ft_sortin_b(int size, t_ps_list **pile_a, t_ps_list **pile_b)
 {
 	while (*pile_b)
 	{
-		if (ft_get_position(pile_b, ft_max_rank(pile_b)) <= size / 2)
+		if (ft_get_position(*pile_b, ft_max_min_rank('x', *pile_b)) <= size
+			/ 2)
 		{
-			while ((*pile_b)->rank != ft_max_rank(pile_b))
+			while ((*pile_b)->rank != ft_max_min_rank('n', *pile_b))
 				ft_functions('r', 'b', pile_b);
 		}
 		else
 		{
-			while ((*pile_b)->rank != ft_max_rank(pile_b))
+			while ((*pile_b)->rank != ft_max_min_rank('x', *pile_b))
 				ft_function_revert('b', pile_b);
 		}
 		ft_function_push('a', pile_b, pile_a);

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:46:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/04/17 19:07:02 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/17 19:50:04 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	ft_sort_three(t_ps_list **pile)
 	else if (a > b && b > c)
 	{
 		ft_functions('s', 'a', pile);
-		ft_functions("rr", 'a', pile);
+		ft_functions('r', 'a', pile);
 	}
 	else if (a > b && b < c && a > c)
 		ft_functions('r', 'a', pile);
@@ -38,7 +38,7 @@ void	ft_sort_three(t_ps_list **pile)
 		ft_functions('r', 'a', pile);
 	}
 	else if (a < b && b > c && a > c)
-		ft_functions("rr", 'a', pile);
+		ft_function_revert('a', pile);
 }
 
 void	ft_sort_five(t_ps_list **a, t_ps_list **b)
@@ -48,7 +48,7 @@ void	ft_sort_five(t_ps_list **a, t_ps_list **b)
 
 	while (ft_list_size(*a) > 3)
 	{
-		min = find_min(*a);
+		min = ft_max_min_rank('n', *a);
 		pos = ft_get_position(*a, min);
 		if (pos == 0)
 			ft_function_push('b', a, b);
@@ -65,13 +65,13 @@ void	ft_sort_five(t_ps_list **a, t_ps_list **b)
 		}
 		else if (pos == 3)
 		{
-			ft_functions("rr", 'a', a);
-			ft_functions("rr", 'a', a);
+			ft_function_revert('a', a);
+			ft_function_revert('a', a);
 			ft_function_push('b', a, b);
 		}
 		else if (pos == 4)
 		{
-			ft_functions("rr", 'a', a);
+			ft_function_revert('a', a);
 			ft_function_push('b', a, b);
 		}
 	}

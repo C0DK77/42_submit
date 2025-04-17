@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:23:04 by codk              #+#    #+#             */
-/*   Updated: 2025/04/17 18:34:43 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/17 19:45:59 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	ft_ispartofgroup(t_ps_list **pile, int target)
 	return (0);
 }
 
-void	ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b)
+void	ft_print_pile(t_ps_list *pile_a, t_ps_list *pile_b)
 {
 	ft_printf("PILE_A\n\n");
 	while (pile_a)
@@ -119,7 +119,7 @@ void	ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b)
 		printf("-> entier : %i ", pile_a->nb);
 		printf("-> valeur de trie : %i", pile_a->rank);
 		printf("-> adresse : %p \n\n", pile_a);
-		*pile_a = pile_a->next;
+		pile_a = pile_a->next;
 	}
 	printf("PILE_B\n\n");
 	while (pile_b)
