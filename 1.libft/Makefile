@@ -38,14 +38,11 @@ OBJ_BONUS = $(addprefix $(OBJ_DIR)/, $(SRC_BONUS:.c=.o))
 # ==== RULES ==== #
 
 all: $(OBJ_DIR) $(NAME)
-	@echo "✅ Compilation terminée !"
 
 $(OBJ_DIR):
-	@echo "📦 Création du repertoire $(OBJ_DIR)"
 	@mkdir -p $(OBJ_DIR)
 
 $(NAME): $(OBJ)
-	@echo "📦 Création de l'archive $(NAME)..."
 	@$(AR) $(NAME) $(OBJ)
 
 $(OBJ_DIR)/%.o: %.c
@@ -57,11 +54,9 @@ bonus: all $(OBJ_BONUS)
 	@$(AR) $(NAME) $(OBJ_BONUS)
 
 clean:
-	@echo "🧹 Suppression des fichiers objets..."
 	@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	@echo "💥 Suppression de $(NAME)..."
 	@rm -f $(NAME) 
 
 re: fclean all

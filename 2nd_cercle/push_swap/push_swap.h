@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/15 16:57:13 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/17 18:47:39 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,47 +19,37 @@
 
 typedef struct s_ps_list
 {
-	int					nbr;
-	int					value;
-	int					median;
-	int					target_node;
+	int					nb;
+	int					rank;
 	struct s_ps_list	*next;
-	struct s_ps_list	*prev;
 }						t_ps_list;
 
-//	FONCTIONS DE TRI
+void					ft_functions(char a, char b, t_ps_list **pile);
+void					ft_function_push(char a, t_ps_list **pile_1,
+							t_ps_list **pile_2);
+void					ft_sortin_a(int size, t_ps_list **pile_a,
+							t_ps_list **pile_b);
+void					ft_sortin_b(int size, t_ps_list **pile_a,
+							t_ps_list **pile_b);
+void					ft_sort(int size, t_ps_list **pile_a,
+							t_ps_list **pile_b);
 
-void					ft_list_swap(t_ps_list **pile);
-void					ft_list_push(t_ps_list **pile_1, t_ps_list **pile_2);
-void					ft_list_rotate(t_ps_list **pile);
-void					ft_list_reverse_rotate(t_ps_list **pile);
+int						ft_list_size(t_ps_list **pile);
+void					ft_append_node(t_ps_list **head, int nb);
+void					ft_append_rank(t_ps_list **pile);
+int						ft_max_rank(t_ps_list **pile);
+int						ft_get_position(t_ps_list **pile, int target);
 
-// 	FONCTIONS LISTES
-
-void					ft_append_node(t_ps_list **head, int nbr,
-							int target_node);
-void					ft_append_target_node(t_ps_list **pile);
-
-// 	FONCTIONS VERIFICATION
-
-int						ft_verif_args_int(int ac, char **av);
+long					ft_atoi_long(const char *str);
+int						ft_isint(int ac, char **av);
 int						ft_verif_doublons(int ac, char **av);
-int						ft_verif_classement(char a, t_ps_list **pile);
+int						ft_verif_ranking(char a, t_ps_list **pile);
+int						ft_ispartofgroup(t_ps_list **pile, int target);
+void					ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b);
 
-
-void					ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b,
-							int ac);
-int						ft_verif_classement_3_a(t_ps_list **pile);
-
-//	RULES
-
-void					ft_split_list_between_a_and_b(t_ps_list **pile_a,
-							t_ps_list **pile_b, int ac);
-void					ft_rules_2_elements(char a, t_ps_list **pile);
-void					ft_push_in_a(t_ps_list **pile_a, t_ps_list **pile_b);
-void					ft_rules_3_elements_a(t_ps_list **pile);
-
-//	FONCTION PUSH_SWAP
+void					ft_sort_three(t_ps_list **pile);
+int						find_min(t_ps_list *pile);
+void					ft_sort_five(t_ps_list **a, t_ps_list **b);
 
 void					push_swap(int ac, char **av);
 

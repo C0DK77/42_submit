@@ -1,7 +1,7 @@
 
 # ==== PROGRAM NAME ==== #
 
-NAME = libftprintf.a
+NAME = ft_printf.a
 
 # ==== COMPILER AND FLAGS ==== #
 
@@ -27,7 +27,6 @@ obj :
 	@mkdir -p $(OBJ_DIR)
 
 $(NAME) : $(OBJ)
-	@echo "📦 Création de $(NAME)..."
 	@$(AR) $(NAME) $(OBJ)
 
 $(OBJ_DIR)/%.o: %.c 
@@ -35,11 +34,9 @@ $(OBJ_DIR)/%.o: %.c
 	@$(CC) $(CFAGS) -c $< -o $@
 
 clean:
-	@echo "🧹 Suppression des fichiers objets..."
 	@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	@echo "🧨 Suppression des exécutables..."
 	@rm -f $(NAME)
 
 re: fclean all

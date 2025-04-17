@@ -6,74 +6,118 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:20:14 by codk              #+#    #+#             */
-/*   Updated: 2025/04/15 15:06:34 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/17 18:44:17 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "libft.h"
 #include "push_swap.h"
 
-void	ft_list_swap(t_ps_list **pile)
+void	ft_functions(char a, char b, t_ps_list **pile)
 {
-	t_ps_list	*first_node;
-	t_ps_list	*second_node;
+	t_ps_list	*node1;
+	t_ps_list	*node2;
 
-	ft_putstr("swap\n");
 	if (!pile || !*pile || !(*pile)->next)
 		return ;
-	first_node = *pile;
-	second_node = first_node->next;
-	first_node->next = second_node->next;
-	second_node->next = first_node;
-	*pile = second_node;
-}
-
-void	ft_list_push(t_ps_list **pile_1, t_ps_list **pile_2)
-{
-	t_ps_list	*t1;
-	t_ps_list	*first_node_pile_1;
-
-	ft_putstr("PUSH\n");
-	t1 = *pile_1;
-	first_node_pile_1 = t1->next;
-	*pile_1 = first_node_pile_1;
-	ft_append_node(&*pile_2, t1->nbr, t1->target_node);
-	ft_list_reverse_rotate(&*pile_2);
-}
-
-void	ft_list_rotate(t_ps_list **pile)
-{
-	t_ps_list	*first_node;
-	t_ps_list	*last_node;
-
-	ft_putstr("rotate\n");
-	if (!pile || !*pile || !(*pile)->next)
-		return ;
-	first_node = *pile;
-	last_node = *pile;
-	while (last_node->next)
-		last_node = last_node->next;
-	*pile = first_node->next;
-	first_node->next = NULL;
-	last_node->next = first_node;
-}
-
-void	ft_list_reverse_rotate(t_ps_list **pile)
-{
-	t_ps_list *prev_last_node;
-	t_ps_list *last_node;
-
-	ft_putstr("reverse\n");
-	if (!pile || !*pile || !(*pile)->next)
-		return ;
-	prev_last_node = *pile;
-	last_node = *pile;
-	while (last_node->next)
+	node1 = *pile;
+	if (a == 's')
 	{
-		prev_last_node = last_node;
-		last_node = last_node->next;
+		node2 = node1->next;
+		node1->next = node2->next;
+		node2->next = node1;
+		*pile = node2;
 	}
-	prev_last_node->next = NULL;
-	last_node->next = *pile;
-	*pile = last_node;
+	if (a == 'r')
+	{
+		node2 = *pile;
+		while (node2->next)
+			node2 = node2->next;
+		node1->next = NULL;
+		node2->next = node1;
+		*pile = node1->next;
+	}
+	ft_printf("%c%c\n", a, b);
+}
+
+void	ft_function_revert(char b, t_ps_list **pile)
+{
+	t_ps_list	*node1;
+	t_ps_list	*node2;
+
+	if (!pile || !*pile || !(*pile)->next)
+		return ;
+	node1 = *pile;
+	node2 = *pile;
+	while (node2->next)
+	{
+		node1 = node2;
+		node2 = node2->next;
+	}
+	node1->next = NULL;
+	node2->next = *pile;
+	*pile = node2;
+	ft_printf("rr%c\n", b);
+}
+
+void	ft_function_push(char a, t_ps_list **pile_1, t_ps_list **pile_2)
+{
+	t_ps_list	*node;
+
+	if (!pile_1 || !*pile_1)
+		return ;
+	node = *pile_1;
+	*pile_1 = node->next;
+	node->next = *pile_2;
+	*pile_2 = node;
+	ft_printf("p%c\n", a);
+}
+
+void	ft_sort(int size, t_ps_list **pile_a, t_ps_list **pile_b)
+{
+	if (size == 2)
+		ft_functions('s', 'a', &pile_a);
+	else if (size == 3)
+		ft_sort_three(&pile_a);
+	else if (size <= 5)
+		ft_sort_five(&pile_a, &pile_b);
+}
+
+void	ft_sortin_a(int size, t_ps_list **pile_a, t_ps_list **pile_b)
+{
+	int	group;
+
+	group = 1;
+	while (*pile_a)
+	{
+		if ((*pile_a)->rank < (size / 10) * group)
+		{
+			ft_function_push('b', pile_a, pile_b);
+			if ((*pile_b)->rank < ((size / 10) * group) - ((size / 10) / 2))
+				ft_functions('r', 'b', pile_b);
+		}
+		else
+			ft_functions('r', 'a', pile_a);
+		if (!ft_ispartofgroup(pile_a, size / 10 * group))
+			group++;
+	}
+}
+
+void	ft_sortin_b(int size, t_ps_list **pile_a, t_ps_list **pile_b)
+{
+	while (*pile_b)
+	{
+		if (ft_get_position(pile_b, ft_max_rank(pile_b)) <= size / 2)
+		{
+			while ((*pile_b)->rank != ft_max_rank(pile_b))
+				ft_functions('r', 'b', pile_b);
+		}
+		else
+		{
+			while ((*pile_b)->rank != ft_max_rank(pile_b))
+				ft_function_revert('b', pile_b);
+		}
+		ft_function_push('a', pile_b, pile_a);
+	}
 }

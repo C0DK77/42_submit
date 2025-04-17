@@ -6,42 +6,39 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/15 16:58:37 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/17 18:36:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "libft.h"
 #include "push_swap.h"
 
 void	push_swap(int ac, char **av)
 {
-	int			i;
+	int			size;
 	t_ps_list	*pile_a;
 	t_ps_list	*pile_b;
 
-	i = 0;
+	size = 1;
 	pile_a = NULL;
 	pile_b = NULL;
-	if (ft_verif_args_int(ac, av) == 0 || ft_verif_doublons(ac, av) == 0)
-		return (ft_putstr("Error\n"));
-	while (i < ac)
+	if (ft_isint(ac, av) == 0 || ft_verif_doublons(ac, av) == 0)
+		return (ft_putstr_fd("Error\n", 2));
+	while (size < ac)
 	{
-		ft_append_node(&pile_a, ft_atoi(av[i]), i);
-		i++;
+		ft_append_node(&pile_a, ft_atoi(av[size]));
+		size++;
 	}
-	ft_append_target_node(&pile_a);
-
-	while (ft_verif_classement('a', &pile_a) == 0 && !(*pile_b))
+	ft_append_rank(&pile_a);
+	if (size <= 5)
+		ft_sort(size, pile_a, pile_b);
+	while (!ft_verif_ranking('a', &pile_a) && pile_b && ac > 2)
 	{
-		
+		ft_sortin_a(size, &pile_a, &pile_b);
+		ft_sortin_b(size, &pile_a, &pile_b);
 	}
-	
-	//ft_split_list_between_a_and_b(&pile_a, &pile_b, ac);
-	//ft_push_in_a(&pile_a, &pile_b);
-	ft_print_pile(&pile_a, &pile_b, ac);
-	//ft_rules_3_elements_a(&pile_a);
-	//ft_print_pile(&pile_a, &pile_b, ac);
-
+	return ;
 }
 
 int	main(int ac, char **av)
