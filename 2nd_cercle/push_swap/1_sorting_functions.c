@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:20:14 by codk              #+#    #+#             */
-/*   Updated: 2025/04/17 18:44:17 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/17 19:17:34 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,11 @@ void	ft_function_push(char a, t_ps_list **pile_1, t_ps_list **pile_2)
 void	ft_sort(int size, t_ps_list **pile_a, t_ps_list **pile_b)
 {
 	if (size == 2)
-		ft_functions('s', 'a', &pile_a);
+		ft_functions('s', 'a', pile_a);
 	else if (size == 3)
-		ft_sort_three(&pile_a);
+		ft_sort_three(pile_a);
 	else if (size <= 5)
-		ft_sort_five(&pile_a, &pile_b);
+		ft_sort_five(pile_a, pile_b);
 }
 
 void	ft_sortin_a(int size, t_ps_list **pile_a, t_ps_list **pile_b)

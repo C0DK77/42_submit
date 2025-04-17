@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:24:53 by codk              #+#    #+#             */
-/*   Updated: 2025/04/17 19:06:38 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/17 19:18:50 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@
 int	ft_list_size(t_ps_list **pile)
 {
 	int	i;
+	t_ps_list tp;
 
 	i = 0;
-	while (pile)
+	tp = *pile;
+	while (tp)
 	{
-		pile = pile->next;
+		tp = tp->next;
 		i++;
 	}
 	return (i);
