@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:46:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/04/17 18:46:47 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/17 19:07:02 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,6 @@ void	ft_sort_three(t_ps_list **pile)
 	}
 	else if (a < b && b > c && a > c)
 		ft_functions("rr", 'a', pile);
-}
-
-int	find_min(t_ps_list *pile)
-{
-	int	min;
-
-	min = pile->nb;
-	while (pile)
-	{
-		if (pile->nb < min)
-			min = pile->nb;
-		pile = pile->next;
-	}
-	return (min);
 }
 
 void	ft_sort_five(t_ps_list **a, t_ps_list **b)

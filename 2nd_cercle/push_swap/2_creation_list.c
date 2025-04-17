@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:24:53 by codk              #+#    #+#             */
-/*   Updated: 2025/04/17 18:29:42 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/17 19:06:38 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,19 @@ void	ft_append_rank(t_ps_list **pile)
 int	ft_max_rank(t_ps_list **pile)
 {
 	int	max;
+	int min;
 
 	max = pile->rank;
+	min = pile->rank;
 	while (pile)
 	{
 		if (pile->rank > max)
 			max = pile->rank;
+		if (pile->rank < min)
+			min = pile->rank;
 		pile = pile->next;
 	}
-	return (max);
+	return (max, min);
 }
 
 int	ft_get_position(t_ps_list **pile, int target)
