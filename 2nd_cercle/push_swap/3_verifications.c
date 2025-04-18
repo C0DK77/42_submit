@@ -6,36 +6,13 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:23:04 by codk              #+#    #+#             */
-/*   Updated: 2025/04/18 18:37:43 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 20:20:21 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "libft.h"
 #include "push_swap.h"
-
-long	ft_atoi_long(const char *str)
-{
-	long	res;
-	int		sign;
-
-	res = 0;
-	sign = 1;
-	while (*str == ' ' || (*str >= 9 && *str <= 13))
-		str++;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign = -1;
-		str++;
-	}
-	while (*str >= '0' && *str <= '9')
-	{
-		res = res * 10 + (*str - '0');
-		str++;
-	}
-	return (res * sign);
-}
 
 int	ft_isint(int ac, char **av)
 {
@@ -111,13 +88,42 @@ int	ft_ispartofgroup(t_ps_list **pile, int target)
 	return (0);
 }
 
-void	ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b)
+void	ft_free_pile(t_ps_list **pile_1, t_ps_list **pile_2,
+		t_ps_list_action **list)
 {
-	t_ps_list	*tp1;
-	t_ps_list	*tp2;
+	t_ps_list			*tp;
+	t_ps_list_action	*t;
+
+	while (*pile_1)
+	{
+		tp = *pile_1;
+		*pile_1 = (*pile_1)->next;
+		free(tp);
+	}
+	while (*pile_2)
+	{
+		tp = *pile_2;
+		*pile_2 = (*pile_2)->next;
+		free(tp);
+	}
+	while (*list)
+	{
+		t = *list;
+		*list = (*list)->next;
+		free(t);
+	}
+}
+
+void	ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b,
+		t_ps_list_action **list)
+{
+	t_ps_list			*tp1;
+	t_ps_list			*tp2;
+	t_ps_list_action	*tp3;
 
 	tp1 = *pile_a;
 	tp2 = *pile_b;
+	tp3 = *list;
 	ft_printf("PILE_A\n\n");
 	while (tp1)
 	{
@@ -134,28 +140,11 @@ void	ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b)
 		printf("-> adresse : %p \n\n", tp2);
 		tp2 = tp2->next;
 	}
-}
-
-void	ft_free_pile(t_ps_list **pile_1, t_ps_list **pile_2, t_ps_list_action **liste)
-{
-	t_ps_list	*tp;
-
-	while (*pile)
+	printf("ACTIONS\n\n");
+	while (tp3)
 	{
-		tp = *pile_1;
-		*pile_1 = (*pile_1)->next;
-		free(tp);
-	}
-	while (*pile_2)
-	{
-		tp = *pile_2;
-		*pile_2 = (*pile_2)->next;
-		free(tp);
-	}
-	while (*liste)
-	{
-		tp = *liste;
-		*liste = (*liste)->next;
-		free(tp);
+		printf("-> commande : %s ", tp3->action);
+		printf("-> adresse : %p \n\n", tp3);
+		tp3 = tp3->next;
 	}
 }
