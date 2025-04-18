@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:24:53 by codk              #+#    #+#             */
-/*   Updated: 2025/04/18 17:59:48 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 18:31:34 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	ft_append_rank(t_ps_list **pile)
 	}
 }
 
-int	ft_max_min_rank(char a, t_ps_list *pile)
+int	ft_max_min_rank(char *a, t_ps_list *pile)
 {
 	int	max;
 	int	min;
@@ -85,9 +85,9 @@ int	ft_max_min_rank(char a, t_ps_list *pile)
 			min = pile->rank;
 		pile = pile->next;
 	}
-	if (a == 'x')
+	if (a == "max")
 		return (max);
-	else
+	else if (a == "min")
 		return (min);
 }
 

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:20:14 by codk              #+#    #+#             */
-/*   Updated: 2025/04/18 17:55:44 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 18:40:21 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,11 @@ void	ft_functions(char *a, t_ps_list **pile, t_ps_list_action **liste)
 		node1->next = NULL;
 		node2->next = node1;
 	}
+	ft_append_node_list(&liste, a);
 	ft_printf("%s\n", a);
 }
 
-void	ft_function_revert(char b, t_ps_list **pile, t_ps_list_action **liste)
+void	ft_function_revert(char a, t_ps_list **pile, t_ps_list_action **liste)
 {
 	t_ps_list	*node1;
 	t_ps_list	*node2;
@@ -58,6 +59,7 @@ void	ft_function_revert(char b, t_ps_list **pile, t_ps_list_action **liste)
 	node1->next = NULL;
 	node2->next = *pile;
 	*pile = node2;
+	ft_append_node_list(&liste, ft_strjoin("rr", &a));
 	ft_printf("rr%c\n", b);
 }
 
@@ -71,6 +73,7 @@ void	ft_function_push(char a, t_ps_list **pile_1, t_ps_list **pile_2, t_ps_list_
 	*pile_1 = node->next;
 	node->next = *pile_2;
 	*pile_2 = node;
+	ft_append_node_list(&liste, ft_strjoin("p", &a));
 	ft_printf("p%c\n", a);
 }
 
@@ -108,14 +111,14 @@ void	ft_sortin_b(int size, t_ps_list **pile_a, t_ps_list **pile_b, t_ps_list_act
 {
 	while (*pile_b)
 	{
-		if (ft_get_position(*pile_b, ft_max_min_rank('x', *pile_b)) <= size / 2)
+		if (ft_get_position(*pile_b, ft_max_min_rank("max", *pile_b)) <= size / 2)
 		{
-			while ((*pile_b)->rank != ft_max_min_rank('x', *pile_b))
+			while ((*pile_b)->rank != ft_max_min_rank("max", *pile_b))
 				ft_functions("rb", pile_b, liste);
 		}
 		else
 		{
-			while ((*pile_b)->rank != ft_max_min_rank('x', *pile_b))
+			while ((*pile_b)->rank != ft_max_min_rank("max", *pile_b))
 				ft_function_revert('b', pile_b, liste);
 		}
 		ft_function_push('a', pile_b, pile_a, liste);

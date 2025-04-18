@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/18 18:00:49 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 18:41:51 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int							ft_verif_ranking(char a, t_ps_list **pile);
 int							ft_ispartofgroup(t_ps_list **pile, int target);
 void						ft_print_pile(t_ps_list **pile_a,
 								t_ps_list **pile_b);
-void						ft_free_pile(t_ps_list **pile_1,
-								t_ps_list **pile_2);
+void						ft_free_pile(t_ps_list **pile_1, t_ps_list **pile_2,
+								t_ps_list_action **liste);
 
 void						ft_sort_three(t_ps_list **pile);
 int							ft_max_min_rank(char a, t_ps_list *pile);
@@ -63,7 +63,7 @@ void						ft_sort_five(int size, t_ps_list **a,
 
 void						push_swap(int ac, char **av);
 
-void						ft_append_node_liste(t_ps_list_action **head,
+void						ft_append_node_list(t_ps_list_action **head,
 								char *action);
 
 #endif

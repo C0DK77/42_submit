@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:23:04 by codk              #+#    #+#             */
-/*   Updated: 2025/04/18 17:10:10 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 18:37:43 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,11 +136,11 @@ void	ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b)
 	}
 }
 
-void	ft_free_pile(t_ps_list **pile_1, t_ps_list **pile_2)
+void	ft_free_pile(t_ps_list **pile_1, t_ps_list **pile_2, t_ps_list_action **liste)
 {
 	t_ps_list	*tp;
 
-	while (*pile_1)
+	while (*pile)
 	{
 		tp = *pile_1;
 		*pile_1 = (*pile_1)->next;
@@ -150,6 +150,12 @@ void	ft_free_pile(t_ps_list **pile_1, t_ps_list **pile_2)
 	{
 		tp = *pile_2;
 		*pile_2 = (*pile_2)->next;
+		free(tp);
+	}
+	while (*liste)
+	{
+		tp = *liste;
+		*liste = (*liste)->next;
 		free(tp);
 	}
 }
