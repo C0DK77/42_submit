@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:20:14 by codk              #+#    #+#             */
-/*   Updated: 2025/04/18 12:25:10 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 17:55:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 #include "push_swap.h"
 
-void	ft_functions(char *a, t_ps_list **pile)
+void	ft_functions(char *a, t_ps_list **pile, t_ps_list_action **liste)
 {
 	t_ps_list	*node1;
 	t_ps_list	*node2;
@@ -41,7 +41,7 @@ void	ft_functions(char *a, t_ps_list **pile)
 	ft_printf("%s\n", a);
 }
 
-void	ft_function_revert(char b, t_ps_list **pile)
+void	ft_function_revert(char b, t_ps_list **pile, t_ps_list_action **liste)
 {
 	t_ps_list	*node1;
 	t_ps_list	*node2;
@@ -61,7 +61,7 @@ void	ft_function_revert(char b, t_ps_list **pile)
 	ft_printf("rr%c\n", b);
 }
 
-void	ft_function_push(char a, t_ps_list **pile_1, t_ps_list **pile_2)
+void	ft_function_push(char a, t_ps_list **pile_1, t_ps_list **pile_2, t_ps_list_action **liste)
 {
 	t_ps_list	*node;
 
@@ -74,17 +74,17 @@ void	ft_function_push(char a, t_ps_list **pile_1, t_ps_list **pile_2)
 	ft_printf("p%c\n", a);
 }
 
-void	ft_sort(int size, t_ps_list **pile_a, t_ps_list **pile_b)
+void	ft_sort(int size, t_ps_list **pile_a, t_ps_list **pile_b, t_ps_list_action **liste)
 {
 	if (size == 2)
-		ft_functions("sa", pile_a);
+		ft_functions("sa", pile_a, liste);
 	else if (size == 3)
-		ft_sort_three(pile_a);
+		ft_sort_three(pile_a, liste);
 	else if (size <= 5)
-		ft_sort_five(size, pile_a, pile_b);
+		ft_sort_five(size, pile_a, pile_b, liste);
 }
 
-void	ft_sortin_a(int size, t_ps_list **pile_a, t_ps_list **pile_b)
+void	ft_sortin_a(int size, t_ps_list **pile_a, t_ps_list **pile_b, t_ps_list_action **liste)
 {
 	int	group;
 
@@ -93,31 +93,31 @@ void	ft_sortin_a(int size, t_ps_list **pile_a, t_ps_list **pile_b)
 	{
 		if ((*pile_a)->rank < (size / 5) * group)
 		{
-			ft_function_push('b', pile_a, pile_b);
-			if ((*pile_b)->rank < ((size / 10) * group) - ((size / 10) / 2))
-				ft_functions("rb", pile_b);
+			ft_function_push('b', pile_a, pile_b, liste);
+			if ((*pile_b)->rank < ((size / 5) * group) - ((size / 5) / 2))
+				ft_functions("rb", pile_b, liste);
 		}
 		else
-			ft_functions("ra", pile_a);
-		if (!ft_ispartofgroup(pile_a, size / 10 * group))
+			ft_functions("ra", pile_a, liste);
+		if (!ft_ispartofgroup(pile_a, size / 5 * group))
 			group++;
 	}
 }
 
-void	ft_sortin_b(int size, t_ps_list **pile_a, t_ps_list **pile_b)
+void	ft_sortin_b(int size, t_ps_list **pile_a, t_ps_list **pile_b, t_ps_list_action **liste)
 {
 	while (*pile_b)
 	{
 		if (ft_get_position(*pile_b, ft_max_min_rank('x', *pile_b)) <= size / 2)
 		{
 			while ((*pile_b)->rank != ft_max_min_rank('x', *pile_b))
-				ft_functions("rb", pile_b);
+				ft_functions("rb", pile_b, liste);
 		}
 		else
 		{
 			while ((*pile_b)->rank != ft_max_min_rank('x', *pile_b))
-				ft_function_revert('b', pile_b);
+				ft_function_revert('b', pile_b, liste);
 		}
-		ft_function_push('a', pile_b, pile_a);
+		ft_function_push('a', pile_b, pile_a, liste);
 	}
 }

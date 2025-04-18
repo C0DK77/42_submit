@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:23:04 by codk              #+#    #+#             */
-/*   Updated: 2025/04/18 10:27:53 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 17:10:10 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ int	ft_verif_ranking(char a, t_ps_list **pile)
 	tp = *pile;
 	while (tp && tp->next)
 	{
-		if ((a == 'a' && tp->nb > tp->next->nb) || (a == 'b' && tp->nb < tp->next->nb))
+		if ((a == 'a' && tp->nb > tp->next->nb) || (a == 'b'
+				&& tp->nb < tp->next->nb))
 			return (0);
 		tp = tp->next;
 	}
@@ -132,5 +133,23 @@ void	ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b)
 		printf("-> valeur de trie : %i", tp2->rank);
 		printf("-> adresse : %p \n\n", tp2);
 		tp2 = tp2->next;
+	}
+}
+
+void	ft_free_pile(t_ps_list **pile_1, t_ps_list **pile_2)
+{
+	t_ps_list	*tp;
+
+	while (*pile_1)
+	{
+		tp = *pile_1;
+		*pile_1 = (*pile_1)->next;
+		free(tp);
+	}
+	while (*pile_2)
+	{
+		tp = *pile_2;
+		*pile_2 = (*pile_2)->next;
+		free(tp);
 	}
 }

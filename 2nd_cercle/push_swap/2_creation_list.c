@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:24:53 by codk              #+#    #+#             */
-/*   Updated: 2025/04/18 09:40:44 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 17:59:48 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,25 @@ int	ft_get_position(t_ps_list *pile, int target)
 		i++;
 	}
 	return (-1);
+}
+
+void	ft_append_node_liste(t_ps_list_action **head, char *action)
+{
+	t_ps_list_action *node;
+	t_ps_list_action *new_node;
+
+	new_node = malloc(sizeof(t_ps_list_action));
+	if (!new_node)
+		return ;
+	new_node->action = action;
+	new_node->next = NULL;
+	if (!*head)
+		*head = new_node;
+	else
+	{
+		node = *head;
+		while (node->next)
+			node = node->next;
+		node->next = new_node;
+	}
 }

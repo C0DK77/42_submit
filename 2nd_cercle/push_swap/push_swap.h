@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/18 12:09:37 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 18:00:49 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,38 +19,51 @@
 
 typedef struct s_ps_list
 {
-	int					nb;
-	int					rank;
-	struct s_ps_list	*next;
-}						t_ps_list;
+	int						nb;
+	int						rank;
+	struct s_ps_list		*next;
+}							t_ps_list;
 
-void					ft_functions(char *a, t_ps_list **pile);
-void					ft_function_revert(char b, t_ps_list **pile);
-void					ft_function_push(char a, t_ps_list **pile_1,
-							t_ps_list **pile_2);
-void					ft_sortin_a(int size, t_ps_list **pile_a,
-							t_ps_list **pile_b);
-void					ft_sortin_b(int size, t_ps_list **pile_a,
-							t_ps_list **pile_b);
-void					ft_sort(int size, t_ps_list **pile_a,
-							t_ps_list **pile_b);
+typedef struct s_ps_list_action
+{
+	char					*action;
+	struct s_ps_list_action	*next;
+}							t_ps_list_action;
 
-int						ft_list_size(t_ps_list *pile);
-void					ft_append_node(t_ps_list **head, int nb);
-void					ft_append_rank(t_ps_list **pile);
-int						ft_get_position(t_ps_list *pile, int target);
+void						ft_functions(char *a, t_ps_list **pile);
+void						ft_function_revert(char b, t_ps_list **pile);
+void						ft_function_push(char a, t_ps_list **pile_1,
+								t_ps_list **pile_2);
+void						ft_sortin_a(int size, t_ps_list **pile_a,
+								t_ps_list **pile_b);
+void						ft_sortin_b(int size, t_ps_list **pile_a,
+								t_ps_list **pile_b);
+void						ft_sort(int size, t_ps_list **pile_a,
+								t_ps_list **pile_b);
 
-long					ft_atoi_long(const char *str);
-int						ft_isint(int ac, char **av);
-int						ft_verif_doublons(int ac, char **av);
-int						ft_verif_ranking(char a, t_ps_list **pile);
-int						ft_ispartofgroup(t_ps_list **pile, int target);
-void					ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b);
+int							ft_list_size(t_ps_list *pile);
+void						ft_append_node(t_ps_list **head, int nb);
+void						ft_append_rank(t_ps_list **pile);
+int							ft_get_position(t_ps_list *pile, int target);
 
-void					ft_sort_three(t_ps_list **pile);
-int						ft_max_min_rank(char a, t_ps_list *pile);
-void					ft_sort_five(int size, t_ps_list **a, t_ps_list **b);
+long						ft_atoi_long(const char *str);
+int							ft_isint(int ac, char **av);
+int							ft_verif_doublons(int ac, char **av);
+int							ft_verif_ranking(char a, t_ps_list **pile);
+int							ft_ispartofgroup(t_ps_list **pile, int target);
+void						ft_print_pile(t_ps_list **pile_a,
+								t_ps_list **pile_b);
+void						ft_free_pile(t_ps_list **pile_1,
+								t_ps_list **pile_2);
 
-void					push_swap(int ac, char **av);
+void						ft_sort_three(t_ps_list **pile);
+int							ft_max_min_rank(char a, t_ps_list *pile);
+void						ft_sort_five(int size, t_ps_list **a,
+								t_ps_list **b);
+
+void						push_swap(int ac, char **av);
+
+void						ft_append_node_liste(t_ps_list_action **head,
+								char *action);
 
 #endif
