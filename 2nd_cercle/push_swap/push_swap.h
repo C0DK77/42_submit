@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/18 10:17:25 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 12:09:37 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct s_ps_list
 	struct s_ps_list	*next;
 }						t_ps_list;
 
-void					ft_functions(char a, char b, t_ps_list **pile);
+void					ft_functions(char *a, t_ps_list **pile);
 void					ft_function_revert(char b, t_ps_list **pile);
 void					ft_function_push(char a, t_ps_list **pile_1,
 							t_ps_list **pile_2);
@@ -49,7 +49,7 @@ void					ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b);
 
 void					ft_sort_three(t_ps_list **pile);
 int						ft_max_min_rank(char a, t_ps_list *pile);
-void					ft_sort_five(t_ps_list **a, t_ps_list **b);
+void					ft_sort_five(int size, t_ps_list **a, t_ps_list **b);
 
 void					push_swap(int ac, char **av);
 

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/18 10:44:12 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 12:26:22 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,15 @@ void	push_swap(int ac, char **av)
 	ft_append_rank(&pile_a);
 	if (ft_verif_ranking('a', &pile_a))
 		return ;
-	ft_print_pile(&pile_a, &pile_b);
-	ft_printf("%i", size);
+	// ft_print_pile(&pile_a, &pile_b);
 	if (size - 1 <= 5)
-	{
 		ft_sort(size - 1, &pile_a, &pile_b);
-		ft_print_pile(&pile_a, &pile_b);
-	}
-	while (!ft_verif_ranking('a', &pile_a) && pile_b && ac > 2)
+	else
 	{
 		ft_sortin_a(size - 1, &pile_a, &pile_b);
 		ft_sortin_b(size - 1, &pile_a, &pile_b);
 	}
-	ft_print_pile(&pile_a, &pile_b);
+	// ft_print_pile(&pile_a, &pile_b);
 	return ;
 }
 
