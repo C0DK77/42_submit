@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:24:53 by codk              #+#    #+#             */
-/*   Updated: 2025/04/17 19:45:01 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 09:40:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	ft_append_rank(t_ps_list **pile)
 	{
 		rank = 1;
 		node2 = *pile;
-		while (node1)
+		while (node2)
 		{
 			if (node1->nb > node2->nb)
 				rank++;

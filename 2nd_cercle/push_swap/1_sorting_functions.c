@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:20:14 by codk              #+#    #+#             */
-/*   Updated: 2025/04/17 19:43:25 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 10:55:55 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ void	ft_functions(char a, char b, t_ps_list **pile)
 		node2->next = node1;
 		*pile = node1->next;
 	}
+	ft_printf("DEBUG: a = %c, b = %c\n", a, b);
+
 	ft_printf("%c%c\n", a, b);
+	printf("%c%c\n", a, b);
 }
 
 void	ft_function_revert(char b, t_ps_list **pile)

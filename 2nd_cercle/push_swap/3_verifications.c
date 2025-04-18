@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:23:04 by codk              #+#    #+#             */
-/*   Updated: 2025/04/17 19:45:59 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 10:27:53 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,7 @@ int	ft_verif_ranking(char a, t_ps_list **pile)
 	tp = *pile;
 	while (tp && tp->next)
 	{
-		if ((a == 'a' && tp->nb > tp->next->nb) || (a == 'b'
-				&& tp->nb < tp->next->nb))
+		if ((a == 'a' && tp->nb > tp->next->nb) || (a == 'b' && tp->nb < tp->next->nb))
 			return (0);
 		tp = tp->next;
 	}
@@ -111,22 +110,27 @@ int	ft_ispartofgroup(t_ps_list **pile, int target)
 	return (0);
 }
 
-void	ft_print_pile(t_ps_list *pile_a, t_ps_list *pile_b)
+void	ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b)
 {
+	t_ps_list	*tp1;
+	t_ps_list	*tp2;
+
+	tp1 = *pile_a;
+	tp2 = *pile_b;
 	ft_printf("PILE_A\n\n");
-	while (pile_a)
+	while (tp1)
 	{
-		printf("-> entier : %i ", pile_a->nb);
-		printf("-> valeur de trie : %i", pile_a->rank);
-		printf("-> adresse : %p \n\n", pile_a);
-		pile_a = pile_a->next;
+		printf("-> entier : %i ", tp1->nb);
+		printf("-> valeur de trie : %i", tp1->rank);
+		printf("-> adresse : %p \n\n", tp1);
+		tp1 = tp1->next;
 	}
 	printf("PILE_B\n\n");
-	while (pile_b)
+	while (tp2)
 	{
-		printf("-> entier : %i ", pile_b->nb);
-		printf("-> valeur de trie : %i", pile_b->rank);
-		printf("-> adresse : %p \n\n", pile_b);
-		pile_b = pile_b->next;
+		printf("-> entier : %i ", tp2->nb);
+		printf("-> valeur de trie : %i", tp2->rank);
+		printf("-> adresse : %p \n\n", tp2);
+		tp2 = tp2->next;
 	}
 }

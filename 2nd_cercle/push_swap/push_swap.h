@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/17 19:47:22 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/18 10:17:25 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int						ft_isint(int ac, char **av);
 int						ft_verif_doublons(int ac, char **av);
 int						ft_verif_ranking(char a, t_ps_list **pile);
 int						ft_ispartofgroup(t_ps_list **pile, int target);
-void					ft_print_pile(t_ps_list *pile_a, t_ps_list *pile_b);
+void					ft_print_pile(t_ps_list **pile_a, t_ps_list **pile_b);
 
 void					ft_sort_three(t_ps_list **pile);
 int						ft_max_min_rank(char a, t_ps_list *pile);
