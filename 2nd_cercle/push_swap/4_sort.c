@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:46:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/04/18 20:52:22 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/24 10:57:17 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,126 +14,125 @@
 #include "libft.h"
 #include "push_swap.h"
 
-void	ft_sort(int size, t_ps_list **pile_a, t_ps_list **pile_b,
-		t_ps_list_action **list)
+void	ft_sort(int len, t_ps **p1, t_ps **p2, t_action **l)
 {
-	if (size == 2)
-		ft_functions("sa", pile_a, list);
-	else if (size == 3)
-		ft_sort_three(pile_a, list);
-	else if (size <= 5)
-		ft_sort_five(size, pile_a, pile_b, list);
+	printf("%i", len);
+	if (len == 2)
+		ft_swap_rotate("sa", 0, p1, p2, l);
+	else if (len <= 5)
+		ft_sort_until_five(len, p1, p2, l);
+	else
+	{
+		ft_sortin_a(len, p1, p2, l);
+		// ft_sortin_b(len, p1, p2, l);
+	}
 }
 
-void	ft_sort_three(t_ps_list **pile, t_ps_list_action **list)
+void	ft_sort_three(t_ps **p1, t_ps **p2, t_action **l)
 {
 	int	a;
 	int	b;
-	int	c;
 
-	a = (*pile)->nb;
-	b = (*pile)->next->nb;
-	c = (*pile)->next->next->nb;
-	if (a > b && b < c && a < c)
-		ft_functions("sa", pile, list);
-	else if (a > b && b > c)
+	a = ft_max_min_rank("min", *p1);
+	b = ft_max_min_rank("max", *p1);
+	if (ft_get_position(*p1, a) == 0)
 	{
-		ft_functions("sa", pile, list);
-		ft_function_revert("rra", pile, list);
+		ft_swap_rotate("sa", 0, p1, p2, l);
+		ft_swap_rotate("ra", 0, p1, p2, l);
 	}
-	else if (a > b && b < c && a > c)
-		ft_functions("ra", pile, list);
-	else if (a < b && b > c && a < c)
+	else if (ft_get_position(*p1, b - 1) == 0 && ft_get_position(*p1, a) == 1)
+		ft_swap_rotate("sa", 0, p1, p2, l);
+	else if (ft_get_position(*p1, a - 1) == 0 && ft_get_position(*p1, b) == 1)
+		ft_reverse("rra", 0, p1, p2, l);
+	else if (ft_get_position(*p1, b) == 0 && ft_get_position(*p1, a) == 1)
+		ft_swap_rotate("ra", 0, p1, p2, l);
+	else if (ft_get_position(*p1, b) == 0 && ft_get_position(*p1, b - 1) == 1)
 	{
-		ft_functions("sa", pile, list);
-		ft_functions("ra", pile, list);
+		ft_swap_rotate("ra", 0, p1, p2, l);
+		ft_swap_rotate("sa", 0, p1, p2, l);
 	}
-	else if (a < b && b > c && a > c)
-		ft_function_revert("rra", pile, list);
 }
 
-void	ft_sort_five(int size, t_ps_list **pile_a, t_ps_list **pile_b,
-		t_ps_list_action **list)
+void	ft_sort_until_five(int len, t_ps **p1, t_ps **p2, t_action **l)
 {
-	int	i;
+	int	a;
+	int	count;
 
-	while (ft_list_size(*pile_a) > 3)
+	count = 1;
+	while (len > 3)
 	{
-		i = ft_get_position(*pile_a, ft_max_min_rank("min", *pile_a));
-		if (i == 0)
-			ft_function_push("pb", pile_a, pile_b, list);
-		else if (i == 1)
+		a = ft_max_min_rank("min", *p1);
+		if (ft_get_position(*p1, a) == 0)
 		{
-			ft_functions("sa", pile_a, list);
-			ft_function_push("pb", pile_a, pile_b, list);
+			ft_push("pb", p2, p1, l);
+			len--;
+			count++;
 		}
-		else if (i == 2)
-		{
-			ft_functions("ra", pile_a, list);
-			ft_functions("ra", pile_a, list);
-			ft_function_push("pb", pile_a, pile_b, list);
-		}
-		else if (i == 3)
-		{
-			ft_function_revert("rra", pile_a, list);
-			ft_function_revert("rra", pile_a, list);
-			ft_function_push("pb", pile_a, pile_b, list);
-		}
-		else if (i == 4)
-		{
-			ft_function_revert("rra", pile_a, list);
-			ft_function_push("pb", pile_a, pile_b, list);
-		}
+		else
+			ft_swap_rotate("ra", 0, p1, p2, l);
 	}
-	ft_sort_three(pile_a, list);
-	if (*pile_b && (*pile_b)->next && (*pile_b)->nb < (*pile_b)->next->nb)
-		ft_functions("sb", pile_b, list);
-	if (size == 5)
-	{
-		ft_function_push("pa", pile_b, pile_a, list);
-		ft_function_push("pa", pile_b, pile_a, list);
-	}
-	else if (size == 4)
-		ft_function_push("pa", pile_b, pile_a, list);
+	ft_sort_three(p1, p2, l);
+	while (count--)
+		ft_push("pa", p1, p2, l);
 }
 
-void	ft_sortin_a(int size, t_ps_list **pile_a, t_ps_list **pile_b,
-		t_ps_list_action **list)
+void	ft_sortin_a(int len, t_ps **p1, t_ps **p2, t_action **l)
 {
 	int	group;
+	int	pushed;
+	int	chunk;
 
 	group = 1;
-	while (*pile_a)
+	pushed = 0;
+	chunk = ft_get_chunks(len);
+	printf("%i", len);
+	while (pushed < len)
 	{
-		if ((*pile_a)->rank < (size / 5) * group)
+		if ((*p1)->rank < chunk * group)
 		{
-			ft_function_push("pb", pile_a, pile_b, list);
-			if ((*pile_b)->rank < ((size / 5) * group) - ((size / 5) / 2))
-				ft_functions("rb", pile_b, list);
+			ft_push("pb", p2, p1, l);
+			pushed++;
+			ft_print(p1, p2, l);
+			if ((*p2)->rank < (chunk * group) - (chunk / 2))
+				ft_swap_rotate("rb", 0, p2, p1, l);
 		}
 		else
-			ft_functions("ra", pile_a, list);
-		if (!ft_ispartofgroup(pile_a, size / 5 * group))
+			ft_swap_rotate("ra", 0, p1, p2, l);
+		if (pushed >= group * chunk && group * chunk < len)
 			group++;
+		printf("%i", pushed);
+	}
+	ft_print(p1, p2, l);
+	// ft_dual_sort(p1, p2, l);
+	// ft_print(p1, p2, l);
+}
+
+void	ft_sortin_b(int len, t_ps **p1, t_ps **p2, t_action **l)
+{
+	while (*p2)
+	{
+		if (ft_get_position(*p2, ft_max_min_rank("max", *p2)) <= len / 2)
+		{
+			while ((*p2)->rank != ft_max_min_rank("max", *p2))
+				ft_swap_rotate("rb", 0, p2, p1, l);
+		}
+		else
+		{
+			while ((*p2)->rank != ft_max_min_rank("max", *p2))
+				ft_reverse("rrb", 0, p2, p1, l);
+		}
+		ft_push("pa", p2, p1, l);
 	}
 }
 
-void	ft_sortin_b(int size, t_ps_list **pile_a, t_ps_list **pile_b,
-		t_ps_list_action **list)
+int	needs_rotate_a(t_ps *a)
 {
-	while (*pile_b)
-	{
-		if (ft_get_position(*pile_b, ft_max_min_rank("max", *pile_b)) <= size
-			/ 2)
-		{
-			while ((*pile_b)->rank != ft_max_min_rank("max", *pile_b))
-				ft_functions("rb", pile_b, list);
-		}
-		else
-		{
-			while ((*pile_b)->rank != ft_max_min_rank("max", *pile_b))
-				ft_function_revert("rrb", pile_b, list);
-		}
-		ft_function_push("pa", pile_b, pile_a, list);
-	}
+	// Ex : tu pourrais dire "je rotate A si son top est au mauvais endroit"
+	return (a->rank > ft_max_min_rank("min", a));
+}
+
+int	needs_reverse_rotate_a(t_ps *a)
+{
+	// Même idée en inversé
+	return (a->rank < ft_max_min_rank("max", a));
 }
