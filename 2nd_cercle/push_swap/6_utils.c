@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 20:17:50 by corentindes       #+#    #+#             */
-/*   Updated: 2025/04/24 10:57:32 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/24 12:14:14 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,10 @@ int	ft_get_chunks(int size)
 
 int	ft_get_rank_last_nb(t_ps *p)
 {
-	while (p)
+	if (!p)
+	return (0);
+
+	while (p->next)
 		p = p->next;
 	return (p->rank);
 }

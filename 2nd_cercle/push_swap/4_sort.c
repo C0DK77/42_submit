@@ -48,6 +48,8 @@ void	ft_sort_three(t_ps **p1, t_ps **p2, t_action **l)
 		ft_swap_rotate("ra", 0, p1, p2, l);
 	else if (ft_get_position(*p1, b) == 0 && ft_get_position(*p1, b - 1) == 1)
 	{
+		printf("\nOK");
+
 		ft_swap_rotate("ra", 0, p1, p2, l);
 		ft_swap_rotate("sa", 0, p1, p2, l);
 	}
@@ -58,7 +60,7 @@ void	ft_sort_until_five(int len, t_ps **p1, t_ps **p2, t_action **l)
 	int	a;
 	int	count;
 
-	count = 1;
+	count = 0;
 	while (len > 3)
 	{
 		a = ft_max_min_rank("min", *p1);
@@ -74,6 +76,8 @@ void	ft_sort_until_five(int len, t_ps **p1, t_ps **p2, t_action **l)
 	ft_sort_three(p1, p2, l);
 	while (count--)
 		ft_push("pa", p1, p2, l);
+	ft_print(p1, p2, l);
+
 }
 
 void	ft_sortin_a(int len, t_ps **p1, t_ps **p2, t_action **l)
@@ -85,7 +89,6 @@ void	ft_sortin_a(int len, t_ps **p1, t_ps **p2, t_action **l)
 	group = 1;
 	pushed = 0;
 	chunk = ft_get_chunks(len);
-	printf("%i", len);
 	while (pushed < len)
 	{
 		if ((*p1)->rank < chunk * group)
