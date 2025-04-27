@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_functions.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:20:14 by codk              #+#    #+#             */
-/*   Updated: 2025/04/18 20:45:24 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/27 15:09:58 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 #include "libft.h"
 #include "push_swap.h"
 
-void	ft_functions(char *a, t_ps_list **pile, t_ps_list_action **list)
+void	ft_functions(char *a, t_ps **pile, t_action **list)
 {
-	t_ps_list	*node1;
-	t_ps_list	*node2;
+	t_ps	*node1;
+	t_ps	*node2;
 
 	if (!pile || !*pile || !(*pile)->next)
 		return ;
@@ -38,13 +38,13 @@ void	ft_functions(char *a, t_ps_list **pile, t_ps_list_action **list)
 		node1->next = NULL;
 		node2->next = node1;
 	}
-	ft_append_node_list(list, a);
+	ft_append_node_actions(list, a);
 }
 
-void	ft_function_revert(char *a, t_ps_list **pile, t_ps_list_action **list)
+void	ft_function_revert(char *a, t_ps **pile, t_action **list)
 {
-	t_ps_list	*node1;
-	t_ps_list	*node2;
+	t_ps	*node1;
+	t_ps	*node2;
 
 	if (!pile || !*pile || !(*pile)->next)
 		return ;
@@ -58,13 +58,13 @@ void	ft_function_revert(char *a, t_ps_list **pile, t_ps_list_action **list)
 	node1->next = NULL;
 	node2->next = *pile;
 	*pile = node2;
-	ft_append_node_list(list, a);
+	ft_append_node_actions(list, a);
 }
 
-void	ft_function_push(char *a, t_ps_list **pile_1, t_ps_list **pile_2,
-		t_ps_list_action **list)
+void	ft_function_push(char *a, t_ps **pile_1, t_ps **pile_2,
+		t_action **list)
 {
-	t_ps_list	*node;
+	t_ps	*node;
 
 	if (!pile_1 || !*pile_1)
 		return ;
@@ -72,5 +72,5 @@ void	ft_function_push(char *a, t_ps_list **pile_1, t_ps_list **pile_2,
 	*pile_1 = node->next;
 	node->next = *pile_2;
 	*pile_2 = node;
-	ft_append_node_list(list, a);
+	ft_append_node_actions(list, a);
 }

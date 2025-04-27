@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/04/25 11:45:05 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/04/27 15:17:53 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void				ft_append_node_actions(t_action **head, char *action);
 
 int					ft_isint(int ac, char **av);
 int					ft_verif_doublons(int ac, char **av);
-int					ft_verif_ranking(t_ps **p);
+int					ft_verif_ranking(t_ps **pile);
 int					ft_verif_group(t_ps **p, int target);
 int					ft_ispartofgroup(t_ps **p, int target);
 void				ft_free(void **list);
