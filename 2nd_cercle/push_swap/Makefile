@@ -6,7 +6,9 @@ NAME = push_swap
 # ==== COMPILER AND FLAGS ==== #
 
 CC = cc 
-CFLAGS = -Wall -Wextra -Werror -I$(LIBFT_DIR) -I$(PRINTF_DIR)
+CFLAGS = 	-Wall -Wextra -Werror \
+			-I$(PRINTF_DIR) \
+			-I$(LIBFT_DIR) 
 
 # ==== FILES SRC ==== #
 

@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:23:04 by codk              #+#    #+#             */
-/*   Updated: 2025/04/27 15:17:28 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/01 14:11:01 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,20 +73,6 @@ int	ft_verif_ranking(t_ps **p)
 	return (1);
 }
 
-int	ft_ispartofgroup(t_ps **p, int target)
-{
-	t_ps	*t;
-
-	t = *p;
-	while (t)
-	{
-		if (t->rank < target)
-			return (1);
-		t = t->next;
-	}
-	return (0);
-}
-
 void	ft_free(void **list)
 {
 	void	*t;
@@ -112,16 +98,18 @@ void	ft_print(t_ps **p1, t_ps **pb, t_action **l)
 	while (t1)
 	{
 		printf("-> entier : %i ", t1->nb);
-		printf("-> valeur de trie : %i", t1->rank);
-		printf("-> adresse : %p \n\n", t1);
+		printf("-> valeur de trie : %i ", t1->rank);
+		printf("-> adresse : %p ", t1);
+		printf("-> patience : %i \n\n", t1->patience);
 		t1 = t1->next;
 	}
 	printf("PILE 2\n\n");
 	while (t2)
 	{
 		printf("-> entier : %i ", t2->nb);
-		printf("-> valeur de trie : %i", t2->rank);
-		printf("-> adresse : %p \n\n", t2);
+		printf("-> valeur de trie : %i ", t2->rank);
+		printf("-> adresse : %p ", t2);
+		printf("-> patience : %i \n\n", t2->patience);
 		t2 = t2->next;
 	}
 	printf("ACTIONS\n\n");
@@ -131,4 +119,15 @@ void	ft_print(t_ps **p1, t_ps **pb, t_action **l)
 		printf("-> adresse : %p \n\n", t3);
 		t3 = t3->next;
 	}
+}
+
+void print_tab(int *tab, int len)
+{
+    int i = 0;
+    while (i < len)
+    {
+        printf("%d ", tab[i]);
+        i++;
+    }
+    printf("\n");
 }

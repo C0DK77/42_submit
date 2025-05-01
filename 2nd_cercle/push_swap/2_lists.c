@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include "libft.h"
 #include "push_swap.h"
 
@@ -54,6 +53,47 @@ void	ft_append_ranking(t_ps **p)
 		}
 		n1->rank = rank;
 		n1 = n1->next;
+	}
+}
+
+int	*ft_create_tab(t_ps *p, int len)
+{
+	int		i;
+	t_ps	*t;
+	int		*tab;
+
+	i = 0;
+	t = p;
+	tab = malloc(sizeof(*tab) * len);
+	while (i < len)
+	{
+		tab[i] = t->rank;
+		i++;
+		t = t->next;
+	}
+	return (tab);
+}
+
+void	ft_append_lis(t_ps *p, int *lis, int len)
+{
+	int		i;
+	int		j;
+	t_ps	*t;
+
+	t = p;
+	i = 0;
+	j = 0;
+	while (t)
+	{
+		if (j < len && i == lis[j])
+		{
+			t->patience = 1;
+			j++;
+		}
+		else
+			t->patience = 0;
+		t = t->next;
+		i++;
 	}
 }
 

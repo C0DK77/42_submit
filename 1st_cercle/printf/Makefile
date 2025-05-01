@@ -23,15 +23,15 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
 all : $(OBJ_DIR) $(NAME)
 
-obj :
+$(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 $(NAME) : $(OBJ)
 	@$(AR) $(NAME) $(OBJ)
 
-$(OBJ_DIR)/%.o: %.c 
+$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	@echo "🔧 Compilation de $<"
-	@$(CC) $(CFAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)

@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   1_funct.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:20:14 by codk              #+#    #+#             */
-/*   Updated: 2025/04/24 12:16:48 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/01 14:59:25 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include "libft.h"
 #include "push_swap.h"
 
@@ -81,13 +80,13 @@ void	ft_try_reverse(char *a, int b, t_ps **p2, t_ps **p1, t_action **l)
 	if (!*p2 || !(*p2)->next)
 		return ;
 
-	last_rank = ft_get_rank_last_nb(*p2);
+	last_rank = ft_get_position(*p2, "last");
 
 	if (ft_strcmp(a, "sa") == 0 && (*p2)->rank < (*p2)->next->rank)
 		ft_swap_rotate("sb", b, p2, p1, l);
 	else if (ft_strcmp(a, "sb") == 0 && (*p2)->rank < (*p2)->next->rank)
 		ft_swap_rotate("sa", b, p1, p2, l);
-	else if (ft_strcmp(a, "ra") == 0 && (*p2)->rank > last_rank)
+	else if (ft_strcmp(a, "ra") == 0 && (*p2)->rank < last_rank)
 		ft_swap_rotate("rb", b, p2, p1, l);
 	else if (ft_strcmp(a, "rb") == 0 && (*p2)->rank > last_rank)
 		ft_swap_rotate("ra", b, p1, p2, l);

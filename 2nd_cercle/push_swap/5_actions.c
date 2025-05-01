@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5_actions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:58:13 by corentindes       #+#    #+#             */
-/*   Updated: 2025/04/25 11:45:23 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/01 13:20:27 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,39 +16,40 @@
 
 void	ft_action_opti(t_action **l)
 {
+	int i;
 	t_action	*t;
-	t_action	*tp;
-	char		*new_action;
-
+	i = 0;
 	t = *l;
-	while (t && t->next)
+	while (t)
 	{
-		if (ft_rules_opti(t->action, t->next->action, &new_action) == 0)
-		{
-			free(t->action);
-			t->action = new_action;
-			tp = t->next;
-			t->next = t->next->next;
-			free(tp->action);
-			free(tp);
-		}
-		else
+		if (t->next && t->next->next && ft_action_dif(t->action,
+				t->next->action))
+			t = t->next->next;
+		if (t->next && !(t->next->next) && ft_action_dif(t->action,
+				t->next->action))
 			t = t->next;
+		else
+		{
+			ft_printf("%s\n", t->action);
+			t = t->next;
+		}
+		i++;
 	}
+	printf("\nTOTAL ACTIONS -> %i\n\n", i);
 }
 
-int	ft_rules_opti(char *action, char *next_action, char **res)
+int	ft_action_dif(char *action, char *next_action)
 {
 	if ((strcmp(action, "ra") == 0 && strcmp(next_action, "rb") == 0)
 		|| (strcmp(action, "rb") == 0 && strcmp(next_action, "ra") == 0))
-		*res = strdup("rr");
+		ft_printf("rr\n");
 	else if ((strcmp(action, "rra") == 0 && strcmp(next_action, "rrb") == 0)
 		|| (strcmp(action, "rrb") == 0 && strcmp(next_action, "rra") == 0))
-		*res = strdup("rrr");
+		ft_printf("rrr\n");
 	else if ((strcmp(action, "sa") == 0 && strcmp(next_action, "sb") == 0)
 		|| (strcmp(action, "sb") == 0 && strcmp(next_action, "sa") == 0))
-		*res = strdup("ss");
+		ft_printf("ss\n");
 	else
-		return (1);
-	return (0);
+		return (0);
+	return (1);
 }

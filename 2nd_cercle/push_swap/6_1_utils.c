@@ -1,16 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   6_utils.c                                          :+:      :+:    :+:   */
+/*   6_1_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 20:17:50 by corentindes       #+#    #+#             */
-/*   Updated: 2025/04/27 15:06:42 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/01 15:02:00 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include "libft.h"
 #include "push_swap.h"
 
@@ -61,15 +60,39 @@ int	ft_get_position(t_ps *p, int target)
 		p = p->next;
 		i++;
 	}
-	return (-1);
+	if (ft_strcmp(target, "last") == 0)
+		return (p->rank);
+}
+
+int	ft_get_target_pos(t_ps *a, int rank)
+{
+	int		pos;
+	int		size;
+	t_ps	*t;
+
+	pos = 0;
+	size = ft_list_size(a);
+	t = a;
+	if (rank < ft_max_min_rank("min", a))
+		return (0);
+	if (rank > ft_max_min_rank("max", a))
+		return (size);
+	while (t && t->next)
+	{
+		if (t->rank < rank && rank < t->next->rank)
+			return (pos + 1);
+		t = t->next;
+		pos++;
+	}
+	return (size);
 }
 
 long	ft_atoi_long(const char *s)
 {
-	long	result;
+	long	i;
 	int		sign;
 
-	result = 0;
+	i = 0;
 	sign = 1;
 	while (*s == ' ' || (*s >= 9 && *s <= 13))
 		s++;
@@ -81,31 +104,9 @@ long	ft_atoi_long(const char *s)
 	}
 	while (*s >= '0' && *s <= '9')
 	{
-		result = result * 10 + (*s - '0');
+		i = i * 10 + (*s - '0');
 		s++;
 	}
-	return (result * sign);
+	return (i * sign);
 }
 
-int	ft_get_chunks(int size)
-{
-	if (size <= 20)
-		return (3);
-	else if (size <= 100)
-		return (15);
-	else if (size <= 200)
-		return (25);
-	else if (size <= 500)
-		return (45);
-	return (60);
-}
-
-int	ft_get_rank_last_nb(t_ps *p)
-{
-	if (!p)
-	return (0);
-
-	while (p->next)
-		p = p->next;
-	return (p->rank);
-}
