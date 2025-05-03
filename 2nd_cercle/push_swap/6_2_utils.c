@@ -3,67 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   6_2_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 14:22:02 by codk              #+#    #+#             */
-/*   Updated: 2025/05/01 15:01:21 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/03 15:19:48 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "push_swap.h"
 
-int	*ft_tab_add_patience(int *tab, int len, int *lis_len)
+int	*ft_tab_add_patience(int *tab, int len, int *out_lis_len)
 {
 	int	i;
+	int	j;
+	int	k;
 	int	*tail;
 	int	*pos;
 	int	*prev;
 	int	lis_end;
-	int	x;
-	int	l;
-	int	r;
-	int	m;
 	int	*lis_idx;
-	int	k;
 
-	lis_end = 0;
-	tail = malloc(sizeof(*tail) * len);
-	pos = malloc(sizeof(*pos) * len);
-	prev = malloc(sizeof(*prev) * len);
 	i = 0;
+	lis_end = 0;
+	tail = malloc(sizeof *tail * len);
+	pos = malloc(sizeof *pos * len);
+	prev = malloc(sizeof *prev * len);
 	while (i < len)
 	{
-		x = tab[i];
-		l = 0;
-		r = lis_end;
-		while (l < r)
+		j = 0;
+		k = lis_end;
+		while (j < k)
 		{
-			m = (l + r) / 2;
-			if (tail[m] < x)
-				l = m + 1;
+			if (tail[(j + k) / 2] < tab[i])
+				j = ((j + k) / 2) + 1;
 			else
-				r = m;
+				k = (j + k) / 2;
 		}
-		tail[l] = x;
-		pos[l] = i;
-		if (l > 0)
-			prev[i] = pos[l - 1];
-		else
-			prev[i] = -1;
-		if (l + 1 > lis_end)
-			lis_end = l + 1;
+		tail[j] = tab[i];
+		pos[j] = i;
+		prev[i] = (j > 0 ? pos[j - 1] : -1);
+		if (j + 1 > lis_end)
+			lis_end = j + 1;
 		i++;
 	}
-	*lis_len = lis_end;
-	lis_idx = malloc(sizeof(*lis_idx) * lis_end);
-	if (!lis_idx)
-	{
-		free(tail);
-		free(pos);
-		free(prev);
-		return (NULL);
-	}
+	*out_lis_len = lis_end;
+	lis_idx = malloc(sizeof *lis_idx * lis_end);
 	k = pos[lis_end - 1];
 	i = lis_end - 1;
 	while (i >= 0)
@@ -78,32 +63,33 @@ int	*ft_tab_add_patience(int *tab, int len, int *lis_len)
 	return (lis_idx);
 }
 
-void	ft_push_b(int len, t_ps **p1, t_ps **p2, t_action **l)
+void	ft_push_b(int len, int lis_len, t_ps **p1, t_ps **p2, t_action **l)
 {
-	int	i;
-	int	pos;
-	int	m;
+	int	pushed;
+	int	to_push;
 
-	i = len;
-	while (i > 0)
+	pushed = 0;
+	to_push = len - lis_len;
+	int pos, sz, moves;
+	while (pushed < to_push && *p1)
 	{
+		sz = ft_list_size(*p1);
 		pos = ft_get_next_non_lis(*p1);
-		if (pos >= i)
+		if (pos < 0 || pos >= sz)
 			break ;
-		if (pos <= i / 2)
-			while (pos--)
+		if (pos <= sz / 2)
+		{
+			while (pos-- > 0)
 				ft_swap_rotate("ra", 1, p1, p2, l);
+		}
 		else
 		{
-			m = i - pos;
-			while (m > 0)
-			{
+			moves = sz - pos;
+			while (moves-- > 0)
 				ft_reverse("rra", 1, p1, p2, l);
-				m--;
-			}
 		}
 		ft_push("pb", p2, p1, l);
-		i--;
+		pushed++;
 	}
 }
 
@@ -112,54 +98,111 @@ int	ft_get_next_non_lis(t_ps *p)
 	int	i;
 
 	i = 0;
-	while (i && i->patience)
+	while (p)
 	{
+		if (p->patience == 0)
+			return (i);
 		p = p->next;
 		i++;
 	}
-	return (i);
+	return (-1);
 }
-
 
 void	reinsert_b_greedy(t_ps **p1, t_ps **p2, t_action **l)
 {
-	t_ps *t;
-	int best_cost;
-	int i;
-	int cost;
-	int best_i;
+	t_ps	*t;
+	int		best_rank;
+	t_ps	*tmp;
+
+	best_rank = INT_MAX;
+	int sz_a, sz_b;
+	int best_cost, best_i, i, cost, moves, pos_a;
 	while (*p2)
 	{
+		sz_a = ft_list_size(*p1);
+		sz_b = ft_list_size(*p2);
+		// 1) Debug : afficher B
+		printf(">>> A = ");
+		tmp = *p1;
+		while (tmp)
+		{
+			printf("%d ", tmp->rank);
+			tmp = tmp->next;
+		}
+		printf("\n");
+		printf(">>> B = ");
+		tmp = *p2;
+		while (tmp)
+		{
+			printf("%d ", tmp->rank);
+			tmp = tmp->next;
+		}
+		printf("\n");
+		// 2) Initialiser t et i AVANT de les utiliser
 		t = *p2;
 		best_cost = INT_MAX;
 		best_i = 0;
 		i = 0;
+		// 3) Parcourir B pour trouver le meilleur candidat
 		while (t)
 		{
-			cost = ft_get_cost(ft_list_size(*p1), ft_list_size(*p2),
-					ft_get_target_pos(*p1, t->rank), i);
-			if (cost < best_cost)
+			pos_a = ft_get_target_pos(*p1, t->rank);
+			printf("   target_pos(%2d) = %d\n", t->rank, pos_a);
+			cost = ft_get_cost(sz_a, sz_b, pos_a, i);
+			// debug par candidat
+			printf("  candidat B[%d]=%d → posA=%d, cost=%d\n", i, t->rank,
+				pos_a, cost);
+			if (cost < best_cost || (cost == best_cost
+					&& t->rank < best_rank))
 			{
 				best_cost = cost;
+				best_rank = t->rank;
 				best_i = i;
 			}
 			t = t->next;
 			i++;
 		}
-		if (best_i <= ft_list_size(*p2) / 2)
-			while (best_i-- > 0)
+		// 4) Ramener le meilleur en tête de B...
+		if (best_i <= sz_b / 2)
+		{
+			moves = best_i;
+			while (moves-- > 0)
 				ft_swap_rotate("rb", 1, p2, p1, l);
+		}
 		else
 		{
-			i = ft_list_size(*p2) - best_i;
-			while (i > 0)
-			{
+			moves = sz_b - best_i;
+			while (moves-- > 0)
 				ft_reverse("rrb", 1, p2, p1, l);
-				i--;
-			}
 		}
-		execute_rotations(p1, p2, ft_get_target_pos(*p1, (*p2)->rank), 1,
-			ft_list_size(*p1), ft_list_size(*p2), l);
+		// 5) Recalculer et insérer dans A
+		sz_a = ft_list_size(*p1);
+		sz_b = ft_list_size(*p2);
+		pos_a = ft_get_target_pos(*p1, (*p2)->rank);
+		execute_rotations(p1, p2, pos_a, 0, sz_a, sz_b, l);
 		ft_push("pa", p1, p2, l);
 	}
+}
+
+int	ft_get_cost(int len_1, int len_2, int pos_a, int pos_b)
+{
+	int up_up;
+	int down_down;
+	int up_down;
+	int down_up;
+
+	up_up = pos_a > pos_b ? pos_a : pos_b;
+	down_down = (len_1 - pos_a) > (len_2 - pos_b) ? (len_1 - pos_a) : (len_2
+			- pos_b);
+	up_down = pos_a + (len_2 - pos_b);
+	down_up = (len_1 - pos_a) + pos_b;
+
+	int cost = up_up;
+	if (down_down < cost)
+		cost = down_down;
+	if (up_down < cost)
+		cost = up_down;
+	if (down_up < cost)
+		cost = down_up;
+	return (cost);
 }

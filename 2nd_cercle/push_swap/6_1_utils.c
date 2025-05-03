@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   6_1_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 20:17:50 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/01 15:02:00 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/03 15:30:23 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,31 +60,32 @@ int	ft_get_position(t_ps *p, int target)
 		p = p->next;
 		i++;
 	}
-	if (ft_strcmp(target, "last") == 0)
+	if (target == -1)
 		return (p->rank);
+	return (0);
 }
 
 int	ft_get_target_pos(t_ps *a, int rank)
 {
-	int		pos;
-	int		size;
-	t_ps	*t;
+	int	min;
+	int	max;
+	int	i;
 
-	pos = 0;
-	size = ft_list_size(a);
-	t = a;
-	if (rank < ft_max_min_rank("min", a))
+	i = 0;
+	min = ft_max_min_rank("min", a);
+	max = ft_max_min_rank("max", a);
+	if (ft_list_size(a) == 0)
 		return (0);
-	if (rank > ft_max_min_rank("max", a))
-		return (size);
-	while (t && t->next)
+	if (rank < min || rank > max)
+		return (ft_get_position(a, max) + 1);
+	while (a->next)
 	{
-		if (t->rank < rank && rank < t->next->rank)
-			return (pos + 1);
-		t = t->next;
-		pos++;
+		if (a->rank < rank && a->next->rank > rank)
+			return (i + 1);
+		a = a->next;
+		i++;
 	}
-	return (size);
+	return (ft_get_position(a, min));
 }
 
 long	ft_atoi_long(const char *s)
@@ -109,4 +110,3 @@ long	ft_atoi_long(const char *s)
 	}
 	return (i * sign);
 }
-

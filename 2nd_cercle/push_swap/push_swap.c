@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:49:04 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/05/01 13:19:57 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/03 15:21:29 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	push_swap(int ac, char **av)
 	ft_append_ranking(&p1);
 	if (ft_verif_ranking(&p1))
 		return ;
-	ft_print(&p1, &p2, &l);
+	//ft_print(&p1, &p2, &l);
 	ft_sort(i, &p1, &p2, &l);
 	ft_print(&p1, &p2, &l);
 	ft_action_opti(&l);

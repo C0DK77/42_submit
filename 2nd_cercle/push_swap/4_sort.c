@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4_sort.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:46:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/01 14:53:49 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/03 15:28:06 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ void	ft_sort(int len, t_ps **p1, t_ps **p2, t_action **l)
 {
 	if (len == 2)
 		ft_swap_rotate("sa", 0, p1, p2, l);
-	else if (len <= 10)
+	else if (len <= 5)
 		ft_sort_ten(len, p1, p2, l);
 	else
-		ft_sort(len, p1, p2, l);
+		ft_sort_big(len, p1, p2, l);
 }
 
 void	ft_sort_three(t_ps **p1, t_ps **p2, t_action **l)
@@ -80,18 +80,18 @@ void	ft_sort_ten(int len, t_ps **p1, t_ps **p2, t_action **l)
 		ft_push("pa", p1, p2, l);
 }
 
-void	ft_sort(int len, t_ps **p1, t_ps **p2, t_action **l)
+void	ft_sort_big(int len, t_ps **p1, t_ps **p2, t_action **l)
 {
 	int	*tab;
-	int	len;
-	int	*lis;
+	int	*lis_i;
+	int	lis_l;
 
 	tab = ft_create_tab(*p1, len);
-	lis = ft_tab_add_patience(tab, len, &len);
+	lis_i = ft_tab_add_patience(tab, len, &lis_l);
 	free(tab);
-	ft_append_lis(*p1, lis, len);
-	free(lis);
-	ft_push_b(len, p1, p2, l);
+	ft_append_lis(*p1, lis_i, lis_l);
+	ft_push_b(len, lis_l, p1, p2, l);
 	reinsert_b_greedy(p1, p2, l);
-	final_rotate_a(p1, l);
+	final_rotate_a(p1, p2, l);
+	free(lis_i);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/05/01 15:05:09 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/03 12:54:23 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,20 +69,19 @@ int					ft_verif_ranking(t_ps **pile);
 int					ft_verif_group(t_ps **p, int target);
 void				ft_free(void **list);
 void				ft_print(t_ps **p1, t_ps **pb, t_action **l);
-void				print_tab(int *tab, int len);
+void				ft_print_tab(int *tab, int len);
 
 //	4_SORT
 
 void				ft_sort(int len, t_ps **p1, t_ps **p2, t_action **l);
 void				ft_sort_three(t_ps **p1, t_ps **p2, t_action **l);
-void				ft_sort_until_five(int len, t_ps **p1, t_ps **p2,
-						t_action **l);
-void				ft_sort(int len, t_ps **p1, t_ps **p2, t_action **l);
+void				ft_sort_ten(int len, t_ps **p1, t_ps **p2, t_action **l);
+void				ft_sort_big(int len, t_ps **p1, t_ps **p2, t_action **l);
 
 //	ACTIONS
 
 void				ft_action_opti(t_action **l);
-int					ft_rules_opti(char *action, char *next_action, char **res);
+int					ft_action_dif(char *action, char *next_action);
 
 //	UTILS 1
 
@@ -94,19 +93,20 @@ long				ft_atoi_long(const char *s);
 
 //	UTILS 2
 
-int					*ft_tab_add_patience(int *tab, int len, int *lis_len);
-void				ft_push_b(int len, t_ps **p1, t_ps **p2, t_action **l);
+int					*ft_tab_add_patience(int *arr, int len, int *out_lis_len);
+void				ft_push_b(int len, int lis_len, t_ps **p1, t_ps **p2,
+						t_action **l);
 int					ft_get_next_non_lis(t_ps *p);
 void				reinsert_b_greedy(t_ps **p1, t_ps **p2, t_action **l);
 int					ft_get_cost(int sz_a, int sz_b, int pos_a, int pos_b);
 
 //	UTILS 3
 
-void				ft_insert_b_in_a(t_ps **p1, t_ps **p2, t_action **l);
-void				final_rotate_a(t_ps **p1, t_action **l);
+void				final_rotate_a(t_ps **p1, t_ps **p2, t_action **l);
 void				execute_rotations(t_ps **p1, t_ps **p2, int pos_a,
 						int pos_b, int sz_a, int sz_b, t_action **l);
-						
+int					get_lis_length(int *tab, int len);
+
 //	MAIN
 
 void				push_swap(int ac, char **av);

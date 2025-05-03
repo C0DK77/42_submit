@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_funct.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:20:14 by codk              #+#    #+#             */
-/*   Updated: 2025/05/01 14:59:25 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/03 15:26:41 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,7 @@ void	ft_try_reverse(char *a, int b, t_ps **p2, t_ps **p1, t_action **l)
 
 	if (!*p2 || !(*p2)->next)
 		return ;
-
-	last_rank = ft_get_position(*p2, "last");
+	last_rank = ft_get_position(*p2, -1);
 
 	if (ft_strcmp(a, "sa") == 0 && (*p2)->rank < (*p2)->next->rank)
 		ft_swap_rotate("sb", b, p2, p1, l);

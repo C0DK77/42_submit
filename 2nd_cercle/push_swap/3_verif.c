@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3_verif.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:23:04 by codk              #+#    #+#             */
-/*   Updated: 2025/05/01 14:11:01 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/02 14:35:47 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void	ft_print(t_ps **p1, t_ps **pb, t_action **l)
 	}
 }
 
-void print_tab(int *tab, int len)
+void ft_print_tab(int *tab, int len)
 {
     int i = 0;
     while (i < len)
