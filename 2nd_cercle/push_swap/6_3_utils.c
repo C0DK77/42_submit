@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 18:11:54 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/05 00:04:06 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/05 00:15:16 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	final_rotate_a(t_ps **p1, t_ps **p2, t_action **l)
 	{
 		while (i > 0)
 		{
-			ft_swap_rotate("ra", 1, p1, p2, l);
+			ft_swap_rotate("ra",p1, p2, l);
 			i--;
 		}
 	}
@@ -34,7 +34,7 @@ void	final_rotate_a(t_ps **p1, t_ps **p2, t_action **l)
 		j = ft_list_size(*p1) - i;
 		while (j > 0)
 		{
-			ft_reverse("rra", 1, p1, p2, l);
+			ft_reverse("rra", p1, p2, l);
 			j--;
 		}
 	}
@@ -58,20 +58,20 @@ void	execute_rotations(t_ps **p1, t_ps **p2, int pos_a, int pos_b, int sz_a,
 
     while (cnt_rra > 0 && cnt_rrb > 0)
     {
-        ft_reverse("rra", 1, p1, p2, l);
-        ft_reverse("rrb", 1, p2, p1, l);
+        ft_reverse("rra",p1, p2, l);
+        ft_reverse("rrb",p2, p1, l);
         cnt_rra--;
         cnt_rrb--;
     }
 
     while (cnt_ra--  > 0)
-        ft_swap_rotate("ra",  1, p1, p2, l); 
+        ft_swap_rotate("ra",  p1, p2, l); 
     while (cnt_rra-- > 0)
-        ft_reverse     ("rra", 1, p1, p2, l);
+        ft_reverse     ("rra",p1, p2, l);
     while (cnt_rb--  > 0)
-        ft_swap_rotate("rb",  1, p2, p1, l);
+        ft_swap_rotate("rb", p2, p1, l);
     while (cnt_rrb-- > 0) 
-        ft_reverse     ("rrb", 1, p2, p1, l);
+        ft_reverse     ("rrb", p2, p1, l);
 
 }
 

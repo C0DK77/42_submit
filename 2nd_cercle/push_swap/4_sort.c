@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:46:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/03 15:28:06 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/05 00:11:45 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void	ft_sort(int len, t_ps **p1, t_ps **p2, t_action **l)
 {
 	if (len == 2)
-		ft_swap_rotate("sa", 0, p1, p2, l);
+		ft_swap_rotate("sa", p1, p2, l);
 	else if (len <= 5)
 		ft_sort_ten(len, p1, p2, l);
 	else
@@ -34,19 +34,19 @@ void	ft_sort_three(t_ps **p1, t_ps **p2, t_action **l)
 		return ;
 	if (ft_get_position(*p1, a) == 0)
 	{
-		ft_swap_rotate("sa", 0, p1, p2, l);
-		ft_swap_rotate("ra", 0, p1, p2, l);
+		ft_swap_rotate("sa", p1, p2, l);
+		ft_swap_rotate("ra", p1, p2, l);
 	}
 	else if (ft_get_position(*p1, b - 1) == 0 && ft_get_position(*p1, a) == 1)
-		ft_swap_rotate("sa", 0, p1, p2, l);
+		ft_swap_rotate("sa", p1, p2, l);
 	else if (ft_get_position(*p1, a - 1) == 0 && ft_get_position(*p1, b) == 1)
-		ft_reverse("rra", 0, p1, p2, l);
+		ft_reverse("rra", p1, p2, l);
 	else if (ft_get_position(*p1, b) == 0 && ft_get_position(*p1, a) == 1)
-		ft_swap_rotate("ra", 0, p1, p2, l);
+		ft_swap_rotate("ra", p1, p2, l);
 	else if (ft_get_position(*p1, b) == 0 && ft_get_position(*p1, b - 1) == 1)
 	{
-		ft_swap_rotate("ra", 0, p1, p2, l);
-		ft_swap_rotate("sa", 0, p1, p2, l);
+		ft_swap_rotate("ra", p1, p2, l);
+		ft_swap_rotate("sa", p1, p2, l);
 	}
 }
 
@@ -68,11 +68,11 @@ void	ft_sort_ten(int len, t_ps **p1, t_ps **p2, t_action **l)
 			i++;
 		}
 		else if (ft_get_position(*p1, a) == 1)
-			ft_swap_rotate("sa", 0, p1, p2, l);
+			ft_swap_rotate("sa", p1, p2, l);
 		else if (ft_get_position(*p1, a) <= len / 2)
-			ft_swap_rotate("ra", 0, p1, p2, l);
+			ft_swap_rotate("ra", p1, p2, l);
 		else
-			ft_reverse("rra", 0, p1, p2, l);
+			ft_reverse("rra", p1, p2, l);
 		ft_print(p1, p2, l);
 	}
 	ft_sort_three(p1, p2, l);

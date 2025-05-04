@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/05/03 12:54:23 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/05 00:15:58 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,9 @@ typedef struct s_cost
 }					t_cost;
 
 //	1_FUNCTIONS
-void				ft_swap_rotate(char *a, int b, t_ps **p1, t_ps **p2,
-						t_action **l);
-void				ft_reverse(char *a, int b, t_ps **p1, t_ps **p2,
-						t_action **l);
+void				ft_swap_rotate(char *a, t_ps **p1, t_ps **p2, t_action **l);
+void				ft_reverse(char *a, t_ps **p1, t_ps **p2, t_action **l);
 void				ft_push(char *a, t_ps **p1, t_ps **p2, t_action **l);
-void				ft_try_reverse(char *a, int b, t_ps **p2, t_ps **p1,
-						t_action **l);
 
 //	2_PILES_ACTIONS
 

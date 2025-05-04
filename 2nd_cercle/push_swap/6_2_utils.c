@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 14:22:02 by codk              #+#    #+#             */
-/*   Updated: 2025/05/05 00:05:32 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/05 00:13:48 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,13 @@ void	ft_push_b(int len, int lis_len, t_ps **p1, t_ps **p2, t_action **l)
 		if (pos <= sz / 2)
 		{
 			while (pos-- > 0)
-				ft_swap_rotate("ra", 1, p1, p2, l);
+				ft_swap_rotate("ra", p1, p2, l);
 		}
 		else
 		{
 			moves = sz - pos;
 			while (moves-- > 0)
-				ft_reverse("rra", 1, p1, p2, l);
+				ft_reverse("rra", p1, p2, l);
 		}
 		ft_push("pb", p2, p1, l);
 		pushed++;
@@ -162,13 +162,13 @@ void	reinsert_b_greedy(t_ps **p1, t_ps **p2, t_action **l)
 		{
 			moves = best_i;
 			while (moves-- > 0)
-				ft_swap_rotate("rb", 1, p2, p1, l);
+				ft_swap_rotate("rb", p2, p1, l);
 		}
 		else
 		{
 			moves = sz_b - best_i;
 			while (moves-- > 0)
-				ft_reverse("rrb", 1, p2, p1, l);
+				ft_reverse("rrb", p2, p1, l);
 		}
 		sz_a = ft_list_size(*p1);
 		sz_b = ft_list_size(*p2);
