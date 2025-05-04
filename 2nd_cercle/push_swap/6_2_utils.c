@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 14:22:02 by codk              #+#    #+#             */
-/*   Updated: 2025/05/03 15:19:48 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/05 00:05:32 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ void	reinsert_b_greedy(t_ps **p1, t_ps **p2, t_action **l)
 	{
 		sz_a = ft_list_size(*p1);
 		sz_b = ft_list_size(*p2);
-		// 1) Debug : afficher B
 		printf(">>> A = ");
 		tmp = *p1;
 		while (tmp)
@@ -138,18 +137,15 @@ void	reinsert_b_greedy(t_ps **p1, t_ps **p2, t_action **l)
 			tmp = tmp->next;
 		}
 		printf("\n");
-		// 2) Initialiser t et i AVANT de les utiliser
 		t = *p2;
 		best_cost = INT_MAX;
 		best_i = 0;
 		i = 0;
-		// 3) Parcourir B pour trouver le meilleur candidat
 		while (t)
 		{
 			pos_a = ft_get_target_pos(*p1, t->rank);
 			printf("   target_pos(%2d) = %d\n", t->rank, pos_a);
 			cost = ft_get_cost(sz_a, sz_b, pos_a, i);
-			// debug par candidat
 			printf("  candidat B[%d]=%d → posA=%d, cost=%d\n", i, t->rank,
 				pos_a, cost);
 			if (cost < best_cost || (cost == best_cost
@@ -162,7 +158,6 @@ void	reinsert_b_greedy(t_ps **p1, t_ps **p2, t_action **l)
 			t = t->next;
 			i++;
 		}
-		// 4) Ramener le meilleur en tête de B...
 		if (best_i <= sz_b / 2)
 		{
 			moves = best_i;
@@ -175,7 +170,6 @@ void	reinsert_b_greedy(t_ps **p1, t_ps **p2, t_action **l)
 			while (moves-- > 0)
 				ft_reverse("rrb", 1, p2, p1, l);
 		}
-		// 5) Recalculer et insérer dans A
 		sz_a = ft_list_size(*p1);
 		sz_b = ft_list_size(*p2);
 		pos_a = ft_get_target_pos(*p1, (*p2)->rank);
