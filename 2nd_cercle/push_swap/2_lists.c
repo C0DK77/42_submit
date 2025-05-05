@@ -74,7 +74,7 @@ int	*ft_create_tab(t_ps *p, int len)
 	return (tab);
 }
 
-void	ft_append_lis(t_ps *p, int *lis, int len)
+void	ft_append_patience(t_ps *p, int *patience, int len)
 {
 	int		i;
 	int		j;
@@ -85,7 +85,7 @@ void	ft_append_lis(t_ps *p, int *lis, int len)
 	j = 0;
 	while (t)
 	{
-		if (j < len && i == lis[j])
+		if (j < len && i == patience[j])
 		{
 			t->patience = 1;
 			j++;

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/05/05 00:15:58 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/05 09:51:07 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ typedef struct s_cost
 }					t_cost;
 
 //	1_FUNCTIONS
-void				ft_swap_rotate(char *a, t_ps **p1, t_ps **p2, t_action **l);
-void				ft_reverse(char *a, t_ps **p1, t_ps **p2, t_action **l);
+void				ft_swap_rotate(char *a, t_ps **p, t_action **l);
+void				ft_reverse(char *a, t_ps **p, t_action **l);
 void				ft_push(char *a, t_ps **p1, t_ps **p2, t_action **l);
 
 //	2_PILES_ACTIONS
@@ -54,7 +54,7 @@ void				ft_push(char *a, t_ps **p1, t_ps **p2, t_action **l);
 void				ft_append_node_piles(t_ps **head, int nb);
 void				ft_append_ranking(t_ps **p);
 int					*ft_create_tab(t_ps *p, int len);
-void				ft_append_lis(t_ps *p, int *lis, int len);
+void				ft_append_patience(t_ps *p, int *patience, int len);
 void				ft_append_node_actions(t_action **head, char *action);
 
 //	3_VERIFS
@@ -70,7 +70,7 @@ void				ft_print_tab(int *tab, int len);
 //	4_SORT
 
 void				ft_sort(int len, t_ps **p1, t_ps **p2, t_action **l);
-void				ft_sort_three(t_ps **p1, t_ps **p2, t_action **l);
+void				ft_sort_three(t_ps **p, t_action **l);
 void				ft_sort_ten(int len, t_ps **p1, t_ps **p2, t_action **l);
 void				ft_sort_big(int len, t_ps **p1, t_ps **p2, t_action **l);
 
@@ -89,7 +89,8 @@ long				ft_atoi_long(const char *s);
 
 //	UTILS 2
 
-int					*ft_tab_add_patience(int *arr, int len, int *out_lis_len);
+void ft_build_patience(int *tab, int len, int *tail, int *pos, int *prev,int *out_lis_len);
+int *ft_tab_add_patience(int *tab, int len, int *out_lis_len);
 void				ft_push_b(int len, int lis_len, t_ps **p1, t_ps **p2,
 						t_action **l);
 int					ft_get_next_non_lis(t_ps *p);
@@ -98,7 +99,7 @@ int					ft_get_cost(int sz_a, int sz_b, int pos_a, int pos_b);
 
 //	UTILS 3
 
-void				final_rotate_a(t_ps **p1, t_ps **p2, t_action **l);
+void				final_rotate_a(t_ps **p, t_action **l);
 void				execute_rotations(t_ps **p1, t_ps **p2, int pos_a,
 						int pos_b, int sz_a, int sz_b, t_action **l);
 int					get_lis_length(int *tab, int len);
