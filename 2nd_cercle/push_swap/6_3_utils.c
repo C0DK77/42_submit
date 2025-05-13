@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   6_3_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 18:11:54 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/05 10:16:40 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/07 16:39:18 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "libft.h"
 #include "push_swap.h"
 
@@ -18,10 +19,8 @@ void	final_rotate_a(t_ps **p, t_action **l)
 	int	i;
 	int	j;
 
-	if (!p || !*p)
-		return ;
-	i = ft_get_position(*p, ft_max_min_rank("min", *p));
-	if (i <= ft_list_size(*p) / 2)
+	i = ft_rank("", ft_rank("min", 0, *p), *p);
+	if (i <= ft_lst_size(*p) / 2)
 	{
 		while (i > 0)
 		{
@@ -31,7 +30,7 @@ void	final_rotate_a(t_ps **p, t_action **l)
 	}
 	else
 	{
-		j = ft_list_size(*p) - i;
+		j = ft_lst_size(*p) - i;
 		while (j > 0)
 		{
 			ft_reverse("rra", p, l);
@@ -74,32 +73,4 @@ void	execute_rotations(t_ps **p1, t_ps **p2, int pos_a, int pos_b, int sz_a,
 		ft_swap_rotate("rb", p2, l);
 	while (cnt_rrb-- > 0)
 		ft_reverse("rrb", p2, l);
-}
-
-int	get_lis_length(int *tab, int len)
-{
-	int *tail = malloc(sizeof(*tail) * len);
-	int lis_end = 0;
-	int i = 0;
-
-	while (i < len)
-	{
-		int x = tab[i];
-		int l = 0, r = lis_end;
-		while (l < r)
-		{
-			int m = (l + r) / 2;
-			if (tail[m] < x)
-				l = m + 1;
-			else
-				r = m;
-		}
-		tail[l] = x;
-		if (l == lis_end)
-			lis_end++;
-		i++;
-	}
-
-	free(tail);
-	return (lis_end);
 }

@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:58:13 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/01 13:20:27 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/07 15:47:08 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@
 
 void	ft_action_opti(t_action **l)
 {
-	int i;
+	int			i;
 	t_action	*t;
+
 	i = 0;
 	t = *l;
 	while (t)
@@ -38,16 +39,19 @@ void	ft_action_opti(t_action **l)
 	printf("\nTOTAL ACTIONS -> %i\n\n", i);
 }
 
-int	ft_action_dif(char *action, char *next_action)
+int	ft_action_dif(char *a1, char *a2)
 {
-	if ((strcmp(action, "ra") == 0 && strcmp(next_action, "rb") == 0)
-		|| (strcmp(action, "rb") == 0 && strcmp(next_action, "ra") == 0))
+	if (ft_strcmp(a1, "ra") == 0 && ft_strcmp(a2, "rb") == 0)
 		ft_printf("rr\n");
-	else if ((strcmp(action, "rra") == 0 && strcmp(next_action, "rrb") == 0)
-		|| (strcmp(action, "rrb") == 0 && strcmp(next_action, "rra") == 0))
+	else if (ft_strcmp(a1, "rb") == 0 && ft_strcmp(a2, "ra") == 0)
+		ft_printf("rr\n");
+	else if (ft_strcmp(a1, "rra") == 0 && ft_strcmp(a2, "rrb") == 0)
 		ft_printf("rrr\n");
-	else if ((strcmp(action, "sa") == 0 && strcmp(next_action, "sb") == 0)
-		|| (strcmp(action, "sb") == 0 && strcmp(next_action, "sa") == 0))
+	else if (ft_strcmp(a1, "rrb") == 0 && ft_strcmp(a2, "rra") == 0)
+		ft_printf("rrr\n");
+	else if (ft_strcmp(a1, "sa") == 0 && ft_strcmp(a2, "sb") == 0)
+		ft_printf("ss\n");
+	else if (ft_strcmp(a1, "sb") == 0 && ft_strcmp(a2, "sa") == 0)
 		ft_printf("ss\n");
 	else
 		return (0);

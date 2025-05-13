@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "libft.h"
 #include "push_swap.h"
 
@@ -99,8 +100,8 @@ void	ft_append_patience(t_ps *p, int *patience, int len)
 
 void	ft_append_node_actions(t_action **head, char *action)
 {
-	t_action *n1;
-	t_action *n2;
+	t_action	*n1;
+	t_action	*n2;
 
 	n2 = malloc(sizeof(t_action));
 	if (!n2)

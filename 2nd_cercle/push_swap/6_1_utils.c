@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   6_1_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 20:17:50 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/03 15:30:23 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/07 15:47:06 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "libft.h"
 #include "push_swap.h"
 
-int	ft_list_size(t_ps *p)
+int	ft_lst_size(t_ps *p)
 {
 	int	i;
 
@@ -26,66 +27,52 @@ int	ft_list_size(t_ps *p)
 	return (i);
 }
 
-int	ft_max_min_rank(char *a, t_ps *p)
+int	ft_rank(char *a, int target, t_ps *p)
 {
+	int	i;
 	int	max;
 	int	min;
 
+	i = 0;
 	max = p->rank;
 	min = p->rank;
 	while (p)
 	{
+		if (p->rank == target)
+			return (i);
 		if (p->rank > max)
 			max = p->rank;
 		if (p->rank < min)
 			min = p->rank;
 		p = p->next;
+		i++;
 	}
 	if (ft_strcmp(a, "max") == 0)
 		return (max);
 	else if (ft_strcmp(a, "min") == 0)
 		return (min);
-	return (0);
+	return (p->rank);
 }
 
-int	ft_get_position(t_ps *p, int target)
+int	ft_pos(int rank, t_ps *p)
 {
 	int	i;
+	int	min;
+	int	max;
 
 	i = 0;
-	while (p)
+	min = ft_rank("min", 0, p);
+	max = ft_rank("max", 0, p);
+	if (rank < min || rank > max)
+		return (ft_rank("", max, p) + 1);
+	while (p->next)
 	{
-		if (p->rank == target)
-			return (i);
+		if (p->rank < rank && p->next->rank > rank)
+			return (i + 1);
 		p = p->next;
 		i++;
 	}
-	if (target == -1)
-		return (p->rank);
-	return (0);
-}
-
-int	ft_get_target_pos(t_ps *a, int rank)
-{
-	int	min;
-	int	max;
-	int	i;
-
-	i = 0;
-	min = ft_max_min_rank("min", a);
-	max = ft_max_min_rank("max", a);
-	if (ft_list_size(a) == 0)
-		return (0);
-	if (rank < min || rank > max)
-		return (ft_get_position(a, max) + 1);
-	while (a->next)
-	{
-		if (a->rank < rank && a->next->rank > rank)
-			return (i + 1);
-		a = a->next;
-		i++;
-	}
-	return (ft_get_position(a, min));
+	return (min);
 }
 
 long	ft_atoi_long(const char *s)
@@ -109,4 +96,19 @@ long	ft_atoi_long(const char *s)
 		s++;
 	}
 	return (i * sign);
+}
+
+int	ft_0_patience(t_ps *p)
+{
+	int	i;
+
+	i = 0;
+	while (p)
+	{
+		if (p->patience == 0)
+			return (i);
+		p = p->next;
+		i++;
+	}
+	return (-1);
 }

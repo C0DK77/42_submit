@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   1_funct.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:20:14 by codk              #+#    #+#             */
-/*   Updated: 2025/05/05 09:26:49 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/07 15:37:25 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "libft.h"
 #include "push_swap.h"
 
@@ -53,8 +54,8 @@ void	ft_push(char *a, t_ps **p1, t_ps **p2, t_action **l)
 
 void	ft_reverse(char *a, t_ps **p, t_action **l)
 {
-	t_ps *n1;
-	t_ps *n2;
+	t_ps	*n1;
+	t_ps	*n2;
 
 	n1 = *p;
 	n2 = *p;
