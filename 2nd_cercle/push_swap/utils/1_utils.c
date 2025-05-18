@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   6_1_utils.c                                        :+:      :+:    :+:   */
+/*   1_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 20:17:50 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/07 15:47:06 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/18 17:56:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	ft_rank(char *a, int target, t_ps *p)
 	i = 0;
 	max = p->rank;
 	min = p->rank;
-	while (p)
+	while (p->next)
 	{
 		if (p->rank == target)
 			return (i);
@@ -56,23 +56,21 @@ int	ft_rank(char *a, int target, t_ps *p)
 
 int	ft_pos(int rank, t_ps *p)
 {
-	int	i;
-	int	min;
-	int	max;
+	int		i;
+	t_ps	*t;
 
 	i = 0;
-	min = ft_rank("min", 0, p);
-	max = ft_rank("max", 0, p);
-	if (rank < min || rank > max)
-		return (ft_rank("", max, p) + 1);
-	while (p->next)
+	t = p;
+	while (t->next)
 	{
-		if (p->rank < rank && p->next->rank > rank)
+		if ((t->rank < t->next->rank && rank > t->rank && rank < t->next->rank)
+			|| (t->rank >= t->next->rank && (rank > t->rank
+					|| rank < t->next->rank)))
 			return (i + 1);
-		p = p->next;
+		t = t->next;
 		i++;
 	}
-	return (min);
+	return (0);
 }
 
 long	ft_atoi_long(const char *s)

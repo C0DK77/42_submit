@@ -57,14 +57,16 @@ void	ft_append_ranking(t_ps **p)
 	}
 }
 
-int	*ft_create_tab(t_ps *p, int len)
+int	*ft_create_tab(t_ps *p)
 {
 	int		i;
 	t_ps	*t;
 	int		*tab;
+	int		len;
 
 	i = 0;
 	t = p;
+	len = ft_lst_size(p);
 	tab = malloc(sizeof(*tab) * len);
 	while (i < len)
 	{

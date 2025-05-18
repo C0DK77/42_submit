@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   3_verif.c                                          :+:      :+:    :+:   */
+/*   verif.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:23:04 by codk              #+#    #+#             */
-/*   Updated: 2025/05/07 15:47:12 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/16 15:40:52 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,21 @@ void	ft_free(void **list)
 		*list = *(void **)(*list);
 		free(t);
 	}
+}
+
+void	ft_free_multiple(int ac, ...)
+{
+	int		i;
+	va_list	av;
+	void	*p;
+
+	va_start(av, ac);
+	i = 0;
+	while (i < ac)
+	{
+		p = va_arg(av, void *);
+		free(p);
+		i++;
+	}
+	va_end(av);
 }

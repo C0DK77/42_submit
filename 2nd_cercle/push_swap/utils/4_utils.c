@@ -1,18 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   5_actions.c                                        :+:      :+:    :+:   */
+/*   4_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:58:13 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/07 15:47:08 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/16 14:03:41 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "libft.h"
 #include "push_swap.h"
+
+void	final_rotate_a(t_ps **p, t_action **l)
+{
+	int	i;
+
+	i = ft_rank("", ft_rank("min", 0, *p), *p);
+	if (i <= ft_lst_size(*p) / 2)
+	{
+		while (i > 0)
+		{
+			ft_swap_rotate("ra", p, l);
+			i--;
+		}
+	}
+	else
+	{
+		i = ft_lst_size(*p) - i;
+		while (i > 0)
+		{
+			ft_reverse("rra", p, l);
+			i--;
+		}
+	}
+}
 
 void	ft_action_opti(t_action **l)
 {

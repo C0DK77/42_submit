@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   4_sort.c                                           :+:      :+:    :+:   */
+/*   sort.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:46:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/07 16:22:07 by codk             ###   ########.fr       */
+/*   Updated: 2025/05/16 17:17:37 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 #include "libft.h"
 #include "push_swap.h"
 
-void	ft_sort(int len, t_ps **p1, t_ps **p2, t_action **l)
+void	ft_sort(t_ps **p1, t_ps **p2, t_action **l)
 {
+	int	len;
+
+	len = ft_lst_size(*p1);
 	if (ft_verif_ranking(p1))
 		return ;
 	if (len == 2)
@@ -23,7 +26,7 @@ void	ft_sort(int len, t_ps **p1, t_ps **p2, t_action **l)
 	else if (len <= 3)
 		ft_sort_three(p1, l);
 	else
-		ft_sort_big(len, p1, p2, l);
+		ft_sort_big(p1, p2, l);
 }
 
 void	ft_sort_three(t_ps **p, t_action **l)
@@ -51,21 +54,25 @@ void	ft_sort_three(t_ps **p, t_action **l)
 	}
 }
 
-void	ft_sort_big(int len, t_ps **p1, t_ps **p2, t_action **l)
+void	ft_sort_big(t_ps **p1, t_ps **p2, t_action **l)
 {
 	int	*tab;
-	int	*lis_i;
-	int	lis_l;
-	printf("\n\n%i\n\n", len);
-	tab = ft_create_tab(*p1, len);
-	lis_i = ft_tab_add_patience(tab, len, &lis_l);
+	int	*patience_i;
+	int	patience_len;
+	int	best_i;
+
+	tab = ft_create_tab(*p1);
+	patience_i = ft_tab_add_patience(tab, ft_lst_size(*p1), &patience_len);
 	free(tab);
-	ft_append_patience(*p1, lis_i, lis_l);
-	ft_print(p1, p2, l);
-	ft_push_b(lis_l, p1, p2, l);
-	ft_print(p1, p2, l);
-	reinsert_b_greedy(p1, p2, l);
-	ft_print(p1, p2, l);
+	ft_append_patience(*p1, patience_i, patience_len);
+	ft_push_b(patience_len, p1, p2, l);
+	while (*p2)
+	{
+		ft_find_best(*p1, *p2, &best_i);
+		ft_push_a(p1, p2, best_i, l);
+		ft_print(p1, p2, l);
+	}
 	final_rotate_a(p1, l);
-	free(lis_i);
+	ft_print(p1, p2, l);
+	free(patience_i);
 }
