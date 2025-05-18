@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 14:22:02 by codk              #+#    #+#             */
-/*   Updated: 2025/05/18 17:32:00 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/18 17:59:59 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,5 @@ int	ft_find_best(t_ps *p1, t_ps *p2, int *best_i)
 		i++;
 	}
 	*best_i = best.i;
-	printf("\n\nBEST RANK : %i\n\n", best.rank);
-	printf("\n\nBEST I : %i\n\n", best.i);
 	return (best.cost);
 }

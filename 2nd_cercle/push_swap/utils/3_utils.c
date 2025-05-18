@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 18:11:54 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/18 17:32:17 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/18 18:00:17 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ void	ft_push_a(t_ps **p1, t_ps **p2, int best_i, t_action **l)
 		while (a-- > 0)
 			ft_reverse("rrb", p2, l);
 	}
-	printf("\n\nPOS_A : %i\n\n", ft_pos((*p2)->rank, *p1));
-	printf("\n\nLAST P1 : %i\n\n", ft_rank("", 0, *p1));
 	ft_rotation_a(p1, ft_pos((*p2)->rank, *p1), l);
 	ft_push("pa", p1, p2, l);
 }
@@ -53,7 +51,6 @@ void	ft_apply_rotation(t_ps **p1, t_rotation rot, t_action **l)
 
 void	ft_calcul_rotation(t_ps **p1, int pos_a, t_rotation *rot)
 {
-	printf("\n\nLIST SIZE : %i\n\n", ft_lst_size(*p1));
 	if (pos_a <= ft_lst_size(*p1) / 2)
 	{
 		rot->cnt_ra = pos_a;
