@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:46:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/18 18:01:04 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/18 18:48:23 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,5 @@ void	ft_sort_big(t_ps **p1, t_ps **p2, t_action **l)
 		ft_push_a(p1, p2, best_i, l);
 	}
 	final_rotate_a(p1, l);
-	ft_print(p1, p2, l);
 	free(patience_i);
 }

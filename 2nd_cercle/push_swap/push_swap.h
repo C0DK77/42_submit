@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 13:39:28 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/05/18 17:16:24 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/18 18:50:13 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,9 @@ int					ft_action_dif(char *action, char *next_action);
 //	MAIN
 void				push_swap(int ac, char **av);
 //	PRINT
-void				ft_print(t_ps **p1, t_ps **pb, t_action **l);
+void				ft_print_commandes(t_action **l);
+void				ft_print_piles(t_ps **p1, t_ps **p2);
 void				ft_print_tab(int *tab, int len);
-int					ft_pos_2(int rank, t_ps *p);
+void				ft_checker(t_ps **p1);
 
 #endif

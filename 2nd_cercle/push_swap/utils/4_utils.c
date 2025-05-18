@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:58:13 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/16 14:03:41 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/05/18 18:40:34 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,8 @@ void	final_rotate_a(t_ps **p, t_action **l)
 
 void	ft_action_opti(t_action **l)
 {
-	int			i;
 	t_action	*t;
 
-	i = 0;
 	t = *l;
 	while (t)
 	{
@@ -58,9 +56,7 @@ void	ft_action_opti(t_action **l)
 			ft_printf("%s\n", t->action);
 			t = t->next;
 		}
-		i++;
 	}
-	printf("\nTOTAL ACTIONS -> %i\n\n", i);
 }
 
 int	ft_action_dif(char *a1, char *a2)
