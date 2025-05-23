@@ -26,17 +26,16 @@ LIBFT_A = $(LIBFT_DIR)/libft.a
 # ==== RULES ==== #
 
 all : $(LIBFT_A) $(OBJ_DIR) $(NAME_SERVER) $(NAME_CLIENT)
-	@echo "✅ Compilation terminée !"
 
 $(OBJ_DIR) :
 	@mkdir -p $(OBJ_DIR)
 
 $(LIBFT_A) :
-	@echo "📚 Compilation de la libft..."
+	@echo "Compilation de la libft..."
 	@make -s -C $(LIBFT_DIR)
 
 $(NAME_SERVER) : $(OBJ_SERVER) $(LIBFT_A)
-	@echo "🔧 Link du binaire 'server'..."
+	@echo "Link du binaire 'server'..."
 	@$(CC) $(CFLAGS) -o $(NAME_SERVER) $(OBJ_SERVER) $(LIBFT_A)
 
 $(NAME_CLIENT) : $(OBJ_CLIENT) $(LIBFT_A)
@@ -44,16 +43,16 @@ $(NAME_CLIENT) : $(OBJ_CLIENT) $(LIBFT_A)
 	@$(CC) $(CFLAGS) -o $(NAME_CLIENT) $(OBJ_CLIENT) $(LIBFT_A)
 
 $(OBJ_DIR)/%.o: %.c
-	@echo "📦 Compilation de $<"
+	@echo "Compilation de $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
-	@echo "🧹 Suppression des fichiers objets..."
+	@echo "Suppression des fichiers objets..."
 	@make -s -C $(LIBFT_DIR) clean
 	@rm -rf $(OBJ_DIR)
 
 fclean : clean
-	@echo "🧨 Suppression des exécutables..."
+	@echo "Suppression des exécutables..."
 	@make -s -C $(LIBFT_DIR) fclean
 	@rm -f $(NAME_SERVER) $(NAME_CLIENT)
 
