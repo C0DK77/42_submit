@@ -13,8 +13,15 @@ CFLAGS 				= 	-Wall -Wextra -Werror 	\
 
 # ==== FILES SRC ==== #
 
-SRC_ROOT   			= $(wildcard *.c)
-SRC_UTIL   			= $(wildcard $(UTILS_DIR)/*.c)
+SRC_ROOT   			=  	push_swap.c 	\
+						sort.c 			\
+						functions.c
+SRC_UTIL   			= 	./utils/1_utils.c \
+						./utils/2_utils.c \
+						./utils/3_utils.c \
+						./utils/4_utils.c \
+						./utils/lists.c \
+						./utils/verif.c
 SRC        			= $(SRC_ROOT) $(SRC_UTIL)
 
 UTILS_DIR 			= utils
@@ -23,8 +30,8 @@ OBJ					= $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 # ==== LIBFT / PRINTF ==== #
 
-LIBFT_DIR			= ../../1.libft
-PRINTF_DIR 			= ../../1st_cercle/printf
+LIBFT_DIR			= ./libft
+PRINTF_DIR 			= ./printf
 LIBFT_A 			= $(LIBFT_DIR)/libft.a 
 PRINTF_A 			= $(PRINTF_DIR)/ft_printf.a 
 
@@ -37,12 +44,12 @@ $(NAME) 			: $(OBJ)
 
 $(OBJ_DIR)/%.o		: %.c
 					  @mkdir -p $(dir $@)
-			  		  @echo "🔧 Compiling $< → $@"
+			  		  @echo "Compilation de $< → $@"
 			  		  @$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/utils/%.o: $(UTILS_DIR)/%.c
 					  @mkdir -p $(dir $@)
-					  @echo "🔧 Compiling $< → $@"
+					  @echo "Compilation de $< → $@"
 					  @$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT_A) 			:

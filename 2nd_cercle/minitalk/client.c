@@ -3,65 +3,74 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/24 13:18:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/05/23 22:54:10 by codk             ###   ########.fr       */
+/*   Created: 2025/05/26 11:07:28 by cdesjars          #+#    #+#             */
+/*   Updated: 2025/05/28 03:38:38 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_minitalk.h"
 #include "libft.h"
+#include "minitalk.h"
+#include <signal.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-volatile sig_atomic_t	g_ack_received = 0;
+static t_client	g_client;
 
-void	ft_send_char(pid_t pid, char c)
+void	handle_ack(int sig)
 {
-	int	i;
+	(void)sig;
+	g_client.ack_received = 1;
+}
 
-	i = 0;
-	while (i < 8)
+void	handle_end(int sig)
+{
+	(void)sig;
+	g_client.end_received = 1;
+}
+
+void	send_char(pid_t pid, unsigned char c)
+{
+	int	sig;
+	int	bit;
+
+	bit = 7;
+	while (bit >= 0)
 	{
-		if ((c >> i) & 1)
-			kill(pid, SIGUSR2);
+		if ((c >> bit) & 1)
+			sig = SIGUSR2;
 		else
-			kill(pid, SIGUSR1);
-		usleep(200);
-		i++;
+			sig = SIGUSR1;
+		g_client.ack_received = 0;
+		if (kill(pid, sig) == -1)
+			return ;
+		while (!g_client.ack_received)
+			pause();
+		bit--;
 	}
 }
 
-void	ft_send_string(pid_t pid, char *str)
+int	main(int argc, char **argv)
 {
-	while (*str)
-		ft_send_char(pid, *str++);
-	ft_send_char(pid, '\0');
-}
+	char	*str;
 
-void	ft_handle_ack(int sig)
-{
-	if (sig == SIGUSR1)
+	if (argc != 3)
 	{
-		g_ack_received = 1;
-		ft_putstr("Message reçu par le serveur\n");
-	}
-}
-
-int	main(int ac, char **av)
-{
-	struct sigaction	sa;
-
-	sa.sa_handler = ft_handle_ack;
-	sa.sa_flags = 0;
-	sigemptyset(&sa.sa_mask);
-	sigaction(SIGUSR1, &sa, NULL);
-	if (ac != 3)
-	{
-		ft_putstr("Le client doit saisir 2 arguments\n");
+		ft_putstr("Le client doit prendre 2 parametres : [PID] [CHAINE]\n");
 		return (1);
 	}
-	ft_send_string(ft_atoi(av[1]), av[2]);
-	while (!g_ack_received)
+	str = argv[2];
+	g_client.server_pid = (pid_t)ft_atoi(argv[1]);
+	g_client.ack_received = 0;
+	g_client.end_received = 0;
+	signal(SIGUSR1, handle_ack);
+	signal(SIGUSR2, handle_end);
+	while (*str)
+		send_char(g_client.server_pid, *str++);
+	send_char(g_client.server_pid, '\0');
+	while (!g_client.end_received)
 		pause();
+	ft_putstr("Le serveur a bien reçu le message\n");
 	return (0);
 }
