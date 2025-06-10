@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 19:53:28 by corentindes       #+#    #+#             */
-/*   Updated: 2025/04/18 19:55:19 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/06/09 23:14:03 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

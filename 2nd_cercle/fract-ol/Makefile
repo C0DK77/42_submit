@@ -13,10 +13,11 @@ CFLAGS 				= 	-Wall -Wextra -Werror 	\
 
 # ==== FILES SRC ==== #
 
-SRC		   			=  	fractol.c 			\
-						init.c 				\
-						events.c			\
-						draw.c 				
+SRC		   			=  	main.c 					\
+						fractal.c 				\
+						program.c 				\
+						events.c				\
+						utils.c 				
 
 OBJ_DIR				= 	obj
 OBJ					= 	$(SRC:%.c=$(OBJ_DIR)/%.o)

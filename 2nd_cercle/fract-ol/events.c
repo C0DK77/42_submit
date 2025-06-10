@@ -6,92 +6,98 @@
 /*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 18:11:08 by lgaudin           #+#    #+#             */
-/*   Updated: 2025/06/08 11:55:04 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/06/10 03:49:14 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 #include "libft.h"
 
-int	key_event(int code, t_mlx *m)
+void	manage_color(int code, t_fractal *f)
 {
-	printf("key pressed: %d\n", code);
+	if (code == K_1)
+		f->color = GREY;
+	if (code == K_2)
+		f->color = PURPLE;
+	if (code == K_3)
+		f->color = BLUE;
+	if (code == K_4)
+		f->color = WHITE;
+	if (code == K_5)
+		f->color = YELLOW;
+	if (code == K_6)
+		f->color = BROWN;
+	if (code == K_7)
+		f->color = PINK;
+	if (code == K_8)
+		f->color = RED;
+	if (code == K_9)
+		f->color = ORANGE;
+}
+
+void	manage_iterations(int code, t_fractal *f)
+{
+	if (code == MINUS)
+	{
+		if (f->max > 100)
+			f->max /= 2;
+	}
+	if (code == PLUS)
+	{
+		if (f->max < 1000)
+			f->max *= 2;
+	}
+}
+
+int	key_event(int code, t_mlx *m, t_fractal *f)
+{
 	if (code == ESC)
 		close_program(m);
 	else if (code == LEFT)
-		m->offset_x -= 42 / m->zoom;
+		f->movex += 0.5 * 1 / f->scale;
 	else if (code == RIGHT)
-		m->offset_x += 42 / m->zoom;
+		f->movex -= 0.5 * 1 / f->scale;
 	else if (code == UP)
-		m->offset_y -= 42 / m->zoom;
+		f->movey += 0.5 * 1 / f->scale;
 	else if (code == DOWN)
-		m->offset_y += 42 / m->zoom;
-	else if (code == R)
-		init_mlx(m);
+		f->movey -= 0.5 * 1 / f->scale;
 	else if (code == C)
-		m->color += (255 * 255 * 255) / 100;
-	else if (code == J)
-	{
-		m->cx = generate_random_c();
-		m->cy = generate_random_c();
-	}
-	else if (code == M || code == P)
-		change_iterations(m, code);
-	draw_fractal(m, m->name);
+		m->image.fractal.color += (255 * 255 * 255) / 100;
+	manage_iterations(code, &m->image.fractal);
+	manage_color(code, &m->image.fractal);
 	return (0);
 }
 
 int	mouse_event(int code, int x, int y, t_mlx *m)
 {
+	double	old_scale;
+	double	new_scale;
+	double	mouse_re;
+	double	mouse_im;
+
+	mouse_re = (x - WIDTH / 2.0) * 4.0 / WIDTH / m->image.fractal.scale
+		+ m->image.fractal.movex;
+	mouse_im = (y - HEIGHT / 2.0) * 4.0 / WIDTH / m->image.fractal.scale
+		+ m->image.fractal.movey;
+	old_scale = m->image.fractal.scale;
 	if (code == SCROLL_UP)
-		zoom(m, x, y, 1);
+		new_scale = old_scale * 1.5;
 	else if (code == SCROLL_DOWN)
-		zoom(m, x, y, -1);
-	draw_fractal(m, m->name);
+		new_scale = old_scale / 1.5;
+	else
+		return (0);
+	m->image.fractal.scale = new_scale;
+	m->image.fractal.movex = mouse_re - (x - WIDTH / 2.0) * 4.0 / WIDTH
+		/ new_scale;
+	m->image.fractal.movey = mouse_im - (y - HEIGHT / 2.0) * 4.0 / WIDTH
+		/ new_scale;
 	return (0);
 }
 
-void	zoom(t_mlx *m, int x, int y, int zoom)
+void	put_color_to_pixel(t_draw *d, int x, int y, int color)
 {
-	if (zoom == 1)
-	{
-		m->offset_x = (x / m->zoom + m->offset_x) - (x / (m->zoom * ZOOM));
-		m->offset_y = (y / m->zoom + m->offset_y) - (y / (m->zoom * ZOOM));
-		m->zoom *= ZOOM;
-	}
-	else if (zoom == -1)
-	{
-		m->offset_x = (x / m->zoom + m->offset_x) - (x / (m->zoom / ZOOM));
-		m->offset_y = (y / m->zoom + m->offset_y) - (y / (m->zoom / ZOOM));
-		m->zoom /= ZOOM;
-	}
-	else
-		return ;
-}
+	char	*c;
 
-void	change_iterations(t_mlx *m, int code)
-{
-	if (code == M)
-	{
-		if (m->max_iterations > 42)
-			m->max_iterations -= 42;
-	}
-	else if (code == P)
-	{
-		if (m->max_iterations < 42)
-				m->max_iterations += 42;
-	}
-}
-
-double	generate_random_c(void)
-{
-	return (((double)rand() / RAND_MAX) * 3.0 - 1.5);
-}
-
-void	put_color_to_pixel(t_mlx *m, int x, int y, int color)
-{
-	int	*buffer;
-
-	buffer = m->p;
-	buffer[(y * m->line_size / 4) + x] = color;
+	c = d->p + (y * d->line_size + x * (d->bits / 8));
+	*(int *)c = color;
 }
