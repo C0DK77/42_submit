@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:06:31 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/02/12 20:05:41 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:57:46 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_putchar(char c)
+int	ft_putchar(int c)
 {
 	write(1, &c, 1);
 	return (1);
@@ -28,6 +28,23 @@ int	ft_putstr(char *str)
 	while (*str)
 		count += ft_putchar(*str++);
 	return (count);
+}
+
+int	ft_putnbr(int nb)
+{
+	int		count;
+	long	nbr;
+
+	count = 0;
+	nbr = nb;
+	if (nbr < 0)
+	{
+		count += ft_putchar('-');
+		nbr = -nbr;
+	}
+	if (nbr >= 10)
+		count += ft_putnbr(nbr / 10);
+	return (count += ft_putchar((nbr % 10) + 48));
 }
 
 int	ft_putnbr_base_long(unsigned long nbr, char *base, unsigned long lbase,
@@ -55,21 +72,4 @@ int	ft_putnbr_base_int(unsigned int nbr, char *base, int b)
 	if (nbr >= 16)
 		count += ft_putnbr_base_int(nbr / 16, base, 1);
 	return (count += ft_putchar(base[nbr % 16]));
-}
-
-int	ft_putnbr(int nb)
-{
-	int		count;
-	long	nbr;
-
-	count = 0;
-	nbr = nb;
-	if (nbr < 0)
-	{
-		count += ft_putchar('-');
-		nbr = -nbr;
-	}
-	if (nbr >= 10)
-		count += ft_putnbr(nbr / 10);
-	return (count += ft_putchar((nbr % 10) + 48));
 }

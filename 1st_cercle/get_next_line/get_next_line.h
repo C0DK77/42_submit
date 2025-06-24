@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:29:25 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/02/25 13:38:30 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/06/24 13:03:34 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,6 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 8
 # endif
-
-//  FONCTIONS UTILS
-
-char	*ft_strcpy(char *d, char *s);
-size_t	ft_strlen(char *s);
-char	*ft_strchr(char *s, int c);
-char	*ft_strjoin(char *s1, char *s2);
-void	*ft_calloc(size_t count, size_t size);
-
-//  FONCTIONS
 
 char	*get_next_line(int fd);
 char	*ft_cline(char *s);

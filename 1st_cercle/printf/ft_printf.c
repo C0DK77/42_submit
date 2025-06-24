@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 04:07:13 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/02/12 20:05:35 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:57:48 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

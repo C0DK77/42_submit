@@ -2,9 +2,9 @@
 # define FRACTOL_H
 
 # include "mlx.h"
-# include <stdlib.h>
 # include <math.h>
 # include <pthread.h>
+# include <stdlib.h>
 
 # define WIDTH 700
 # define HEIGH 700
@@ -27,37 +27,21 @@
 typedef struct s_mlx
 {
 	void	*mlx;
+	char	*name;
 	void	*window;
 	void	*image;
-	char	*addr;
-	int		bpp;
-	int		line_len;
+	int		color;
+	double	zoom;
+	char	*p;
+	int		bits;
+	int		line_size;
 	int		endian;
 	double	re_min;
 	double	re_max;
 	double	im_min;
 	double	im_max;
-	int		max_iter;
-}			t_mlx;
+	int		max_iterations;
 
-int			key_hook(int keycode, t_mlx *vars);
-int			close_program(t_mlx *vars);
-int			resize_hook(int x, int y, int width, int height, t_mlx *vars);
-void		draw_fractal(t_mlx *v);
-void		my_pixel_put(t_mlx *v, int x, int y, int color);
-int			expose_hook(t_mlx *vars);
-
-#endif
-
-typedef struct s_fractal
-{
-	void	*mlx;
-	void	*window;
-	void	*image;
-	void	*pointer_to_image;
-	int		bits_per_pixel;
-	int		size_line;
-	int		endian;
 	int		x;
 	int		y;
 	double	zx;
@@ -67,7 +51,13 @@ typedef struct s_fractal
 	int		color;
 	double	offset_x;
 	double	offset_y;
-	double	zoom;
-	char	*name;
-	int		max_iterations;
-}			t_fractal;
+}			t_mlx;
+
+int			key_hook(int keycode, t_mlx *m);
+int			close_program(t_mlx *m);
+int			resize_hook(int x, int y, int width, int height, t_mlx *m);
+void		draw_fractal(t_mlx *m);
+void		my_pixel_put(t_mlx *m, int x, int y, int color);
+int			expose_hook(t_mlx *m);
+
+#endif

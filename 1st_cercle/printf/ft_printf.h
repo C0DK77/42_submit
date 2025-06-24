@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 04:08:26 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/02/12 20:05:28 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:57:23 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct s_var
 }			t_var;
 
 int			ft_printf(const char *format, ...);
-int			ft_putchar(char c);
+int			ft_putchar(int c);
 int			ft_putstr(char *str);
 int			ft_putnbr(int nb);
 int			ft_putnbr_base_long(unsigned long nbr, char *base,
