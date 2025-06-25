@@ -6,17 +6,15 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:49:12 by codk              #+#    #+#             */
-/*   Updated: 2025/03/26 13:49:31 by codk             ###   ########.fr       */
+/*   Updated: 2025/06/26 00:30:23 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
-
-char ft_convert_bit_to_char(char *s)
+char	ft_convert_bit_to_char(char *s)
 {
-	int	i;
-	int j;
-    char	c;
+	int		i;
+	int		j;
+	char	c;
 
 	i = 0;
 	j = 128;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:21:09 by corentindes       #+#    #+#             */
-/*   Updated: 2025/06/24 11:21:34 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/06/26 00:34:05 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_strcpy(char *d, char *s)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (s[i])
