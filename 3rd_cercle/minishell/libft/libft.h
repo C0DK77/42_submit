@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:38:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/06/26 00:30:29 by codk             ###   ########.fr       */
+/*   Updated: 2025/06/26 01:52:24 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char				*ft_strdup(const char *s1);
 // FONCTIONS SUPPLEMENTAIRES
 
 char				*ft_substr(char const *s, unsigned int start, size_t len);
-char				*ft_strjoin(char const *s1, char const *s2);
+char				*ft_strjoin(char *s1, char *s2);
 char				*ft_strtrim(char const *s1, char const *set);
 char				**ft_split(char const *s, char c);
 char				*ft_itoa(int n);
@@ -79,6 +79,7 @@ int					ft_isdoublequote(char c);
 int					ft_issinglequote(char c);
 int					ft_isspace(char c);
 int					ft_isoperator(char c);
+char				*ft_strcpy(char *d, char *s);
 
 // FONCTIONS BONUS
 

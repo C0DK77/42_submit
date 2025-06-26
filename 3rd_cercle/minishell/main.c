@@ -6,28 +6,57 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/06/26 00:50:39 by codk             ###   ########.fr       */
+/*   Updated: 2025/06/26 01:58:41 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "minishell.h"
-# include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+
+char	*prompt(void)
+{
+	char	*prompt;
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror("getcwd");
+		prompt = malloc(ft_strlen("minishell > ") + 1);
+		if (!prompt)
+			return (NULL);
+		ft_strcpy(prompt, "minishell > ");
+		return (prompt);
+	}
+	prompt = malloc(ft_strlen(cwd) + 4);
+	if (!prompt)
+    {
+        free(cwd);
+		return (NULL);
+    }
+	ft_strcpy(prompt, cwd);
+	prompt[ft_strlen(cwd)] = ' ';
+	prompt[ft_strlen(cwd) + 1] = '>';
+	prompt[ft_strlen(cwd) + 2] = ' ';
+	prompt[ft_strlen(cwd) + 3] = '\0';
+	return (prompt);
+}
 
 int	main(int argc, char **argv)
 {
 	char	*line;
 
-	while ((line = readline("Minishell> ")) != NULL)
-    {
-        if (*line)
-            add_history(line);
-        printf("Vous avez tapé : %s\n", line);
-        free(line);
-    }
-    printf("exit\n");
-    return (0);
+	(void)argc;
+	(void)argv;
+	while ((line = readline(prompt())) != NULL)
+	{
+		if (*line)
+			add_history(line);
+		printf("Vous avez tapé : %s\n", line);
+		free(line);
+	}
+	printf("exit\n");
+	return (0);
 }
 
 // int	ft_parse_word(char *line, int i, char c)

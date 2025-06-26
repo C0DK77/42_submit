@@ -8,9 +8,7 @@ NAME 				= 	minishell.a
 CC 					= 	cc
 CFLAGS 				= 	-Wall -Wextra -Werror		\
 						-I.						 	\
-						-I$(PRINTF_DIR) 			\
-						-I$(LIBFT_DIR) 				\
-						-I/usr/include/readline 	
+						-I$(LIBFT_DIR)
 
 # ==== FILES ==== #
 
@@ -22,17 +20,14 @@ OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
 # ==== LIBFT / PRINTF /	GET NEXT LINE ==== #
 
 LIBFT_DIR			= 	./libft
-PRINTF_DIR 			= 	./printf
-
 LIBFT_A 			= 	$(LIBFT_DIR)/libft.a
-PRINTF_A 			= 	$(PRINTF_DIR)/ft_printf.a
 
 # ==== RULES ==== #
 
-all 				: 	$(LIBFT_A) $(PRINTF_A) $(NAME)
+all 				: 	$(LIBFT_A) $(NAME)
 
 $(NAME) 			: 	$(OBJ)
-			  		  	@$(CC) $(CFLAGS) -o $@ $^ $(LIBFT_A) $(PRINTF_A)
+			  		  	@$(CC) $(CFLAGS) -o $@ $^ $(LIBFT_A) -lreadline
 
 $(OBJ_DIR)/%.o		: 	%.c
 					  	@mkdir -p $(dir $@)
@@ -42,17 +37,12 @@ $(OBJ_DIR)/%.o		: 	%.c
 $(LIBFT_A) 			:
 					  	@make -s -C $(LIBFT_DIR)
 
-$(PRINTF_A) 		:
-					  	@make -s -C $(PRINTF_DIR)
-
 clean 				:
 					  	@make -s -C $(LIBFT_DIR) clean
-					  	@make -s -C $(PRINTF_DIR) clean
 					  	@rm -rf $(OBJ_DIR)
 	
 fclean 				: 	clean 
 					  	@make -s -C $(LIBFT_DIR) fclean
-					  	@make -s -C $(PRINTF_DIR) fclean
 					  	@rm -f $(NAME)
 	
 re 					: 	fclean all
