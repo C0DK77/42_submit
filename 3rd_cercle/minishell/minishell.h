@@ -3,52 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/06/26 01:47:48 by codk             ###   ########.fr       */
+/*   Updated: 2025/06/27 17:41:28 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <limits.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 # include <stdio.h>
-#include <limits.h>
-#include <string.h>
-#include <stdlib.h>
 # include <stdlib.h>
+# include <string.h>
 # include <unistd.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 
-// typedef struct s_list
-// {
-// 	void			*content;
-// 	struct s_list	*next;
-// }					t_list;
+typedef struct s_token
+{
+	t_token_type	type;
+	char			*value;
+	struct s_token	*next;
+}					t_token;
 
-// typedef enum e_list_type
-// {
-// 	TOK_WORD,
-// 	TOK_PIPE,
-// 	TOK_REDIR_IN
-// }					t_list_type;
+typedef enum e_token_type
+{
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_REDIR_APPEND,
+	TOKEN_HEREDOC,
+	TOKEN_SEMICOLON,
+	TOKEN_AND,
+	TOKEN_OR,
+	TOKEN_OPEN_PAREN,
+	TOKEN_CLOSE_PAREN,
+	TOKEN_EOF
+}					t_token_type;
 
-// typedef struct s_token
-// {
-// 	t_list_type		type;
-// 	char			*value;
-// }					t_token;
-
-// typedef struct s_cmd
-// {
-// 	char			**argv;
-// 	char			*infile;
-// 	char			*outfile;
-// 	int				append;
-// }					t_cmd;
-
-void ft_prompt (void);
+void				ft_prompt(void);
+int					ft_parse_word(t_token *split_line, char *line, int i);
+void				parse(char *line);
+void				add_token(t_token **head, t_token *new_token);
+t_token				*create_token(t_token_type type, const char *value);
 
 #endif
