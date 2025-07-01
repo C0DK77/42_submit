@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/06/27 18:18:02 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/06/29 14:35:53 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int	ft_parse_word(t_token *split_line, char *line, int i)
 	return (0);
 }
 
-
 void parse_double_operator(t_token tokens, char *line, int i)
 {
 	if (line[i] == '>' && line[i + 1] == '>')
@@ -66,7 +65,7 @@ void parse_double_operator(t_token tokens, char *line, int i)
     }
 }
 
-void parse_double_operator(t_token tokens, char *line, int i)
+void parse_single_operator(t_token tokens, char *line, int i)
 {
     if (line[i] == '>')
     {

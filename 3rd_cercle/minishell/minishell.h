@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/06/27 17:41:28 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/06/29 14:37:13 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,12 @@ typedef enum e_token_type
 }					t_token_type;
 
 void				ft_prompt(void);
-int					ft_parse_word(t_token *split_line, char *line, int i);
 void				parse(char *line);
 void				add_token(t_token **head, t_token *new_token);
 t_token				*create_token(t_token_type type, const char *value);
+
+void				parse_single_operator(t_token tokens, char *line, int i);
+void				parse_double_operator(t_token tokens, char *line, int i);
+int					ft_parse_word(t_token *split_line, char *line, int i);
 
 #endif
