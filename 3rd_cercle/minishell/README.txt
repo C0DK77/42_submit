@@ -94,3 +94,87 @@ DESCRIPTION
 
 ____________________________________________________________________________
 
+getcwd
+
+#include <unistd.h>
+
+char *getcwd(char *buf, size_t size);
+
+DESCRIPTION
+
+       The getcwd() function copies the absolute pathname of the current 
+       working directory into the memory referenced by buf and returns a 
+       pointer to buf.  The size argument is the size, in bytes, of the
+       array referenced by buf.
+
+       If buf is NULL, space is allocated as necessary to store the 
+       pathname and size is ignored.  This space may later be free(3)'d.
+
+       The function getwd() is a compatibility routine which calls getcwd() 
+       with its buf argument and a size of MAXPATHLEN (as defined in the 
+       include file <sys/param.h>).  Obviously, buf should be at least
+       MAXPATHLEN bytes in length.
+
+       These routines have traditionally been used by programs to save the 
+       name of a working directory for the purpose of returning to it.  A 
+       much faster and less error-prone method of accomplishing this is to 
+       open the current directory (‘.’) and use the fchdir(2) function to 
+       return.
+
+RETURN VALUES
+
+       Upon successful completion, a pointer to the pathname is returned.  
+       Otherwise a NULL pointer is returned and the global variable errno 
+       is set to indicate the error.  In addition, getwd() copies the
+       error message associated with errno into the memory referenced by buf.
+
+ERRORS
+
+       The getcwd() function will fail if:
+
+       [EINVAL]             The size argument is zero.
+
+       [ENOENT]             A component of the pathname no longer exists.
+
+       [ENOMEM]             Insufficient memory is available.
+
+       [ERANGE]             The size argument is greater than zero but
+                            smaller than the length of the pathname plus 1.
+
+       The getcwd() function may fail if:
+
+       [EACCES]             Read or search permission was denied for a 
+                            component of the pathname.  This is only 
+                            checked in limited cases, depending on 
+                            implementation details.
+
+____________________________________________________________________________
+
+getenv
+
+#include <stdlib.h>
+
+char *getenv(const char *name);
+
+DESCRIPTION
+
+       These functions set, unset and fetch environment variables from the host
+       environment list.
+
+       The getenv() function obtains the current value of the environment 
+       variable, name.  The application should not modify the string pointed to
+       by the getenv() function.
+
+RETURN VALUES
+
+       The getenv() function returns the value of the environment variable as a
+       NUL-terminated string.  If the variable name is not in the current 
+       environment, NULL is returned.
+
+ERRORS
+
+     [EINVAL]               The function getenv(), setenv() or unsetenv() failed 
+                            because the name is a NULL pointer, points to an empty
+                            string, or points to a string containing an “=” character.
+
+____________________________________________________________________________
