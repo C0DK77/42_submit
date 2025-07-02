@@ -178,3 +178,40 @@ ERRORS
                             string, or points to a string containing an “=” character.
 
 ____________________________________________________________________________
+
+perror, strerror
+
+#include <stdio.h>
+#include <string.h>
+
+void perror(const char *s);
+char *strerror(int errnum);
+
+DESCRIPTION
+
+       The strerror() and perror() functions look up the error message string 
+       corresponding to an error number. The strerror() function accepts an 
+       error number argument errnum and returns a pointer to the corresponding 
+       message string.
+
+       The perror() function finds the error message corresponding to the current 
+       value of the global variable errno (intro(2)) and writes it, followed by a 
+       newline, to the standard error file descriptor.  If the argument s is non-NULL 
+       and does not point to the null character, this string is prepended to the 
+       message string and separated from it by a colon and space (“: ”); otherwise, 
+       only the error message string is printed.
+
+       If the error number is not recognized, these functions return an error message 
+       string containing “Unknown error: ” followed by the error number in decimal.  
+       The strerror() and strerror_r() functions return EINVAL as a warning.  Error 
+       numbers recognized by this implementation fall in the range 0 <= errnum < sys_nerr.
+
+       If insufficient storage is provided in strerrbuf (as specified in buflen) to 
+       contain the error string, strerror_r() returns ERANGE and strerrbuf will contain 
+       an error message that has been truncated and NUL terminated to fit the length 
+       specified by buflen.
+
+       The message strings can be accessed directly using the external array sys_errlist.  
+       The external value sys_nerr contains a count of the messages in sys_errlist. The 
+       use of these variables is deprecated; strerror() or strerror_r() should be used 
+       instead.

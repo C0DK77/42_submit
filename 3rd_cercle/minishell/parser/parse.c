@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/07/01 12:07:03 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/01 14:25:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,26 @@ int	ft_parse_word_isdoublequote(char *line, int i)
 		printf("Erreur pas de deuxieme quote");
 		return (0);
 	}
+	word = malloc(sizeof(char) * (i - start + 1));
+	if (!word)
+		return (0);
+	while (start < i)
+		word[j++] = line[start++];
+	word[j] = '\0';
+	return (word);
+}
+
+int	ft_parse_word_withoutquotes(char *line, int i)
+{
+	int		j;
+	int		start;
+	char	*word;
+
+	i += 1;
+	start = i;
+	j = 0;
+	while (line[i] && !ft_isspace(line[i]) && !ft_isoperator(line[i]))
+		i++;
 	word = malloc(sizeof(char) * (i - start + 1));
 	if (!word)
 		return (0);
