@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/02 16:18:47 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/02 18:11:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,11 @@ int					ft_check_var(t_envp **envp, char *var);
 int					ft_change_var(t_envp **envp, t_envp *t, char *var);
 int					shlvl(t_envp *t);
 
-//	PARSER
+//	PARSER / PARSE
 
 void				parse(char *line);
+
+
 void				add_token(t_token **head, t_token *new_token);
 t_token				*create_token(t_token_type type, const char *value);
 
