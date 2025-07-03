@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/02 19:00:41 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/03 12:10:13 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_check_operator(char c)
 	return (1);
 }
 
-t_token	*create_token(t_token_type type, char *value)
+t_token	*ft_create_token(t_token_type type, char *value)
 {
 	t_token	*token;
 
@@ -35,7 +35,7 @@ t_token	*create_token(t_token_type type, char *value)
 	return (token);
 }
 
-void	add_token(t_token **head, t_token *new_token)
+void	ft_add_token(t_token **head, t_token *new_token)
 {
 	t_token	*t;
 
