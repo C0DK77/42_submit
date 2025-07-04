@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/03 15:14:26 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/04 10:28:21 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,19 @@ void	ft_add_token(t_token **head, t_token *new_token)
 		while (t->next)
 			t = t->next;
 		t->next = new_token;
+	}
+}
+
+void	ft_free_token(t_token *lst)
+{
+	t_token	*t;
+
+	while (lst)
+	{
+		t = lst->next;
+		if (lst->value)
+			free(lst->value);
+		free(lst);
+		lst = t;
 	}
 }

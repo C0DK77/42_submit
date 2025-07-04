@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/04 07:50:19 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/04 10:27:18 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,9 @@ int					ft_parse_word(t_token **lst, char *line, int i,
 						t_envp *envp);
 int					ft_parse_operator(t_token **lst, char *line, int i);
 
+//	PARSER / UTILS
+
+void				ft_free_token(t_token *lst);
 int					ft_check_operator(char c);
 t_token				*ft_create_token(t_token_type type, char *value);
 void				ft_add_token(t_token **head, t_token *new_token);
