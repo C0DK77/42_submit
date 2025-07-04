@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/04 10:00:30 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/04 10:16:58 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,13 @@ int	main(int argc, char **argv, char **envp)
 		p = tokens;
 		while (p)
 		{
-			printf("[TOKEN] type=%d  value='%s'\n", p->type, p->value);
+			printf("[TOKEN] TYPE =>%d  VALUE =>'%s'\n", p->type, p->value);
 			p = p->next;
 		}
-		free_token_list(tokens);
+		// free_token_list(tokens);
 		free(line);
 	}
-	free_env_list(c_envp);
+	free_envp(c_envp);
 	printf("exit\n");
 	return (0);
 }
