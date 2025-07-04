@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   var_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/02 16:18:01 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/03 15:14:52 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "minishell.h"
 
-char	*prompt(void)
+char	*ft_prompt(void)
 {
 	char	*prompt;
 	char	*cwd;

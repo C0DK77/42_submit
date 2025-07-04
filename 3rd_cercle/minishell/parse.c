@@ -6,13 +6,14 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/07/03 12:12:49 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/04 07:26:43 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "minishell.h"
 
-void	ft_parse_line(char *str)
+t_token	*ft_parse_line(char *str, t_envp *envp)
 {
 	int		i;
 	t_token	*lst;
@@ -28,91 +29,106 @@ void	ft_parse_line(char *str)
 		else if (ft_isoperator(str[i]))
 			i = ft_parse_operator(&lst, str, i);
 		else
-			i = ft_parse_word(&lst, str, i);
+			i = ft_parse_word(&lst, str, i, envp);
 	}
+	return (lst);
 }
 
-int	ft_parse_word_double_quotes(t_envp *envp, t_token *lst, char *line, int end,
+int	ft_parse_word_double_quotes(t_envp *envp, char **word, char *line, int end,
 		int i)
 {
 	int		start;
-	char	*word;
-	char	*joined;
+	char	*a;
 	char	*t;
 
 	start = i;
 	while (i < end)
 	{
 		if (line[i] == '$')
-			i = ft_parse_dollar_sign(envp, lst, line, i);
+			i = ft_parse_dollar_sign(envp, word, line, i);
 		else
 		{
 			while (i < end && line[i] != '$')
 				i++;
-			t = ft_strndup(line + start, i - start);
-			joined = ft_strjoin(word, t);
-			free(word);
+			t = strndup(line + start, i - start);
+			a = ft_strjoin(*word, t);
+			free(*word);
 			free(t);
-			word = joined;
+			*word = a;
 		}
 	}
-}
-
-int	ft_parse_dollar_sign(t_envp *envp, t_token **lst, char *line, int i)
-{
-	int		start;
-	char	*joined;
-	char	*value;
-	char	*var;
-	char	*word;
-
-	i++;
-	start = i;
-	while (line[i] && (ft_isalnum(line[i]) || line[i] == '_'))
-		i++;
-	var = ft_strndup(line + start, i - start);
-	value = ft_search_var(envp, var);
-	joined = ft_strjoin(word, value ? value : "");
-	free(word);
-	word = joined;
-	free(var);
-	add_token(lst, create_token(TOKEN_WORD, word));
-	free(word);
 	return (i);
 }
 
-int	ft_parse_word_without_quotes(t_token **lst, char *line, int i)
+int	ft_parse_dollar_sign(t_envp *envp, char **word, char *line, int i)
+{
+	char	*t;
+	int		start;
+	char	*value;
+	char	*var;
+	t_envp	*v;
+
+	i++;
+	if (line[i] == '?')
+	{
+		t = ft_itoa(g_exit_status);
+		var = ft_strjoin(*word, t);
+		free(*word);
+		free(t);
+		*word = var;
+		return (i + 1);
+	}
+	start = i;
+	while (line[i] && (ft_isalnum(line[i]) || line[i] == '_'))
+		i++;
+	var = strndup(line + start, i - start);
+	v = ft_search_var(envp, var);
+	value = v ? v->value : NULL;
+	t = ft_strjoin(*word, value ? value : "");
+	free(*word);
+	*word = t;
+	free(var);
+	return (i);
+}
+
+int	ft_parse_word_without_quotes(char **word, char *line, int i)
 {
 	char	*a;
 	char	*t;
-	char	*word;
 	int		start;
 
 	start = i;
 	while (line[i] && !ft_isspace(line[i]) && !ft_isoperator(line[i])
-		&& !ft_isquote(line[i]))
+		&& !ft_isquote(line[i]) && line[i] != '$')
 		i++;
-	t = ft_strndup(line + start, i - start);
-	a = ft_strjoin(word, t);
-	free(word);
+	t = strndup(line + start, i - start);
+	a = ft_strjoin(*word, t);
+	free(*word);
 	free(t);
-	word = a;
-	ft_add_token(lst, ft_create_token(TOKEN_WORD, word));
-	free(word);
+	*word = a;
+	return (i);
+}
+
+int	ft_parse_word_single_quote(char **word, char *line, int i, int start)
+{
+	char	*t;
+	char	*a;
+
+	t = strndup(line + start, i - start);
+	a = ft_strjoin(*word, t);
+	free(*word);
+	free(t);
+	*word = a;
 	return (i);
 }
 
 int	ft_parse_word(t_token **lst, char *line, int i, t_envp *envp)
 {
-	char	*t;
-	int		start;
-	char	quote;
 	char	*word;
-	char	*joined;
+	char	quote;
+	int		start;
 
 	word = ft_strdup("");
-	if (!word)
-		return (i);
 	while (line[i] && !ft_isspace(line[i]) && !ft_isoperator(line[i]))
 	{
 		if (ft_isquote(line[i]))
@@ -121,23 +137,17 @@ int	ft_parse_word(t_token **lst, char *line, int i, t_envp *envp)
 			start = i;
 			while (line[i] && line[i] != quote)
 				i++;
-			if (quote == '\"')
-				i = ft_parse_word_double_quotes(envp, lst, line, i, start);
-			if (quote == '\'')
-			{
-				t = ft_strndup(line + start, i - start);
-				joined = ft_strjoin(word, t);
-				free(word);
-				free(t);
-				word = joined;
-			}
+			if (quote == '"')
+				i = ft_parse_word_double_quotes(envp, &word, line, i, start);
+			else
+				i = ft_parse_word_single_quote(&word, line, i, start);
 			if (line[i])
 				i++;
 		}
 		else if (line[i] == '$')
-			i = ft_parse_dollar_sign(envp, lst, line, i);
+			i = ft_parse_dollar_sign(envp, &word, line, i);
 		else
-			i = ft_parse_word_without_quotes(lst, line, i);
+			i = ft_parse_word_without_quotes(&word, line, i);
 	}
 	ft_add_token(lst, ft_create_token(TOKEN_WORD, word));
 	free(word);
@@ -163,14 +173,14 @@ int	ft_parse_operator(t_token **lst, char *line, int i)
 	{
 		if (line[i + 1] == '<')
 		{
-			token = ft_create_token(TOKEN_REDIR_OUT, "<<");
+			token = ft_create_token(TOKEN_HEREDOC, "<<");
 			i++;
 		}
 		else
-			token = ft_create_token(TOKEN_REDIR_OUT, "<");
+			token = ft_create_token(TOKEN_REDIR_IN, "<");
 	}
 	if (line[i] == '|')
 		token = ft_create_token(TOKEN_PIPE, "|");
 	ft_add_token(lst, token);
-	return (i++);
+	return (i + 1);
 }

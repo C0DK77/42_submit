@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:38:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/06/26 01:52:24 by codk             ###   ########.fr       */
+/*   Updated: 2025/07/03 19:12:39 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,6 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 
 char				ft_convert_bit_to_char(char *s);
 char				*ft_convert_char_to_bit(char c);
+int					ft_isquote(char c);
 
 #endif
