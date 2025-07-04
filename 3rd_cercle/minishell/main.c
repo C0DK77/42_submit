@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/03 15:12:14 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/04 10:00:30 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@ int	g_exit_status = 0;
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
+	char	*next;
+	char	*t;
 	t_envp	*c_envp;
 	t_token	*tokens;
-	t_token	*tmp;
+	t_token	*p;
 
 	(void)argc;
 	(void)argv;
@@ -29,20 +31,38 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	if (!ft_check_all_var(&c_envp))
 		return (0);
-	while ((line = readline(ft_prompt())) != NULL)
+	while (1)
 	{
+		line = readline(ft_prompt());
+		if (!line)
+			break ;
+		while (ft_has_unclosed_quote(line))
+		{
+			next = readline("> ");
+			if (!next)
+				break ;
+			t = ft_strjoin(line, "\n");
+			free(line);
+			line = ft_strjoin(t, next);
+			free(t);
+			free(next);
+		}
+		if (!line)
+			break ;
 		if (*line)
 			add_history(line);
 		printf("LINE => %s\n", line);
 		tokens = ft_parse_line(line, c_envp);
-		tmp = tokens;
-		while (tmp)
+		p = tokens;
+		while (p)
 		{
-			printf("[TOKEN] type=%d  value='%s'\n", tmp->type, tmp->value);
-			tmp = tmp->next;
+			printf("[TOKEN] type=%d  value='%s'\n", p->type, p->value);
+			p = p->next;
 		}
+		free_token_list(tokens);
+		free(line);
 	}
-	free(c_envp);
+	free_env_list(c_envp);
 	printf("exit\n");
 	return (0);
 }

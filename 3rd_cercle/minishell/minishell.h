@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/03 19:21:40 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/04 07:50:19 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ typedef enum e_token_type
 	TOKEN_HEREDOC,
 	TOKEN_SEMICOLON,
 	TOKEN_AND,
+	TOKEN_AND_IF,
 	TOKEN_OR,
+	TOKEN_OR_IF,
+	TOKEN_BACKGROUND,
 	TOKEN_OPEN_PAREN,
 	TOKEN_CLOSE_PAREN,
 	TOKEN_EOF
