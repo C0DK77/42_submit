@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/04 10:27:32 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/07 21:48:05 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ int	g_exit_status = 0;
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*line;
-	char	*next;
-	char	*t;
-	t_envp	*c_envp;
-	t_token	*tokens;
-	t_token	*p;
+	char		*line;
+	char		*next;
+	char		*t;
+	t_envp		*c_envp;
+	t_token		*tokens;
+	t_parsing	*parse;
 
 	(void)argc;
 	(void)argv;
@@ -53,12 +53,9 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 		printf("LINE => %s\n", line);
 		tokens = ft_parse_line(line, c_envp);
-		p = tokens;
-		while (p)
-		{
-			printf("[TOKEN] TYPE =>%d  VALUE =>'%s'\n", p->type, p->value);
-			p = p->next;
-		}
+		ft_print_token(tokens);
+		parse = ft_parsing_line(tokens);
+		ft_print_parsing(parse);
 		ft_free_token(tokens);
 		free(line);
 	}

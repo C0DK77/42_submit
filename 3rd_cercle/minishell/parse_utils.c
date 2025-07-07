@@ -5,62 +5,62 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/04 10:28:21 by corentindes      ###   ########.fr       */
+/*   Created: 2025/07/04 12:34:00 by corentindes       #+#    #+#             */
+/*   Updated: 2025/07/07 22:07:24 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-int	ft_check_operator(char c)
+char	**ft_append_token(char **line, char *value)
 {
-	if (c == ';' || c == '&' || c == '(' || c == ')')
-	{
-		printf("Operateur pas pris en compte par le sujet.");
-		return (0);
-	}
-	return (1);
-}
+	int		i;
+	char	**new;
 
-t_token	*ft_create_token(t_token_type type, char *value)
-{
-	t_token	*token;
-
-	token = malloc(sizeof(t_token));
-	if (!token)
+	i = 0;
+	if (!value)
+		return (line);
+	while (line && line[i])
+		i++;
+	new = malloc(sizeof(char *) * (i + 2));
+	if (!new)
 		return (NULL);
-	token->type = type;
-	token->value = ft_strdup(value);
-	token->next = NULL;
-	return (token);
+	for (int j = 0; j < i; j++)
+		new[j] = line[j];
+	new[i] = strdup(value);
+	new[i + 1] = NULL;
+	free(line);
+	return (new);
 }
 
-void	ft_add_token(t_token **head, t_token *new_token)
+void	ft_print_parsing(t_parsing *lst)
 {
-	t_token	*t;
+	t_parsing	*p;
+	int			i;
 
-	if (!*head)
-		*head = new_token;
-	else
+	p = lst;
+	while (p)
 	{
-		t = *head;
-		while (t->next)
-			t = t->next;
-		t->next = new_token;
-	}
-}
-
-void	ft_free_token(t_token *lst)
-{
-	t_token	*t;
-
-	while (lst)
-	{
-		t = lst->next;
-		if (lst->value)
-			free(lst->value);
-		free(lst);
-		lst = t;
+		printf("=== Command ===\n");
+		if (p->line)
+		{
+			i = 0;
+			while (p->line[i])
+			{
+				printf("argv[%d]: %s\n", i, p->line[i]);
+				i++;
+			}
+		}
+		else
+			printf("argv: (empty)\n");
+		if (p->infile)
+			printf("infile: %s\n", p->infile);
+		if (p->outfile)
+			printf("outfile: %s (append=%d)\n", p->outfile, p->append);
+		if (p->heredoc)
+			printf("heredoc: yes\n");
+		printf("separator: %d\n", p->sep);
+		p = p->next;
 	}
 }
