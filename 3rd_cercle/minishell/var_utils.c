@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/03 15:14:52 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/09 15:20:57 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,4 +122,15 @@ void	ft_free_envp(t_envp *lst)
 		free(lst);
 		lst = t;
 	}
+}
+
+char	*ft_search_value(t_envp *lst, char *var)
+{
+	while (lst)
+	{
+		if (strcmp(lst->var, var) == 0)
+			return (lst->value);
+		lst = lst->next;
+	}
+	return (NULL);
 }

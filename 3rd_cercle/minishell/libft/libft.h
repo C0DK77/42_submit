@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:38:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/04 10:25:52 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/09 13:00:32 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,5 +100,6 @@ char				ft_convert_bit_to_char(char *s);
 char				*ft_convert_char_to_bit(char c);
 int					ft_isquote(char c);
 int					ft_has_unclosed_quote(char *str);
+char				*ft_strjoin_free(char *s1, char *s2);
 
 #endif

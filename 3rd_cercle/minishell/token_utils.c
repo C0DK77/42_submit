@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/07 21:15:27 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/11 13:13:08 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,66 @@ void	ft_print_token(t_token *lst)
 		printf("[TOKEN] TYPE =>%d  VALUE =>'%s'\n", p->type, p->value);
 		p = p->next;
 	}
+}
+
+int	check_redirection_syntax(t_token *token)
+{
+	while (token)
+	{
+		if (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT
+			|| token->type == TOKEN_REDIR_APPEND
+			|| token->type == TOKEN_HEREDOC)
+		{
+			if (!token->next || token->next->type != TOKEN_WORD)
+			{
+				fprintf(stderr,
+					"minishell: syntax error near unexpected token `newline'\n");
+				return (0);
+			}
+		}
+		token = token->next;
+	}
+	return (1);
+}
+
+int	check_token_syntax(t_token *token)
+{
+	t_token	*prev;
+
+	prev = NULL;
+	while (token)
+	{
+		// Redirection sans argument
+		if ((token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT
+				|| token->type == TOKEN_REDIR_APPEND
+				|| token->type == TOKEN_HEREDOC) && (!token->next
+				|| token->next->type != TOKEN_WORD))
+		{
+			fprintf(stderr,
+				"minishell: syntax error near unexpected token `newline'\n");
+			return (0);
+		}
+		// Opérateur logique en début
+		if ((token->type == TOKEN_PIPE || token->type == TOKEN_AND_IF
+				|| token->type == TOKEN_OR_IF) && (!prev
+				|| prev->type != TOKEN_WORD))
+		{
+			fprintf(stderr,
+				"minishell: syntax error near unexpected token `%s'\n",
+				token->value);
+			return (0);
+		}
+		// Opérateur logique en fin
+		if ((token->type == TOKEN_PIPE || token->type == TOKEN_AND_IF
+				|| token->type == TOKEN_OR_IF) && (!token->next
+				|| token->next->type != TOKEN_WORD))
+		{
+			fprintf(stderr,
+				"minishell: syntax error near unexpected token `newline'\n");
+			return (0);
+		}
+		prev = token;
+		token = token->next;
+	}
+	return (1);
 }

@@ -6,20 +6,24 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/07 21:50:44 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/11 13:13:13 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <fcntl.h>
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/stat.h>
 # include <unistd.h>
+
+# define HEREDOC_FILE "/tmp/.minishell_heredoc"
 
 //	STRUCTURE ENV
 
@@ -102,6 +106,7 @@ t_envp					*ft_create_envp(char *str);
 t_envp					*ft_init_envp(char **envp);
 t_envp					*ft_search_var(t_envp *lst, char *var);
 void					ft_free_envp(t_envp *lst);
+char					*ft_search_value(t_envp *lst, char *var);
 
 //	ENV / VAR
 
@@ -131,6 +136,8 @@ t_token					*ft_create_token(t_token_type type, char *value);
 void					ft_add_token(t_token **head, t_token *new_token);
 void					ft_free_token(t_token *lst);
 void					ft_print_token(t_token *lst);
+int						check_redirection_syntax(t_token *token);
+int						check_token_syntax(t_token *token);
 
 //	PARSE / PARSE
 
@@ -140,5 +147,17 @@ t_parsing				*ft_parsing_line(t_token *t);
 
 char					**ft_append_token(char **line, char *value);
 void					ft_print_parsing(t_parsing *lst);
+
+//	EXEC / UTILS
+
+int						setup_redirections(t_parsing *cmd);
+int						create_heredoc(char *delimiter);
+
+//	EXEC / EXEC
+
+char					**env_list_to_array(t_envp *envp);
+char					*find_cmd_path(char *cmd, t_envp *envp);
+void					exec_cmd(char **cmd, t_envp *envp);
+void					ft_exec(t_parsing *p, t_envp *envp);
 
 #endif

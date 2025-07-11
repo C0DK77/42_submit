@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:00 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/07 22:07:24 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/08 12:52:22 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	**ft_append_token(char **line, char *value)
 		return (NULL);
 	for (int j = 0; j < i; j++)
 		new[j] = line[j];
-	new[i] = strdup(value);
+	new[i] = ft_strdup(value);
 	new[i + 1] = NULL;
 	free(line);
 	return (new);

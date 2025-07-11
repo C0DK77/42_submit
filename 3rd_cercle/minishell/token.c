@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/07/07 21:05:09 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/11 13:18:03 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ int	ft_parse_operator(t_token **lst, char *line, int i)
 	}
 	if (line[i] == '|')
 	{
-		if (line[i + 1] == '<')
+		if (line[i + 1] == '|')
 		{
 			// A SUPPRIMER LORS DE L'EXECUTION
 			token = ft_create_token(TOKEN_OR_IF, "||");
