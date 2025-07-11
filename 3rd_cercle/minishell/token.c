@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/07/11 13:18:03 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/11 14:29:41 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,13 @@ int	ft_parse_operator(t_token **lst, char *line, int i)
 	{
 		if (line[i + 1] == '>')
 		{
-			token = ft_create_token(TOKEN_REDIR_OUT, ">>");
+			if (line[i + 2] == '>')
+			{
+				fprintf(stderr,
+					"minishell: syntax error near unexpected token `>>'\n");
+				return (-1);
+			}
+			token = ft_create_token(TOKEN_REDIR_APPEND, ">>");
 			i++;
 		}
 		else
@@ -173,7 +179,13 @@ int	ft_parse_operator(t_token **lst, char *line, int i)
 	{
 		if (line[i + 1] == '<')
 		{
-			token = ft_create_token(TOKEN_HEREDOC, "<<");
+			if (line[i + 2] == '<')
+			{
+				fprintf(stderr,
+					"minishell: syntax error near unexpected token `<<'\n");
+				return (-1);
+			}
+			token = ft_create_token(TOKEN_REDIR_APPEND, "<<");
 			i++;
 		}
 		else
@@ -199,7 +211,7 @@ int	ft_parse_operator(t_token **lst, char *line, int i)
 			i++;
 		}
 		else
-			token = ft_create_token(TOKEN_BACKGROUND, "&");
+			token = ft_create_token(TOKEN_AND, "&");
 	}
 	ft_add_token(lst, token);
 	return (i + 1);

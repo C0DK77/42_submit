@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/11 13:13:46 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/11 13:41:45 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 		// printf("LINE => %s\n", line);
 		tokens = ft_parse_line(line, c_envp);
-		// ft_print_token(tokens);
+		ft_print_token(tokens);
 		if (!tokens || !check_token_syntax(tokens))
 		{
 			ft_free_token(tokens);
