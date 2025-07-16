@@ -1,37 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_utils.c                                      :+:      :+:    :+:   */
+/*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 12:34:00 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/08 12:52:22 by corentindes      ###   ########.fr       */
+/*   Created: 2025/07/11 18:13:20 by corentindes       #+#    #+#             */
+/*   Updated: 2025/07/12 12:54:30 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-char	**ft_append_token(char **line, char *value)
+void	ft_print_token(t_token *l)
 {
-	int		i;
-	char	**new;
+	t_token	*t;
 
-	i = 0;
-	if (!value)
-		return (line);
-	while (line && line[i])
-		i++;
-	new = malloc(sizeof(char *) * (i + 2));
-	if (!new)
-		return (NULL);
-	for (int j = 0; j < i; j++)
-		new[j] = line[j];
-	new[i] = ft_strdup(value);
-	new[i + 1] = NULL;
-	free(line);
-	return (new);
+	t = l;
+	while (t)
+	{
+		printf("[TOKEN] TYPE =>%d  VALUE =>'%s'\n", t->type, t->value);
+		t = t->next;
+	}
 }
 
 void	ft_print_parsing(t_parsing *lst)

@@ -12,10 +12,15 @@ CFLAGS 				= 	-Wall -Wextra -Werror		\
 
 # ==== FILES ==== #
 
-SRC 				= 	main.c parse_utils.c parse.c var.c var_utils.c token.c token_utils.c exec.c exec_utils.c
+SRC 				= 	main.c parse.c var.c var_utils.c token.c token_utils.c exec.c exec_utils.c functions.c print.c
 OBJ_DIR 			= 	obj
 
 OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
+
+# ==== READLINE ==== #
+
+CPPFLAGS			= 	-I/opt/homebrew/opt/readline/include
+LDFLAGS				=	-L/opt/homebrew/opt/readline/lib -lreadline
 
 # ==== LIBFT / PRINTF /	GET NEXT LINE ==== #
 
@@ -27,12 +32,12 @@ LIBFT_A 			= 	$(LIBFT_DIR)/libft.a
 all 				: 	$(LIBFT_A) $(NAME)
 
 $(NAME) 			: 	$(OBJ)
-			  		  	@$(CC) $(CFLAGS) -o $@ $^ $(LIBFT_A) -lreadline
+						@$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ $(LIBFT_A) $(LDFLAGS)
 
 $(OBJ_DIR)/%.o		: 	%.c
 					  	@mkdir -p $(dir $@)
 			  		  	@echo "Compilation de $< → $@"
-			  		  	@$(CC) $(CFLAGS) -c $< -o $@
+			  		  	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 $(LIBFT_A) 			:
 					  	@make -s -C $(LIBFT_DIR)

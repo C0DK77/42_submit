@@ -6,27 +6,26 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:32:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/03 19:20:35 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/16 11:49:12 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-t_var	g_vars_to_check[] = {{"PATH"}, {"PWD"}, {"SHLVL"}, {"HOME"}, {"TERM"},
-		{"OLDPWD"}, {NULL}};
+t_var	g_var[] = {{"PATH"}, {"PWD"}, {"SHLVL"}, {"HOME"}, {"TERM"}, {"OLDPWD"},
+		{NULL}};
 
-int	ft_check_all_var(t_envp **envp)
+int	ft_vars_check(t_envp **l)
 {
 	int	i;
 
 	i = 0;
-	while (g_vars_to_check[i].var)
+	while (g_var[i].var)
 	{
-		if (!ft_check_var(envp, g_vars_to_check[i].var))
+		if (!ft_var_check(l, g_var[i].var))
 		{
-			printf("Probleme sur l'initialisation de la variable %s.\n",
-				g_vars_to_check[i].var);
+			printf("Init problem %s.\n", g_var[i].var);
 			return (0);
 		}
 		i++;
@@ -34,17 +33,17 @@ int	ft_check_all_var(t_envp **envp)
 	return (1);
 }
 
-int	ft_check_var(t_envp **envp, char *var)
+int	ft_var_check(t_envp **l, char *v)
 {
 	t_envp	*t;
-	char	cwd[PATH_MAX];
+	char	c[PATH_MAX];
 
-	t = ft_search_var(*envp, var);
-	if (t && ft_strcmp(var, "SHLVL") == 0 && !shlvl(t))
+	t = ft_env_search_node(*l, v);
+	if (t && ft_strcmp(v, "SHLVL") == 0 && !ft_var_shlvl(t))
 		return (0);
 	if (t)
 		return (1);
-	if (ft_strcmp(var, "PWD") == 0 && !getcwd(cwd, sizeof(cwd)))
+	if (ft_strcmp(v, "PWD") == 0 && !getcwd(c, sizeof(c)))
 	{
 		perror("getcwd");
 		return (0);
@@ -52,27 +51,27 @@ int	ft_check_var(t_envp **envp, char *var)
 	t = malloc(sizeof(t_envp));
 	if (!t)
 		return (0);
-	if (!ft_change_var(envp, t, var))
+	if (!ft_var_init(l, t, v))
 		return (0);
 	return (1);
 }
 
-int	ft_change_var(t_envp **envp, t_envp *t, char *var)
+int	ft_var_init(t_envp **l, t_envp *t, char *v)
 {
 	char	cwd[PATH_MAX];
 
-	t->var = ft_strdup(var);
-	if (ft_strcmp(var, "TERM") == 0)
+	t->var = ft_strdup(v);
+	if (ft_strcmp(v, "TERM") == 0)
 		t->value = ft_strdup("xterm");
-	else if (ft_strcmp(var, "HOME") == 0)
+	else if (ft_strcmp(v, "HOME") == 0)
 		t->value = ft_strdup("/");
-	else if (ft_strcmp(var, "PATH") == 0)
+	else if (ft_strcmp(v, "PATH") == 0)
 		t->value = ft_strdup("/usr/local/bin:/usr/bin:/bin");
-	else if (ft_strcmp(var, "OLDPWD") == 0)
+	else if (ft_strcmp(v, "OLDPWD") == 0)
 		t->value = ft_strdup("");
-	else if (ft_strcmp(var, "SHLVL") == 0)
+	else if (ft_strcmp(v, "SHLVL") == 0)
 		t->value = ft_strdup("1");
-	else if (ft_strcmp(var, "PWD") == 0)
+	else if (ft_strcmp(v, "PWD") == 0)
 	{
 		if (!getcwd(cwd, sizeof(cwd)))
 		{
@@ -90,22 +89,22 @@ int	ft_change_var(t_envp **envp, t_envp *t, char *var)
 		free(t);
 		return (0);
 	}
-	t->next = *envp;
-	*envp = t;
+	t->next = *l;
+	*l = t;
 	return (1);
 }
 
-int	shlvl(t_envp *envp)
+int	ft_var_shlvl(t_envp *l)
 {
 	char	*t;
 	int		s;
 
-	s = ft_atoi(envp->value);
+	s = ft_atoi(l->value);
 	s++;
 	t = ft_itoa(s);
 	if (!t)
 		return (0);
-	free(envp->value);
-	envp->value = t;
+	free(l->value);
+	l->value = t;
 	return (1);
 }

@@ -6,133 +6,117 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/11 13:40:35 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/16 11:52:00 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-t_token	*ft_create_token(t_token_type type, char *value)
+t_token	*ft_token_init(t_token_type t, char *v)
 {
-	t_token	*token;
+	t_token	*n;
 
-	token = malloc(sizeof(t_token));
-	if (!token)
+	n = malloc(sizeof(t_token));
+	if (!n)
 		return (NULL);
-	token->type = type;
-	token->value = ft_strdup(value);
-	token->next = NULL;
-	return (token);
+	n->type = t;
+	n->value = ft_strdup(v);
+	n->next = NULL;
+	return (n);
 }
 
-void	ft_add_token(t_token **head, t_token *new_token)
+void	ft_token_add(t_token **l, t_token *n)
 {
 	t_token	*t;
 
-	if (!*head)
-		*head = new_token;
+	if (!*l)
+		*l = n;
 	else
 	{
-		t = *head;
+		t = *l;
 		while (t->next)
 			t = t->next;
-		t->next = new_token;
+		t->next = n;
 	}
 }
 
-void	ft_free_token(t_token *lst)
+t_token	*ft_token(char *s, t_envp *l)
+{
+	int		i;
+	t_token	*t;
+
+	i = 0;
+	t = NULL;
+	while (s[i])
+	{
+		while (ft_isspace(s[i]))
+			i++;
+		if (!s[i])
+			break ;
+		else if (ft_isoperator(s[i]))
+			i = ft_token_ope(&t, s, i);
+		else
+			i = ft_token_word(&t, s, i, l);
+	}
+	return (t);
+}
+
+int	ft_token_check(t_token *n)
+{
+	t_token			*prev;
+	t_token_type	t;
+
+	prev = NULL;
+	while (n)
+	{
+		t = n->type;
+		if ((t == R_IN || t == R_OUT || t == R_APPEND || t == HERE) && (!n->next
+				|| n->next->type != WRD))
+		{
+			fprintf(stderr,
+				"minishell: syntax error near unexpected token `newline'\n");
+			return (0);
+		}
+		if ((t == PIPE || t == AND_IF || t == OR_IF || t == SEMIC || t == AND)
+			&& !prev)
+		{
+			fprintf(stderr,
+				"minishell: syntax error near unexpected token `%s'\n",
+				n->value);
+			return (0);
+		}
+		if ((t == PIPE || t == AND_IF || t == OR_IF || t == SEMIC || t == AND)
+			&& (!n->next || n->next->type != WRD))
+		{
+			fprintf(stderr,
+				"minishell: syntax error near unexpected token `newline'\n");
+			return (0);
+		}
+		if (prev && (prev->type >= PIPE && prev->type <= BACKGRD) && (t >= PIPE
+				&& t <= BACKGRD))
+		{
+			fprintf(stderr,
+				"minishell: syntax error near unexpected token `%s'\n",
+				n->value);
+			return (0);
+		}
+		prev = n;
+		n = n->next;
+	}
+	return (1);
+}
+
+void	ft_token_free(t_token *l)
 {
 	t_token	*t;
 
-	while (lst)
+	while (l)
 	{
-		t = lst->next;
-		if (lst->value)
-			free(lst->value);
-		free(lst);
-		lst = t;
+		t = l->next;
+		if (l->value)
+			free(l->value);
+		free(l);
+		l = t;
 	}
-}
-
-void	ft_print_token(t_token *lst)
-{
-	t_token	*p;
-
-	p = lst;
-	while (p)
-	{
-		printf("[TOKEN] TYPE =>%d  VALUE =>'%s'\n", p->type, p->value);
-		p = p->next;
-	}
-}
-
-int	check_redirection_syntax(t_token *token)
-{
-	while (token)
-	{
-		if (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT
-			|| token->type == TOKEN_REDIR_APPEND
-			|| token->type == TOKEN_HEREDOC)
-		{
-			if (!token->next || token->next->type != TOKEN_WORD)
-			{
-				fprintf(stderr,
-					"minishell: syntax error near unexpected token `newline'\n");
-				return (0);
-			}
-		}
-		token = token->next;
-	}
-	return (1);
-}
-
-int	check_token_syntax(t_token *token)
-{
-	t_token *prev = NULL;
-
-	while (token)
-	{
-		t_token_type type = token->type;
-
-		if ((type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT
-				|| type == TOKEN_REDIR_APPEND || type == TOKEN_HEREDOC)
-			&& (!token->next || token->next->type != TOKEN_WORD))
-		{
-			fprintf(stderr,
-				"minishell: syntax error near unexpected token `newline'\n");
-			return (0);
-		}
-
-		if ((type == TOKEN_PIPE || type == TOKEN_AND_IF || type == TOKEN_OR_IF
-				|| type == TOKEN_SEMICOLON || type == TOKEN_AND) && !prev)
-		{
-			fprintf(stderr,
-				"minishell: syntax error near unexpected token `%s'\n",
-				token->value);
-			return (0);
-		}
-
-		if ((type == TOKEN_PIPE || type == TOKEN_AND_IF || type == TOKEN_OR_IF
-				|| type == TOKEN_SEMICOLON || type == TOKEN_AND)
-			&& (!token->next || token->next->type != TOKEN_WORD))
-		{
-			fprintf(stderr,
-				"minishell: syntax error near unexpected token `newline'\n");
-			return (0);
-		}
-
-		if (prev && (prev->type >= TOKEN_PIPE && prev->type <= TOKEN_BACKGROUND)
-			&& (type >= TOKEN_PIPE && type <= TOKEN_BACKGROUND))
-		{
-			fprintf(stderr,
-				"minishell: syntax error near unexpected token `%s'\n",
-				token->value);
-			return (0);
-		}
-
-		prev = token;
-		token = token->next;
-	}
-	return (1);
 }

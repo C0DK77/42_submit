@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/11 13:41:45 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/16 19:01:13 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,21 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	c_envp = ft_init_envp(envp);
+	c_envp = ft_env_init(envp);
 	if (!c_envp)
 		return (1);
-	if (!ft_check_all_var(&c_envp))
+	if (!ft_vars_check(&c_envp))
 		return (0);
+	signal(SIGINT, ft_sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		line = readline(ft_prompt());
+		line = readline(ft_env_prompt());
 		if (!line)
+		{
+			printf("exit\n");
 			break ;
+		}
 		while (ft_has_unclosed_quote(line))
 		{
 			next = readline("> ");
@@ -49,43 +54,57 @@ int	main(int argc, char **argv, char **envp)
 			free(t);
 			free(next);
 		}
-		if (!line)
-			break ;
 		if (*line)
 			add_history(line);
 		// printf("LINE => %s\n", line);
-		tokens = ft_parse_line(line, c_envp);
-		ft_print_token(tokens);
-		if (!tokens || !check_token_syntax(tokens))
+		tokens = ft_token(line, c_envp);
+		// ft_print_token(tokens);
+		if (!tokens || !ft_token_check(tokens))
 		{
-			ft_free_token(tokens);
+			ft_token_free(tokens);
 			free(line);
 			continue ;
 		}
-		parse = ft_parsing_line(tokens);
+		parse = ft_parse_line(tokens);
 		// ft_print_parsing(parse);
 		p = parse;
 		while (p)
 		{
-			pid = fork();
-			if (pid == 0)
+			if (p->sep == SEP_NONE && ft_exec_builtin(p->line, &c_envp))
 			{
-				if (setup_redirections(p) != 0)
-					exit(1);
-				exec_cmd(p->line, c_envp);
-				exit(0);
+				// printf("[PARENT] Builtin exécuté : %s\n", p->line[0]);
+				p = p->next;
 			}
 			else
 			{
-				waitpid(pid, &g_exit_status, 0);
-				unlink("/tmp/.minishell_heredoc");
+				pid = fork();
+				if (pid == 0)
+				{
+					// printf("[CHILD] Je suis le fils pour : %s\n",
+						// p->line[0]);
+					if (ft_exec_redirections_init(p) != 0)
+						exit(1);
+					if (p->sep != SEP_NONE && ft_exec_builtin(p->line, &c_envp))
+					{
+						// printf("[CHILD] Builtin exécuté dans pipe : %s\n",
+							// p->line[0]);
+							exit(g_exit_status);
+					}
+					// printf("[CHILD] Commande externe : %s\n", p->line[0]);
+					ft_exec_cmd(p->line, c_envp);
+					exit(1);
+				}
+				else
+				{
+					waitpid(pid, &g_exit_status, 0);
+					unlink("/tmp/.minishell_heredoc");
+				}
+				p = p->next;
 			}
-			p = p->next;
 		}
-		ft_free_token(tokens);
+		ft_token_free(tokens);
 		free(line);
 	}
-	ft_free_envp(c_envp);
-	printf("exit\n");
+	ft_env_free(c_envp);
 	return (0);
 }

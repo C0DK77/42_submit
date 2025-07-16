@@ -6,17 +6,19 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/11 13:13:13 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/16 18:06:18 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -47,21 +49,20 @@ extern t_var			g_vars_to_check[];
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,
-	TOKEN_PIPE,
-	TOKEN_REDIR_IN,
-	TOKEN_REDIR_OUT,
-	TOKEN_REDIR_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_SEMICOLON,
-	TOKEN_AND,
-	TOKEN_AND_IF,
-	TOKEN_OR,
-	TOKEN_OR_IF,
-	TOKEN_BACKGROUND,
-	TOKEN_OPEN_PAREN,
-	TOKEN_CLOSE_PAREN,
-	TOKEN_EOF
+	WRD,
+	PIPE,
+	R_IN,
+	R_OUT,
+	R_APPEND,
+	HERE,
+	SEMIC,
+	AND,
+	AND_IF,
+	OR,
+	OR_IF,
+	BACKGRD,
+	O_PAREN,
+	C_PAREN
 }						t_token_type;
 
 typedef struct s_token
@@ -78,7 +79,7 @@ extern int				g_exit_status;
 
 typedef enum s_sep
 {
-	SEP_NONE,
+	SEP_NONE = 0,
 	SEP_PIPE,
 	SEP_AND,
 	SEP_AND_IF,
@@ -101,63 +102,76 @@ typedef struct s_parsing
 
 //	ENV / UTILS
 
-char					*ft_prompt(void);
-t_envp					*ft_create_envp(char *str);
-t_envp					*ft_init_envp(char **envp);
-t_envp					*ft_search_var(t_envp *lst, char *var);
-void					ft_free_envp(t_envp *lst);
-char					*ft_search_value(t_envp *lst, char *var);
+char					*ft_env_prompt(void);
+t_envp					*ft_env_copy(char *s);
+t_envp					*ft_env_init(char **l);
+char					*ft_env_search_value(t_envp *l, char *v);
+t_envp					*ft_env_search_node(t_envp *l, char *v);
+void					ft_env_free(t_envp *l);
 
 //	ENV / VAR
 
-int						ft_check_all_var(t_envp **envp);
-int						ft_check_var(t_envp **envp, char *var);
-int						ft_change_var(t_envp **envp, t_envp *t, char *var);
-int						shlvl(t_envp *t);
+int						ft_vars_check(t_envp **l);
+int						ft_var_check(t_envp **l, char *v);
+int						ft_var_init(t_envp **l, t_envp *t, char *v);
+int						ft_var_shlvl(t_envp *l);
 
 //	TOKEN / PARSE
 
-t_token					*ft_parse_line(char *str, t_envp *envp);
-int						ft_parse_word_double_quotes(t_envp *envp, char **word,
-							char *line, int end, int i);
-int						ft_parse_dollar_sign(t_envp *envp, char **word,
-							char *line, int i);
-int						ft_parse_word_without_quotes(char **word, char *line,
+int						ft_token_word_dbquote(t_envp *l, char **w, char *s,
+							int z, int i);
+int						ft_token_ope_dollar(t_envp *l, char **w, char *s,
 							int i);
-int						ft_parse_word_single_quote(char **word, char *line,
-							int i, int start);
-int						ft_parse_word(t_token **lst, char *line, int i,
-							t_envp *envp);
-int						ft_parse_operator(t_token **lst, char *line, int i);
+int						ft_token_word_noquote(char **w, char *s, int i);
+int						ft_token_word_sgquote(char **w, char *s, int i, int j);
+int						ft_token_word(t_token **n, char *s, int i, t_envp *l);
+int						ft_token_ope(t_token **l, char *s, int i);
 
 //	TOKEN / UTILS
 
-t_token					*ft_create_token(t_token_type type, char *value);
-void					ft_add_token(t_token **head, t_token *new_token);
-void					ft_free_token(t_token *lst);
-void					ft_print_token(t_token *lst);
-int						check_redirection_syntax(t_token *token);
-int						check_token_syntax(t_token *token);
+t_token					*ft_token_init(t_token_type t, char *v);
+void					ft_token_add(t_token **l, t_token *n);
+t_token					*ft_token(char *s, t_envp *l);
+int						ft_token_check(t_token *n);
+void					ft_token_free(t_token *l);
 
 //	PARSE / PARSE
 
-t_parsing				*ft_parsing_line(t_token *t);
-
-//	PARSE / UTILS
-
-char					**ft_append_token(char **line, char *value);
-void					ft_print_parsing(t_parsing *lst);
+char					**ft_parse_add(char **line, char *value);
+t_parsing				*ft_parse_line(t_token *t);
 
 //	EXEC / UTILS
 
-int						setup_redirections(t_parsing *cmd);
-int						create_heredoc(char *delimiter);
+int						ft_exec_redirections_init(t_parsing *s);
+int						ft_exec_create_heredoc(char *delimiter);
+int						ft_exec_is_directory(char *p);
+char					*ft_exec_find_cmd(char *s, t_envp *l);
+char					*ft_strjoin_three(char *s1, char *s2, char *s3);
+void					ft_free_split(char **arr);
+char					**ft_env_to_tab(t_envp *l);
+void					ft_sigint_handler(int sig);
+int						ft_setenv(t_envp **envp, char *var, char *value);
+void					ft_env_sorted(t_envp *envp);
 
 //	EXEC / EXEC
 
-char					**env_list_to_array(t_envp *envp);
-char					*find_cmd_path(char *cmd, t_envp *envp);
-void					exec_cmd(char **cmd, t_envp *envp);
-void					ft_exec(t_parsing *p, t_envp *envp);
+void					ft_exec(t_parsing *p, t_envp *l);
+void					ft_exec_cmd(char **s, t_envp *l);
+char					**ft_exec_env_array(t_envp *l);
+
+//	FUNCTIONS
+
+void					ft_exec_cmd(char **s, t_envp *l);
+int						ft_exec_builtin(char **s, t_envp **l);
+int						ft_echo(char **args);
+int						ft_exit(char **args);
+int						ft_pwd(void);
+int						ft_env(t_envp *l);
+int						ft_cd(char **s, t_envp *l);
+int						ft_export(char **args, t_envp **envp);
+int						ft_unset(char **args, t_envp **envp);
+
+void					ft_print_token(t_token *l);
+void					ft_print_parsing(t_parsing *lst);
 
 #endif

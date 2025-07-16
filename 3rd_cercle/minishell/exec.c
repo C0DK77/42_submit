@@ -6,21 +6,26 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/09 15:25:26 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/16 17:46:29 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-void	ft_exec(t_parsing *p, t_envp *envp)
+void	ft_exec(t_parsing *p, t_envp *l)
 {
 	int		fd[2];
 	pid_t	pid;
 
 	while (p)
 	{
-		setup_redirections(p);
+		ft_exec_redirections_init(p);
+		if (p->sep == SEP_NONE && ft_exec_builtin(p->line, &l))
+		{
+			p = p->next;
+			continue ;
+		}
 		if (p->sep == SEP_PIPE)
 			pipe(fd);
 		pid = fork();
@@ -28,7 +33,8 @@ void	ft_exec(t_parsing *p, t_envp *envp)
 		{
 			if (p->sep == SEP_PIPE)
 				dup2(fd[1], STDOUT_FILENO);
-			exec_cmd(p->line, envp);
+			close(fd[0]);
+			ft_exec_cmd(p->line, l);
 			exit(1);
 		}
 		else
@@ -44,76 +50,69 @@ void	ft_exec(t_parsing *p, t_envp *envp)
 	}
 }
 
-char	**env_list_to_array(t_envp *envp)
+void	ft_exec_cmd(char **s, t_envp *l)
 {
-	int		count;
-	t_envp	*tmp;
+	char	*path;
+	char	**env;
+
+	if (!s || !s[0])
+		exit(0);
+	if (s[0][0] == '/' || s[0][0] == '.')
+		path = ft_strdup(s[0]);
+	else
+		path = ft_exec_find_cmd(s[0], l);
+	if (!path)
+	{
+		fprintf(stderr, "minishell: %s: command not found\n", s[0]);
+		exit(127);
+	}
+	if (ft_exec_is_directory(path))
+	{
+		fprintf(stderr, "minishell: %s: Is a directory\n", path);
+		free(path);
+		exit(126);
+	}
+	if (access(path, X_OK) != 0)
+	{
+		perror("minishell");
+		free(path);
+		exit(126);
+	}
+	env = ft_exec_env_array(l);
+	execve(path, s, env);
+	perror("execve");
+	free(path);
+	ft_free_split(env);
+	exit(errno == ENOENT ? 127 : 126);
+}
+
+char	**ft_exec_env_array(t_envp *l)
+{
+	int		i;
+	t_envp	*t;
 	char	**env;
 	char	*entry;
 
-	count = 0;
-	tmp = envp;
-	while (tmp)
+	i = 0;
+	t = l;
+	while (t)
 	{
-		count++;
-		tmp = tmp->next;
+		i++;
+		t = t->next;
 	}
-	env = malloc(sizeof(char *) * (count + 1));
+	env = malloc(sizeof(char *) * (i + 1));
 	if (!env)
 		return (NULL);
-	tmp = envp;
-	count = 0;
-	while (tmp)
-	{
-		entry = ft_strjoin(tmp->var, "=");
-		env[count] = ft_strjoin(entry, tmp->value);
-		free(entry);
-		count++;
-		tmp = tmp->next;
-	}
-	env[count] = NULL;
-	return (env);
-}
-
-char	*find_cmd_path(char *cmd, t_envp *envp)
-{
-	char	**paths;
-	char	*path_var;
-	char	*candidate;
-	int		i;
-
-	path_var = ft_search_value(envp, "PATH");
+	t = l;
 	i = 0;
-	if (!path_var || ft_strchr(cmd, '/'))
-		return (ft_strdup(cmd));
-	paths = ft_split(path_var, ':');
-	while (paths && paths[i])
+	while (t)
 	{
-		candidate = ft_strjoin(paths[i], "/");
-		candidate = ft_strjoin_free(candidate, cmd);
-		if (access(candidate, X_OK) == 0)
-			return (candidate);
-		free(candidate);
+		entry = ft_strjoin(t->var, "=");
+		env[i] = ft_strjoin(entry, t->value);
+		free(entry);
 		i++;
+		t = t->next;
 	}
-	return (NULL);
-}
-
-void	exec_cmd(char **cmd, t_envp *envp)
-{
-	char	*path;
-	char	**env_array;
-
-	if (!cmd || !cmd[0])
-		exit(0);
-	path = find_cmd_path(cmd[0], envp);
-	if (!path)
-	{
-		printf("minishell: %s: command not found\n", cmd[0]);
-		exit(127);
-	}
-	env_array = env_list_to_array(envp);
-	execve(path, cmd, env_array);
-	perror("execve");
-	exit(1);
+	env[i] = NULL;
+	return (env);
 }

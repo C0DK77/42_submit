@@ -6,213 +6,198 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/07/11 14:29:41 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/16 18:03:24 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-t_token	*ft_parse_line(char *str, t_envp *envp)
+int	ft_token_word_dbquote(t_envp *l, char **w, char *s, int z, int i)
 {
-	int		i;
-	t_token	*lst;
-
-	i = 0;
-	lst = NULL;
-	while (str[i])
-	{
-		while (ft_isspace(str[i]))
-			i++;
-		if (!str[i])
-			break ;
-		else if (ft_isoperator(str[i]))
-			i = ft_parse_operator(&lst, str, i);
-		else
-			i = ft_parse_word(&lst, str, i, envp);
-	}
-	return (lst);
-}
-
-int	ft_parse_word_double_quotes(t_envp *envp, char **word, char *line, int end,
-		int i)
-{
-	int		start;
+	int		j;
 	char	*a;
 	char	*t;
 
-	start = i;
-	while (i < end)
+	j = i;
+	while (i < z)
 	{
-		if (line[i] == '$')
-			i = ft_parse_dollar_sign(envp, word, line, i);
+		if (s[i] == '$')
+			i = ft_token_ope_dollar(l, w, s, i);
 		else
 		{
-			while (i < end && line[i] != '$')
+			while (i < z && s[i] != '$')
 				i++;
-			t = strndup(line + start, i - start);
-			a = ft_strjoin(*word, t);
-			free(*word);
+			t = ft_strndup(s + j, i - j);
+			a = ft_strjoin(*w, t);
+			free(*w);
 			free(t);
-			*word = a;
+			*w = a;
 		}
 	}
 	return (i);
 }
 
-int	ft_parse_dollar_sign(t_envp *envp, char **word, char *line, int i)
+int	ft_token_ope_dollar(t_envp *l, char **w, char *s, int i)
 {
 	char	*t;
-	int		start;
-	char	*value;
-	char	*var;
-	t_envp	*v;
+	int		j;
+	char	*r;
+	char	*v;
+	t_envp	*n;
 
 	i++;
-	if (line[i] == '?')
+	if (s[i] == '?')
 	{
 		t = ft_itoa(g_exit_status);
-		var = ft_strjoin(*word, t);
-		free(*word);
+		if (!t)
+			return (i + 1);
+		r = ft_strjoin(*w, t);
+		free(*w);
 		free(t);
-		*word = var;
+		*w = r;
 		return (i + 1);
 	}
-	start = i;
-	while (line[i] && (ft_isalnum(line[i]) || line[i] == '_'))
+	j = i;
+	while (s[i] && (ft_isalnum(s[i]) || s[i] == '_'))
 		i++;
-	var = strndup(line + start, i - start);
-	v = ft_search_var(envp, var);
-	value = v ? v->value : NULL;
-	t = ft_strjoin(*word, value ? value : "");
-	free(*word);
-	*word = t;
-	free(var);
+	v = ft_strndup(s + j, i - j);
+	if (!v)
+		return (i);
+	r = NULL;
+	n = ft_env_search_node(l, v);
+	if (n && n->value)
+		r = n->value;
+	if (r)
+		t = ft_strjoin(*w, r);
+	else
+		t = ft_strjoin(*w, "");
+	free(*w);
+	free(v);
+	*w = t;
 	return (i);
 }
 
-int	ft_parse_word_without_quotes(char **word, char *line, int i)
+int	ft_token_word_noquote(char **w, char *s, int i)
 {
 	char	*a;
 	char	*t;
-	int		start;
+	int		j;
 
-	start = i;
-	while (line[i] && !ft_isspace(line[i]) && !ft_isoperator(line[i])
-		&& !ft_isquote(line[i]) && line[i] != '$')
+	j = i;
+	while (s[i] && !ft_isspace(s[i]) && !ft_isoperator(s[i])
+		&& !ft_isquote(s[i]) && s[i] != '$')
 		i++;
-	t = strndup(line + start, i - start);
-	a = ft_strjoin(*word, t);
-	free(*word);
+	t = ft_strndup(s + j, i - j);
+	a = ft_strjoin(*w, t);
+	free(*w);
 	free(t);
-	*word = a;
+	*w = a;
 	return (i);
 }
 
-int	ft_parse_word_single_quote(char **word, char *line, int i, int start)
+int	ft_token_word_sgquote(char **w, char *s, int i, int j)
 {
 	char	*t;
 	char	*a;
 
-	t = strndup(line + start, i - start);
-	a = ft_strjoin(*word, t);
-	free(*word);
+	t = ft_strndup(s + j, i - j);
+	a = ft_strjoin(*w, t);
+	free(*w);
 	free(t);
-	*word = a;
+	*w = a;
 	return (i);
 }
 
-int	ft_parse_word(t_token **lst, char *line, int i, t_envp *envp)
+int	ft_token_word(t_token **n, char *s, int i, t_envp *l)
 {
-	char	*word;
+	char	*w;
 	char	quote;
-	int		start;
+	int		j;
 
-	word = ft_strdup("");
-	while (line[i] && !ft_isspace(line[i]) && !ft_isoperator(line[i]))
+	w = ft_strdup("");
+	while (s[i] && !ft_isspace(s[i]) && !ft_isoperator(s[i]))
 	{
-		if (ft_isquote(line[i]))
+		if (ft_isquote(s[i]))
 		{
-			quote = line[i++];
-			start = i;
-			while (line[i] && line[i] != quote)
+			quote = s[i++];
+			j = i;
+			while (s[i] && s[i] != quote)
 				i++;
 			if (quote == '"')
-				i = ft_parse_word_double_quotes(envp, &word, line, i, start);
+				i = ft_token_word_dbquote(l, &w, s, i, j);
 			else
-				i = ft_parse_word_single_quote(&word, line, i, start);
-			if (line[i])
+				i = ft_token_word_sgquote(&w, s, i, j);
+			if (s[i])
 				i++;
 		}
-		else if (line[i] == '$')
-			i = ft_parse_dollar_sign(envp, &word, line, i);
+		else if (s[i] == '$')
+			i = ft_token_ope_dollar(l, &w, s, i);
 		else
-			i = ft_parse_word_without_quotes(&word, line, i);
+			i = ft_token_word_noquote(&w, s, i);
 	}
-	ft_add_token(lst, ft_create_token(TOKEN_WORD, word));
-	free(word);
+	ft_token_add(n, ft_token_init(WRD, w));
+	free(w);
 	return (i);
 }
 
-int	ft_parse_operator(t_token **lst, char *line, int i)
+int	ft_token_ope(t_token **l, char *s, int i)
 {
-	t_token	*token;
+	t_token	*n;
 
-	token = NULL;
-	if (line[i] == '>')
+	n = NULL;
+	if (s[i] == '>')
 	{
-		if (line[i + 1] == '>')
+		if (s[i + 1] == '>')
 		{
-			if (line[i + 2] == '>')
+			if (s[i + 2] == '>')
 			{
 				fprintf(stderr,
 					"minishell: syntax error near unexpected token `>>'\n");
 				return (-1);
 			}
-			token = ft_create_token(TOKEN_REDIR_APPEND, ">>");
+			n = ft_token_init(R_APPEND, ">>");
 			i++;
 		}
 		else
-			token = ft_create_token(TOKEN_REDIR_OUT, ">");
+			n = ft_token_init(R_OUT, ">");
 	}
-	if (line[i] == '<')
+	if (s[i] == '<')
 	{
-		if (line[i + 1] == '<')
+		if (s[i + 1] == '<')
 		{
-			if (line[i + 2] == '<')
+			if (s[i + 2] == '<')
 			{
 				fprintf(stderr,
 					"minishell: syntax error near unexpected token `<<'\n");
 				return (-1);
 			}
-			token = ft_create_token(TOKEN_REDIR_APPEND, "<<");
+			n = ft_token_init(HERE, "<<");
 			i++;
 		}
 		else
-			token = ft_create_token(TOKEN_REDIR_IN, "<");
+			n = ft_token_init(R_IN, "<");
 	}
-	if (line[i] == '|')
+	if (s[i] == '|')
 	{
-		if (line[i + 1] == '|')
+		if (s[i + 1] == '|')
 		{
-			// A SUPPRIMER LORS DE L'EXECUTION
-			token = ft_create_token(TOKEN_OR_IF, "||");
+			n = ft_token_init(OR_IF, "||");
 			i++;
 		}
 		else
-			token = ft_create_token(TOKEN_PIPE, "|");
+			n = ft_token_init(PIPE, "|");
 	}
-	// A SUPPRIMER LORS DE L'EXECUTION
-	if (line[i] == '&')
+	if (s[i] == '&')
 	{
-		if (line[i + 1] == '&')
+		if (s[i + 1] == '&')
 		{
-			token = ft_create_token(TOKEN_AND_IF, "&&");
+			n = ft_token_init(AND_IF, "&&");
 			i++;
 		}
 		else
-			token = ft_create_token(TOKEN_AND, "&");
+			n = ft_token_init(AND, "&");
 	}
-	ft_add_token(lst, token);
+	ft_token_add(l, n);
 	return (i + 1);
 }

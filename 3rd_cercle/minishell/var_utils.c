@@ -6,131 +6,131 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/09 15:20:57 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/16 11:47:17 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-char	*ft_prompt(void)
+char	*ft_env_prompt(void)
 {
-	char	*prompt;
-	char	*cwd;
+	char	*p;
+	char	*c;
 
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
+	c = getcwd(NULL, 0);
+	if (!c)
 	{
 		perror("getcwd");
-		prompt = malloc(ft_strlen("minishell > ") + 1);
-		if (!prompt)
+		p = malloc(ft_strlen("minishell > ") + 1);
+		if (!p)
 			return (NULL);
-		ft_strcpy(prompt, "minishell > ");
-		return (prompt);
+		ft_strcpy(p, "minishell > ");
+		return (p);
 	}
-	prompt = malloc(ft_strlen(cwd) + 4);
-	if (!prompt)
+	p = malloc(ft_strlen(c) + 4);
+	if (!p)
 	{
-		free(cwd);
+		free(c);
 		return (NULL);
 	}
-	ft_strcpy(prompt, cwd);
-	prompt[ft_strlen(cwd)] = ' ';
-	prompt[ft_strlen(cwd) + 1] = '>';
-	prompt[ft_strlen(cwd) + 2] = ' ';
-	prompt[ft_strlen(cwd) + 3] = '\0';
-	return (prompt);
+	ft_strcpy(p, c);
+	p[ft_strlen(c)] = ' ';
+	p[ft_strlen(c) + 1] = '>';
+	p[ft_strlen(c) + 2] = ' ';
+	p[ft_strlen(c) + 3] = '\0';
+	return (p);
 }
 
-t_envp	*ft_create_envp(char *str)
+t_envp	*ft_env_copy(char *s)
 {
 	char	*a;
-	t_envp	*node;
+	t_envp	*n;
 
-	node = malloc(sizeof(t_envp));
-	if (!node)
+	n = malloc(sizeof(t_envp));
+	if (!n)
 		return (NULL);
-	a = ft_strchr(str, '=');
+	a = ft_strchr(s, '=');
 	if (!a)
 	{
-		free(node);
+		free(n);
 		return (NULL);
 	}
-	node->var = strndup(str, a - str);
-	node->value = ft_strdup(a + 1);
-	node->next = NULL;
-	if (!node->var || !node->value)
+	n->var = ft_strndup(s, a - s);
+	n->value = ft_strdup(a + 1);
+	n->next = NULL;
+	if (!n->var || !n->value)
 	{
-		free(node->var);
-		free(node->value);
-		free(node);
+		free(n->var);
+		free(n->value);
+		free(n);
 		return (NULL);
 	}
-	return (node);
+	return (n);
 }
 
-t_envp	*ft_init_envp(char **envp)
+t_envp	*ft_env_init(char **l)
 {
 	t_envp	*head;
 	t_envp	*tail;
-	t_envp	*new_node;
+	t_envp	*n;
 	int		i;
 
 	head = NULL;
 	tail = NULL;
 	i = 0;
-	while (envp[i])
+	while (l[i])
 	{
-		new_node = ft_create_envp(envp[i]);
-		if (!new_node)
+		n = ft_env_copy(l[i]);
+		if (!n)
 			return (NULL);
 		if (!head)
 		{
-			head = new_node;
-			tail = new_node;
+			head = n;
+			tail = n;
 		}
 		else
 		{
-			tail->next = new_node;
-			tail = new_node;
+			tail->next = n;
+			tail = n;
 		}
 		i++;
 	}
 	return (head);
 }
 
-t_envp	*ft_search_var(t_envp *lst, char *var)
+char	*ft_env_search_value(t_envp *l, char *v)
 {
-	while (lst)
+	while (l)
 	{
-		if (strcmp(lst->var, var) == 0)
-			return (lst);
-		lst = lst->next;
+		if (ft_strcmp(l->var, v) == 0)
+			return (l->value);
+		l = l->next;
 	}
 	return (NULL);
 }
 
-void	ft_free_envp(t_envp *lst)
+t_envp	*ft_env_search_node(t_envp *l, char *v)
+{
+	while (l)
+	{
+		if (ft_strcmp(l->var, v) == 0)
+			return (l);
+		l = l->next;
+	}
+	return (NULL);
+}
+
+void	ft_env_free(t_envp *l)
 {
 	t_envp	*t;
 
-	while (lst)
+	while (l)
 	{
-		t = lst->next;
-		free(lst->var);
-		free(lst->value);
-		free(lst);
-		lst = t;
+		t = l->next;
+		free(l->var);
+		free(l->value);
+		free(l);
+		l = t;
 	}
-}
-
-char	*ft_search_value(t_envp *lst, char *var)
-{
-	while (lst)
-	{
-		if (strcmp(lst->var, var) == 0)
-			return (lst->value);
-		lst = lst->next;
-	}
-	return (NULL);
 }
