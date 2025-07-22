@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/16 18:06:18 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/22 14:41:35 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_envp
 {
 	char				*var;
 	char				*value;
+	int					export;
 	struct s_envp		*next;
 }						t_envp;
 
@@ -150,7 +151,7 @@ char					*ft_strjoin_three(char *s1, char *s2, char *s3);
 void					ft_free_split(char **arr);
 char					**ft_env_to_tab(t_envp *l);
 void					ft_sigint_handler(int sig);
-int						ft_setenv(t_envp **envp, char *var, char *value);
+void					ft_env_set(t_envp **l, char *s, char *value, int i);
 void					ft_env_sorted(t_envp *envp);
 
 //	EXEC / EXEC
@@ -163,13 +164,13 @@ char					**ft_exec_env_array(t_envp *l);
 
 void					ft_exec_cmd(char **s, t_envp *l);
 int						ft_exec_builtin(char **s, t_envp **l);
-int						ft_echo(char **args);
-int						ft_exit(char **args);
-int						ft_pwd(void);
+int						ft_echo(char **s);
+int						ft_exit(char **s);
+int						ft_pwd(char **s);
 int						ft_env(t_envp *l);
 int						ft_cd(char **s, t_envp *l);
-int						ft_export(char **args, t_envp **envp);
-int						ft_unset(char **args, t_envp **envp);
+int						ft_export(char **s, t_envp **envp);
+int						ft_unset(char **s, t_envp **envp);
 
 void					ft_print_token(t_token *l);
 void					ft_print_parsing(t_parsing *lst);

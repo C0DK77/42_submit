@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:54:44 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/16 19:00:33 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/22 14:50:06 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_exec_builtin(char **s, t_envp **l)
 	}
 	else if (ft_strcmp(s[0], "pwd") == 0)
 	{
-		g_exit_status = ft_pwd();
+		g_exit_status = ft_pwd(s);
 		return (1);
 	}
 	else if (ft_strcmp(s[0], "env") == 0)
@@ -52,29 +52,34 @@ int	ft_exec_builtin(char **s, t_envp **l)
 		g_exit_status = ft_unset(s, l);
 		return (1);
 	}
+	else if (ft_strcmp(s[0], ":") == 0)
+	{
+		g_exit_status = 0;
+		return (1);
+	}
 	return (0);
 }
 
-int	ft_exit(char **args)
+int	ft_exit(char **s)
 {
 	long long	code;
 
 	printf("exit\n");
-	if (!args[1])
+	if (!s[1])
 		exit(0);
-	if (!ft_is_numeric(args[1]))
+	if (!ft_is_numeric(s[1]))
 	{
 		fprintf(stderr, "minishell: exit: %s: numeric argument required\n",
-			args[1]);
+			s[1]);
 		exit(255);
 	}
-	if (args[2])
+	if (s[2])
 	{
 		fprintf(stderr, "minishell: exit: too many arguments\n");
 		g_exit_status = 1;
 		return (1);
 	}
-	code = ft_atoll(args[1]);
+	code = ft_atoll(s[1]);
 	exit(code % 256);
 }
 
@@ -82,7 +87,7 @@ int	ft_env(t_envp *l)
 {
 	while (l)
 	{
-		if (l->value)
+		if (l->export && l->value)
 			printf("%s=%s\n", l->var, l->value);
 		l = l->next;
 	}
@@ -90,17 +95,58 @@ int	ft_env(t_envp *l)
 	return (0);
 }
 
-int	ft_pwd(void)
+int	ft_pwd(char **s)
 {
 	char	cwd[PATH_MAX];
+	char	*pwd_env;
+	int		a;
 
-	if (!getcwd(cwd, sizeof(cwd)))
+	a = 0;
+	for (int i = 1; s[i]; i++)
 	{
-		perror("minishell: pwd");
-		g_exit_status = 1;
-		return (1);
+		if (s[i][0] == '-')
+		{
+			if (!ft_strcmp(s[i], "-P"))
+				a = 1;
+			else if (!ft_strcmp(s[i], "-L"))
+				a = 0;
+			else
+			{
+				fprintf(stderr, "minishell: pwd: %s: invalid option\n", s[i]);
+				fprintf(stderr, "usage: pwd [-L | -P]\n");
+				g_exit_status = 1;
+				return (1);
+			}
+		}
+		else
+			break ;
 	}
-	printf("%s\n", cwd);
+	if (a)
+	{
+		if (!getcwd(cwd, sizeof(cwd)))
+		{
+			perror("minishell: pwd");
+			g_exit_status = 1;
+			return (1);
+		}
+		printf("%s\n", cwd);
+	}
+	else
+	{
+		pwd_env = getenv("PWD");
+		if (!pwd_env || !pwd_env[0])
+		{
+			if (!getcwd(cwd, sizeof(cwd)))
+			{
+				perror("minishell: pwd");
+				g_exit_status = 1;
+				return (1);
+			}
+			printf("%s\n", cwd);
+		}
+		else
+			printf("%s\n", pwd_env);
+	}
 	g_exit_status = 0;
 	return (0);
 }
@@ -108,13 +154,19 @@ int	ft_pwd(void)
 int	ft_echo(char **s)
 {
 	int	i;
-	int	newline;
+	int	l;
+	int	j;
 
 	i = 1;
-	newline = 1;
-	if (s[1] && ft_strcmp(s[1], "-n") == 0)
+	l = 1;
+	while (s[i] && s[i][0] == '-' && s[i][1] == 'n')
 	{
-		newline = 0;
+		j = 2;
+		while (s[i][j] == 'n')
+			j++;
+		if (s[i][j] != '\0')
+			break ;
+		l = 0;
 		i++;
 	}
 	while (s[i])
@@ -124,8 +176,9 @@ int	ft_echo(char **s)
 			printf(" ");
 		i++;
 	}
-	if (newline)
+	if (l)
 		printf("\n");
+	fflush(stdout);
 	g_exit_status = 0;
 	return (0);
 }
@@ -133,8 +186,8 @@ int	ft_echo(char **s)
 int	ft_unset(char **s, t_envp **l)
 {
 	int		i;
-	t_envp	*prev;
 	t_envp	*t;
+	t_envp	*prev;
 
 	i = 1;
 	while (s[i])
@@ -143,14 +196,15 @@ int	ft_unset(char **s, t_envp **l)
 		prev = NULL;
 		while (t)
 		{
-			if (ft_strcmp(t->var, s[i]) == 0)
+			if (strcmp(t->var, s[i]) == 0)
 			{
 				if (prev)
 					prev->next = t->next;
 				else
 					*l = t->next;
 				free(t->var);
-				free(t->value);
+				if (t->value)
+					free(t->value);
 				free(t);
 				break ;
 			}
@@ -159,57 +213,88 @@ int	ft_unset(char **s, t_envp **l)
 		}
 		i++;
 	}
-	g_exit_status = 0;
 	return (0);
 }
 
 int	ft_export(char **s, t_envp **l)
 {
 	int		i;
-	char	**split;
+	t_envp	*t;
+	char	*eq;
+	int		len;
+	char	*name;
+	char	*v;
 
 	i = 1;
 	if (!s[1])
 	{
-		ft_env_sorted(*l);
-		g_exit_status = 0;
+		t = *l;
+		while (t)
+		{
+			if (t->export)
+			{
+				if (t->value)
+					printf("declare -x %s=\"%s\"\n", t->var, t->value);
+				else
+					printf("declare -x %s\n", t->var);
+			}
+			t = t->next;
+		}
 		return (0);
 	}
 	while (s[i])
 	{
-		if (ft_strchr(s[i], '='))
+		eq = ft_strchr(s[i], '=');
+		if (eq)
 		{
-			split = ft_split(s[i], '=');
-			ft_setenv(l, split[0], split[1] ? split[1] : "");
-			ft_free_split(split);
+			len = eq - s[i];
+			name = ft_strndup(s[i], len);
+			v = ft_strdup(eq + 1);
+			ft_env_set(l, name, v, 1);
+			free(name);
+			free(v);
 		}
 		else
-		{
-			if (!ft_env_search_value(*l, s[i]))
-				ft_setenv(l, s[i], "");
-		}
+			ft_env_set(l, s[i], NULL, 1);
 		i++;
 	}
-	g_exit_status = 0;
 	return (0);
 }
 
 int	ft_cd(char **s, t_envp *l)
 {
+	char	cwd[PATH_MAX];
+	char	*d;
+	char	*p;
+
+	if (getcwd(cwd, sizeof(cwd)))
+		p = ft_strdup(cwd);
+	else
+		p = NULL;
 	if (!s[1])
-		return (chdir(ft_env_search_value(l, "HOME")));
-	if (s[1] && s[2])
+		d = ft_env_search_value(l, "HOME");
+	else if (s[2])
 	{
 		fprintf(stderr, "minishell: cd: too many arguments\n");
 		g_exit_status = 1;
 		return (1);
 	}
-	if (chdir(s[1]) != 0)
+	else
+		d = s[1];
+	if (chdir(d) != 0)
 	{
 		perror("minishell: cd");
+		free(p);
 		g_exit_status = 1;
 		return (1);
 	}
+	if (getcwd(cwd, sizeof(cwd)))
+	{
+		ft_env_set(&l, "PWD", cwd, 1);
+		if (p)
+			ft_env_set(&l, "OLDPWD", p, 1);
+	}
+	free(p);
 	g_exit_status = 0;
 	return (0);
 }

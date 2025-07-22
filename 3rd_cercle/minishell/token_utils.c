@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/16 11:52:00 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/22 11:27:51 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,21 @@ int	ft_token_check(t_token *n)
 	while (n)
 	{
 		t = n->type;
-		if ((t == R_IN || t == R_OUT || t == R_APPEND || t == HERE) && (!n->next
-				|| n->next->type != WRD))
+		if ((t == R_IN || t == R_OUT || t == R_APPEND || t == HERE))
 		{
-			fprintf(stderr,
-				"minishell: syntax error near unexpected token `newline'\n");
-			return (0);
+			if (!n->next)
+			{
+				fprintf(stderr,
+					"minishell: syntax error near unexpected token `newline'\n");
+				return (0);
+			}
+			if (n->next->type != WRD)
+			{
+				fprintf(stderr,
+					"minishell: syntax error near unexpected token `%s'\n",
+					n->next->value);
+				return (0);
+			}
 		}
 		if ((t == PIPE || t == AND_IF || t == OR_IF || t == SEMIC || t == AND)
 			&& !prev)

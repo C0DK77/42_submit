@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/16 18:05:20 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/22 11:20:23 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,46 @@ char	**ft_parse_add(char **s, char *v)
 	return (n);
 }
 
+static int	handle_redirection(t_parsing *n, t_token **t)
+{
+	t_token	*l;
+	char	*f;
+
+	l = *t;
+	if (!l->next)
+	{
+		fprintf(stderr,
+			"minishell: syntax error near unexpected token `newline'\n");
+		return (1);
+	}
+	if (l->next->type != WRD)
+	{
+		fprintf(stderr, "minishell: syntax error near unexpected token `%s'\n",
+			l->next->value);
+		return (1);
+	}
+	f = l->next->value;
+	if (l->type == R_IN)
+		n->infile = ft_strdup(f);
+	else if (l->type == R_OUT)
+	{
+		n->outfile = ft_strdup(f);
+		n->append = 0;
+	}
+	else if (l->type == R_APPEND)
+	{
+		n->outfile = ft_strdup(f);
+		n->append = 1;
+	}
+	else if (l->type == HERE)
+	{
+		n->infile = ft_strdup(f);
+		n->heredoc = 1;
+	}
+	*t = l->next;
+	return (0);
+}
+
 t_parsing	*ft_parse_line(t_token *t)
 {
 	t_parsing	*a;
@@ -58,31 +98,11 @@ t_parsing	*ft_parse_line(t_token *t)
 		}
 		if (t->type == WRD && t->value)
 			n->line = ft_parse_add(n->line, t->value);
-		else if ((t->type == R_IN || t->type == R_OUT || t->type == R_APPEND
-				|| t->type == HERE) && (!t->next || !t->next->value))
-			return (NULL);
-		else if (t->type == R_IN)
+		else if (t->type == R_IN || t->type == R_OUT || t->type == R_APPEND
+			|| t->type == HERE)
 		{
-			t = t->next;
-			n->infile = ft_strdup(t->value);
-		}
-		else if (t->type == R_OUT)
-		{
-			t = t->next;
-			n->outfile = ft_strdup(t->value);
-			n->append = 0;
-		}
-		else if (t->type == R_APPEND)
-		{
-			t = t->next;
-			n->outfile = ft_strdup(t->value);
-			n->append = 1;
-		}
-		else if (t->type == HERE)
-		{
-			t = t->next;
-			n->infile = ft_strdup(t->value);
-			n->heredoc = 1;
+			if (handle_redirection(n, &t))
+				return (NULL);
 		}
 		else if (t->type == PIPE)
 		{

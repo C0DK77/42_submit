@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/16 18:27:49 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/22 14:42:58 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,24 +211,33 @@ void	ft_sigint_handler(int sig)
 	rl_redisplay();
 }
 
-int	ft_setenv(t_envp **envp, char *var, char *value)
+void	ft_env_set(t_envp **l, char *s, char *value, int i)
 {
-	t_envp	*node;
-	t_envp	*new;
+	t_envp	*t;
+	t_envp	*n;
 
-	node = ft_env_search_node(*envp, var);
-	if (node)
+	t = *l;
+	while (t)
 	{
-		free(node->value);
-		node->value = ft_strdup(value);
-		return (0);
+		if (strcmp(t->var, s) == 0)
+		{
+			if (value)
+			{
+				free(t->value);
+				t->value = ft_strdup(value);
+			}
+			if (i)
+				t->export = 1;
+			return ;
+		}
+		t = t->next;
 	}
-	new = malloc(sizeof(t_envp));
-	new->var = ft_strdup(var);
-	new->value = ft_strdup(value);
-	new->next = *envp;
-	*envp = new;
-	return (0);
+	n = malloc(sizeof(t_envp));
+	n->var = ft_strdup(s);
+	n->value = value ? ft_strdup(value) : NULL;
+	n->export = i;
+	n->next = (*l)->next;
+	(*l)->next = n;
 }
 
 void	ft_env_sorted(t_envp *envp)

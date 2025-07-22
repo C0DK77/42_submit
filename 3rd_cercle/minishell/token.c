@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/07/16 18:03:24 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/22 12:04:33 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,13 @@ int	ft_token_ope_dollar(t_envp *l, char **w, char *s, int i)
 	j = i;
 	while (s[i] && (ft_isalnum(s[i]) || s[i] == '_'))
 		i++;
+	if (i == j)
+	{
+		t = ft_strjoin(*w, "$");
+		free(*w);
+		*w = t;
+		return (i);
+	}
 	v = ft_strndup(s + j, i - j);
 	if (!v)
 		return (i);
@@ -80,19 +87,43 @@ int	ft_token_ope_dollar(t_envp *l, char **w, char *s, int i)
 
 int	ft_token_word_noquote(char **w, char *s, int i)
 {
-	char	*a;
-	char	*t;
+	char	*tmp;
+	int		start;
+	char	*result;
 	int		j;
 
-	j = i;
+	// int		len;
+	start = i;
+	// len = 0;
 	while (s[i] && !ft_isspace(s[i]) && !ft_isoperator(s[i])
-		&& !ft_isquote(s[i]) && s[i] != '$')
-		i++;
-	t = ft_strndup(s + j, i - j);
-	a = ft_strjoin(*w, t);
+		&& !ft_isquote(s[i]))
+	{
+		if (s[i] == '\\' && s[i + 1])
+			i += 2;
+		else
+			i++;
+	}
+	tmp = malloc(i - start + 1);
+	if (!tmp)
+		return (i);
+	i = start;
+	j = 0;
+	while (s[i] && !ft_isspace(s[i]) && !ft_isoperator(s[i])
+		&& !ft_isquote(s[i]))
+	{
+		if (s[i] == '\\' && s[i + 1])
+		{
+			i++;
+			tmp[j++] = s[i++];
+		}
+		else
+			tmp[j++] = s[i++];
+	}
+	tmp[j] = '\0';
+	result = ft_strjoin(*w, tmp);
 	free(*w);
-	free(t);
-	*w = a;
+	free(tmp);
+	*w = result;
 	return (i);
 }
 
@@ -162,7 +193,7 @@ int	ft_token_ope(t_token **l, char *s, int i)
 		else
 			n = ft_token_init(R_OUT, ">");
 	}
-	if (s[i] == '<')
+	else if (s[i] == '<')
 	{
 		if (s[i + 1] == '<')
 		{
@@ -178,7 +209,7 @@ int	ft_token_ope(t_token **l, char *s, int i)
 		else
 			n = ft_token_init(R_IN, "<");
 	}
-	if (s[i] == '|')
+	else if (s[i] == '|')
 	{
 		if (s[i + 1] == '|')
 		{
@@ -188,7 +219,7 @@ int	ft_token_ope(t_token **l, char *s, int i)
 		else
 			n = ft_token_init(PIPE, "|");
 	}
-	if (s[i] == '&')
+	else if (s[i] == '&')
 	{
 		if (s[i + 1] == '&')
 		{
