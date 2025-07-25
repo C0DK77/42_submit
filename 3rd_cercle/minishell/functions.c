@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:54:44 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/22 14:50:06 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/25 09:34:26 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_exec_builtin(char **s, t_envp **l)
 	}
 	else if (ft_strcmp(s[0], "pwd") == 0)
 	{
-		g_exit_status = ft_pwd(s);
+		g_exit_status = ft_pwd(s, *l);
 		return (1);
 	}
 	else if (ft_strcmp(s[0], "env") == 0)
@@ -57,12 +57,17 @@ int	ft_exec_builtin(char **s, t_envp **l)
 		g_exit_status = 0;
 		return (1);
 	}
+	else if (ft_strcmp(s[0], "history") == 0)
+	{
+		ft_history_print(g_history);
+		return (1);
+	}
 	return (0);
 }
 
 int	ft_exit(char **s)
 {
-	long long	code;
+	long long	c;
 
 	printf("exit\n");
 	if (!s[1])
@@ -79,8 +84,8 @@ int	ft_exit(char **s)
 		g_exit_status = 1;
 		return (1);
 	}
-	code = ft_atoll(s[1]);
-	exit(code % 256);
+	c = ft_atoll(s[1]);
+	exit(c % 256);
 }
 
 int	ft_env(t_envp *l)
@@ -95,57 +100,79 @@ int	ft_env(t_envp *l)
 	return (0);
 }
 
-int	ft_pwd(char **s)
+int	parse_pwd_opts(char **s, int *p)
 {
-	char	cwd[PATH_MAX];
-	char	*pwd_env;
-	int		a;
+	int	i;
+	int	j;
 
-	a = 0;
-	for (int i = 1; s[i]; i++)
+	i = 1;
+	*p = 0;
+	while (s[i])
 	{
-		if (s[i][0] == '-')
+		if (s[i][0] != '-' || s[i][1] == '\0')
+			break ;
+		if (!ft_strcmp(s[i], "--"))
 		{
-			if (!ft_strcmp(s[i], "-P"))
-				a = 1;
-			else if (!ft_strcmp(s[i], "-L"))
-				a = 0;
+			i++;
+			break ;
+		}
+		j = 1;
+		while (s[i][j])
+		{
+			if (s[i][j] == 'P')
+				*p = 1;
+			else if (s[i][j] == 'L')
+				*p = 0;
 			else
 			{
-				fprintf(stderr, "minishell: pwd: %s: invalid option\n", s[i]);
+				fprintf(stderr, "minishell: pwd: -%c: invalid option\n",
+					s[i][j]);
 				fprintf(stderr, "usage: pwd [-L | -P]\n");
-				g_exit_status = 1;
-				return (1);
+				g_exit_status = 2;
+				return (-1);
 			}
+			j++;
 		}
-		else
-			break ;
+		i++;
 	}
-	if (a)
+	return (i);
+}
+
+int	ft_pwd(char **s, t_envp *l)
+{
+	int		i;
+	int		n;
+	char	b[PATH_MAX];
+	char	*pwd;
+
+	pwd = ft_env_search_value(l, "PWD");
+	n = parse_pwd_opts(s, &i);
+	if (n < 0)
+		return (1);
+	if (i)
 	{
-		if (!getcwd(cwd, sizeof(cwd)))
+		if (!getcwd(b, sizeof(b)))
 		{
 			perror("minishell: pwd");
 			g_exit_status = 1;
 			return (1);
 		}
-		printf("%s\n", cwd);
+		printf("%s\n", b);
 	}
 	else
 	{
-		pwd_env = getenv("PWD");
-		if (!pwd_env || !pwd_env[0])
+		if (pwd && *pwd)
+			printf("%s\n", pwd);
+		else
 		{
-			if (!getcwd(cwd, sizeof(cwd)))
+			if (!getcwd(b, sizeof(b)))
 			{
 				perror("minishell: pwd");
 				g_exit_status = 1;
 				return (1);
 			}
-			printf("%s\n", cwd);
+			printf("%s\n", b);
 		}
-		else
-			printf("%s\n", pwd_env);
 	}
 	g_exit_status = 0;
 	return (0);
@@ -187,19 +214,19 @@ int	ft_unset(char **s, t_envp **l)
 {
 	int		i;
 	t_envp	*t;
-	t_envp	*prev;
+	t_envp	*p;
 
 	i = 1;
 	while (s[i])
 	{
 		t = *l;
-		prev = NULL;
+		p = NULL;
 		while (t)
 		{
 			if (strcmp(t->var, s[i]) == 0)
 			{
-				if (prev)
-					prev->next = t->next;
+				if (p)
+					p->next = t->next;
 				else
 					*l = t->next;
 				free(t->var);
@@ -208,7 +235,7 @@ int	ft_unset(char **s, t_envp **l)
 				free(t);
 				break ;
 			}
-			prev = t;
+			p = t;
 			t = t->next;
 		}
 		i++;
@@ -261,40 +288,143 @@ int	ft_export(char **s, t_envp **l)
 	return (0);
 }
 
+void	update_pwd_vars(t_envp *l, char *s)
+{
+	char	c[PATH_MAX];
+
+	if (s)
+		ft_env_set(&l, "OLDPWD", s, 1);
+	if (getcwd(c, sizeof(c)))
+		ft_env_set(&l, "PWD", c, 1);
+}
+
 int	ft_cd(char **s, t_envp *l)
 {
-	char	cwd[PATH_MAX];
-	char	*d;
-	char	*p;
+	int		i;
+	char	*target;
+	char	*pwd_before;
 
-	if (getcwd(cwd, sizeof(cwd)))
-		p = ft_strdup(cwd);
-	else
-		p = NULL;
-	if (!s[1])
-		d = ft_env_search_value(l, "HOME");
-	else if (s[2])
+	target = NULL;
+	pwd_before = ft_env_search_value(l, "PWD");
+	i = 0;
+	while (s[i])
+		i++;
+	if (i == 1)
 	{
-		fprintf(stderr, "minishell: cd: too many arguments\n");
-		g_exit_status = 1;
-		return (1);
+		target = ft_env_search_value(l, "HOME");
+		if (!target)
+		{
+			fprintf(stderr, "minishell: cd: HOME not set\n");
+			g_exit_status = 1;
+			return (1);
+		}
 	}
 	else
-		d = s[1];
-	if (chdir(d) != 0)
+	{
+		if (ft_strcmp(s[1], "-") == 0)
+		{
+			target = ft_env_search_value(l, "OLDPWD");
+			if (!target)
+			{
+				fprintf(stderr, "minishell: cd: OLDPWD not set\n");
+				g_exit_status = 1;
+				return (1);
+			}
+			printf("%s\n", target);
+		}
+		else if (ft_strcmp(s[1], "--") == 0)
+		{
+			if (i == 2)
+			{
+				target = ft_env_search_value(l, "HOME");
+				if (!target)
+				{
+					fprintf(stderr, "minishell: cd: HOME not set\n");
+					g_exit_status = 1;
+					return (1);
+				}
+			}
+			else if (i == 3)
+				target = s[2];
+			else
+			{
+				fprintf(stderr, "minishell: cd: too many arguments\n");
+				g_exit_status = 1;
+				return (1);
+			}
+		}
+		else if (s[1][0] == '-' && s[1][1] != '\0')
+		{
+			fprintf(stderr, "minishell: cd: %s: invalid option\n", s[1]);
+			fprintf(stderr, "cd: usage: cd [dir]\n");
+			g_exit_status = 2;
+			return (1);
+		}
+		else
+		{
+			if (i > 2)
+			{
+				fprintf(stderr, "minishell: cd: too many arguments\n");
+				g_exit_status = 1;
+				return (1);
+			}
+			target = s[1];
+		}
+	}
+	if (chdir(target) != 0)
 	{
 		perror("minishell: cd");
-		free(p);
 		g_exit_status = 1;
 		return (1);
 	}
-	if (getcwd(cwd, sizeof(cwd)))
-	{
-		ft_env_set(&l, "PWD", cwd, 1);
-		if (p)
-			ft_env_set(&l, "OLDPWD", p, 1);
-	}
-	free(p);
+	update_pwd_vars(l, pwd_before);
 	g_exit_status = 0;
 	return (0);
+}
+
+void	ft_history_add(t_history **h, const char *s)
+{
+	t_history	*n;
+	t_history	*t;
+
+	n = malloc(sizeof(t_history));
+	if (!n)
+		return ;
+	n->line = strdup(s);
+	n->next = NULL;
+	if (!*h)
+		*h = n;
+	else
+	{
+		t = *h;
+		while (t->next)
+			t = t->next;
+		t->next = n;
+	}
+}
+
+void	ft_history_print(t_history *h)
+{
+	int	i;
+
+	i = 1;
+	while (h)
+	{
+		printf("%5d  %s\n", i, h->line);
+		h = h->next;
+		i++;
+	}
+}
+
+void	ft_history_clear(t_history **h)
+{
+	t_history	*t;
+
+	while (*h)
+	{
+		t = (*h)->next;
+		free((*h)->line);
+		free(*h);
+		*h = t;
+	}
 }

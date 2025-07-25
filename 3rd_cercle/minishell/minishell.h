@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/22 14:41:35 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/25 09:33:47 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <unistd.h>
 
 # define HEREDOC_FILE "/tmp/.minishell_heredoc"
+extern struct s_history	*g_history;
 
 //	STRUCTURE ENV
 
@@ -101,6 +102,14 @@ typedef struct s_parsing
 	struct s_parsing	*next;
 }						t_parsing;
 
+//	STRUCTURE HISTORIQUE
+
+typedef struct s_history
+{
+	char				*line;
+	struct s_history	*next;
+}						t_history;
+
 //	ENV / UTILS
 
 char					*ft_env_prompt(void);
@@ -166,11 +175,16 @@ void					ft_exec_cmd(char **s, t_envp *l);
 int						ft_exec_builtin(char **s, t_envp **l);
 int						ft_echo(char **s);
 int						ft_exit(char **s);
-int						ft_pwd(char **s);
+int						ft_pwd(char **s, t_envp *l);
 int						ft_env(t_envp *l);
 int						ft_cd(char **s, t_envp *l);
 int						ft_export(char **s, t_envp **envp);
 int						ft_unset(char **s, t_envp **envp);
+void					ft_history_add(t_history **h, const char *s);
+void					ft_history_print(t_history *h);
+void					ft_history_clear(t_history **h);
+int						parse_pwd_opts(char **s, int *p);
+void					update_pwd_vars(t_envp *l, char *s);
 
 void					ft_print_token(t_token *l);
 void					ft_print_parsing(t_parsing *lst);

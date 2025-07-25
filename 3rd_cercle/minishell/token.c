@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/07/22 12:04:33 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/24 11:37:50 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ int	ft_token_word_dbquote(t_envp *l, char **w, char *s, int z, int i)
 	char	*a;
 	char	*t;
 
-	j = i;
 	while (i < z)
 	{
 		if (s[i] == '$')
 			i = ft_token_ope_dollar(l, w, s, i);
 		else
 		{
+			j = i;
 			while (i < z && s[i] != '$')
 				i++;
 			t = ft_strndup(s + j, i - j);
@@ -87,14 +87,12 @@ int	ft_token_ope_dollar(t_envp *l, char **w, char *s, int i)
 
 int	ft_token_word_noquote(char **w, char *s, int i)
 {
-	char	*tmp;
-	int		start;
-	char	*result;
+	char	*t;
+	char	*res;
 	int		j;
+	int		k;
 
-	// int		len;
-	start = i;
-	// len = 0;
+	k = i;
 	while (s[i] && !ft_isspace(s[i]) && !ft_isoperator(s[i])
 		&& !ft_isquote(s[i]))
 	{
@@ -103,10 +101,10 @@ int	ft_token_word_noquote(char **w, char *s, int i)
 		else
 			i++;
 	}
-	tmp = malloc(i - start + 1);
-	if (!tmp)
+	t = malloc(i - k + 1);
+	if (!t)
 		return (i);
-	i = start;
+	i = k;
 	j = 0;
 	while (s[i] && !ft_isspace(s[i]) && !ft_isoperator(s[i])
 		&& !ft_isquote(s[i]))
@@ -114,16 +112,16 @@ int	ft_token_word_noquote(char **w, char *s, int i)
 		if (s[i] == '\\' && s[i + 1])
 		{
 			i++;
-			tmp[j++] = s[i++];
+			t[j++] = s[i++];
 		}
 		else
-			tmp[j++] = s[i++];
+			t[j++] = s[i++];
 	}
-	tmp[j] = '\0';
-	result = ft_strjoin(*w, tmp);
+	t[j] = '\0';
+	res = ft_strjoin(*w, t);
 	free(*w);
-	free(tmp);
-	*w = result;
+	free(t);
+	*w = res;
 	return (i);
 }
 

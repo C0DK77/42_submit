@@ -6,14 +6,15 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/16 19:01:13 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/25 09:45:28 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-int	g_exit_status = 0;
+int			g_exit_status = 0;
+t_history	*g_history = NULL;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -25,6 +26,7 @@ int	main(int argc, char **argv, char **envp)
 	t_parsing	*parse;
 	t_parsing	*p;
 	pid_t		pid;
+	char		*pwd;
 
 	(void)argc;
 	(void)argv;
@@ -38,6 +40,8 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		line = readline(ft_env_prompt());
+		if (line && *line)
+			ft_history_add(&g_history, line);
 		if (!line)
 		{
 			printf("exit\n");
@@ -81,14 +85,14 @@ int	main(int argc, char **argv, char **envp)
 				if (pid == 0)
 				{
 					// printf("[CHILD] Je suis le fils pour : %s\n",
-						// p->line[0]);
+					// p->line[0]);
 					if (ft_exec_redirections_init(p) != 0)
 						exit(1);
 					if (p->sep != SEP_NONE && ft_exec_builtin(p->line, &c_envp))
 					{
 						// printf("[CHILD] Builtin exécuté dans pipe : %s\n",
-							// p->line[0]);
-							exit(g_exit_status);
+						// p->line[0]);
+						exit(g_exit_status);
 					}
 					// printf("[CHILD] Commande externe : %s\n", p->line[0]);
 					ft_exec_cmd(p->line, c_envp);
