@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/07/24 11:37:50 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/28 23:13:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	ft_token_ope_dollar(t_envp *l, char **w, char *s, int i)
 	char	*v;
 	t_envp	*n;
 
+	r = NULL;
 	i++;
 	if (s[i] == '?')
 	{
@@ -58,27 +59,30 @@ int	ft_token_ope_dollar(t_envp *l, char **w, char *s, int i)
 		*w = r;
 		return (i + 1);
 	}
-	j = i;
-	while (s[i] && (ft_isalnum(s[i]) || s[i] == '_'))
-		i++;
-	if (i == j)
+	if (!ft_isalpha(s[i]) && s[i] != '_')
 	{
+		if (ft_isdigit(s[i]))
+			return (i + 1);
 		t = ft_strjoin(*w, "$");
 		free(*w);
 		*w = t;
 		return (i);
 	}
+	j = i;
+	if (ft_isalpha(s[i]) || s[i] == '_')
+	{
+		i++;
+		while (s[i] && (ft_isalnum(s[i]) || s[i] == '_'))
+			i++;
+	}
 	v = ft_strndup(s + j, i - j);
 	if (!v)
 		return (i);
-	r = NULL;
 	n = ft_env_search_node(l, v);
 	if (n && n->value)
-		r = n->value;
-	if (r)
-		t = ft_strjoin(*w, r);
+		t = ft_strjoin(*w, n->value);
 	else
-		t = ft_strjoin(*w, "");
+		t = ft_strdup(*w);
 	free(*w);
 	free(v);
 	*w = t;
@@ -164,6 +168,7 @@ int	ft_token_word(t_token **n, char *s, int i, t_envp *l)
 			i = ft_token_ope_dollar(l, &w, s, i);
 		else
 			i = ft_token_word_noquote(&w, s, i);
+		//	printf("TOKEN [%s]\n", w);
 	}
 	ft_token_add(n, ft_token_init(WRD, w));
 	free(w);

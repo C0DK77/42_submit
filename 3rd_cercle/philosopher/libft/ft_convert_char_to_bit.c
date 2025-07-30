@@ -6,11 +6,11 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:51:36 by codk              #+#    #+#             */
-/*   Updated: 2025/03/26 13:51:48 by codk             ###   ########.fr       */
+/*   Updated: 2025/06/26 00:28:57 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
+#include "libft.h"
 
 char	*ft_convert_char_to_bit(char c)
 {

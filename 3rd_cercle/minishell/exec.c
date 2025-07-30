@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/22 14:28:09 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/28 23:01:26 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,16 @@ void	ft_exec(t_parsing *p, t_envp *l)
 	saved_stdout = dup(STDOUT_FILENO);
 	while (p)
 	{
+		if (p->prev && p->prev->sep == SEP_AND_IF && g_exit_status != 0)
+		{
+			p = p->next;
+			continue ;
+		}
+		if (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0)
+		{
+			p = p->next;
+			continue ;
+		}
 		ft_exec_redirections_init(p);
 		if (p->sep == SEP_NONE && ft_exec_builtin(p->line, &l))
 		{
@@ -75,20 +85,17 @@ void	ft_exec(t_parsing *p, t_envp *l)
 	close(saved_stdin);
 	close(saved_stdout);
 }
-
 void	ft_exec_cmd(char **s, t_envp *l)
 {
 	char	*p;
 	char	**env;
 
-	if (!s || !s[0])
-		exit(0);
-	if (s[0][0] == '\0')
+	if (!s || !s[0] || s[0][0] == '\0')
 	{
-		fprintf(stderr, "minishell: : command not found\n");
+		fprintf(stderr, "minishell: %s: command not found\n", s[0] ? s[0] : "");
 		exit(127);
 	}
-	if (s[0][0] == '/' || s[0][0] == '.')
+	if (ft_strchr(s[0], '/'))
 		p = ft_strdup(s[0]);
 	else
 		p = ft_exec_find_cmd(s[0], l);
@@ -97,15 +104,21 @@ void	ft_exec_cmd(char **s, t_envp *l)
 		fprintf(stderr, "minishell: %s: command not found\n", s[0]);
 		exit(127);
 	}
+	if (access(p, F_OK) != 0)
+	{
+		fprintf(stderr, "minishell: %s: No such file or directory\n", s[0]);
+		free(p);
+		exit(127);
+	}
 	if (ft_exec_is_directory(p))
 	{
-		fprintf(stderr, "minishell: %s: Is a directory\n", p);
+		fprintf(stderr, "minishell: %s: Is a directory\n", s[0]);
 		free(p);
 		exit(126);
 	}
 	if (access(p, X_OK) != 0)
 	{
-		perror("minishell");
+		fprintf(stderr, "minishell: %s: Permission denied\n", s[0]);
 		free(p);
 		exit(126);
 	}
@@ -114,15 +127,7 @@ void	ft_exec_cmd(char **s, t_envp *l)
 	perror("minishell");
 	ft_free_split(env);
 	free(p);
-	if (errno == ENOENT)
-		exit(127);
-	else if (errno == EISDIR)
-	{
-		fprintf(stderr, "minishell: %s: Is a directory\n", p);
-		exit(126);
-	}
-	else
-		exit(126);
+	exit(126);
 }
 
 char	**ft_exec_env_array(t_envp *l)

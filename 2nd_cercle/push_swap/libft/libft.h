@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:38:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/04/18 19:56:35 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/16 15:53:34 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char				*ft_strdup(const char *s1);
 // FONCTIONS SUPPLEMENTAIRES
 
 char				*ft_substr(char const *s, unsigned int start, size_t len);
-char				*ft_strjoin(char const *s1, char const *s2);
+char				*ft_strjoin(char *s1, char *s2);
 char				*ft_strtrim(char const *s1, char const *set);
 char				**ft_split(char const *s, char c);
 char				*ft_itoa(int n);
@@ -75,6 +75,11 @@ void				ft_putchar_fd(char c, int fd);
 void				ft_putstr_fd(char *s, int fd);
 void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
+int					ft_isdoublequote(char c);
+int					ft_issinglequote(char c);
+int					ft_isspace(char c);
+int					ft_isoperator(char c);
+char				*ft_strcpy(char *d, char *s);
 
 // FONCTIONS BONUS
 
@@ -93,5 +98,11 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 
 char				ft_convert_bit_to_char(char *s);
 char				*ft_convert_char_to_bit(char c);
+int					ft_isquote(char c);
+int					ft_has_unclosed_quote(char *str);
+char				*ft_strjoin_free(char *s1, char *s2);
+char				*ft_strndup(char *s1, int n);
+long long			ft_atoll(char *s);
+int					ft_is_numeric(char *s);
 
 #endif

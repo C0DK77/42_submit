@@ -6,16 +6,14 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 10:24:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/06/18 20:58:06 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/30 15:08:15 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#include "libft.h"
+#include "philosopher.h"
 
-int64_t	ft_atoi(char *s)
+int64_t	ft_atoi_int64(char *s)
 {
 	int		i;
 	int64_t	res;
@@ -24,47 +22,41 @@ int64_t	ft_atoi(char *s)
 	i = 0;
 	res = 0;
 	sign = 1;
-	while (ft_isspace(*s))
-		s++;
-	if (s[i] == '-')
-		sign = -1;
-	while (s[i] == '-' || s[i] == '+')
+	while (ft_isspace(s[i]))
 		i++;
+	if (s[i] == '-' || s[i] == '+')
+	{
+		if (s[i] == '-')
+			sign = -1;
+		i++;
+	}
 	while (ft_isdigit(s[i]))
 	{
-		res = (res * 10) + (s[i] - 48);
+		res = (res * 10) + (s[i] - '0');
 		i++;
 	}
 	return (res * sign);
 }
 
-int	ft_isdigit(char c)
+uint64_t	get_time(void)
 {
-	if ('0' <= c && c <= '9')
-		return (1);
-	return (0);
+	struct timeval	tv;
+	uint64_t		ms;
+
+	gettimeofday(&tv, NULL);
+	ms = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+	return (ms);
 }
 
-int	ft_isspace(char c)
+void	print_action(t_philo *p, char *msg)
 {
-	if (c == ' ' || (7 <= c && c <= 13))
-		return (1);
-	return (0);
-}
+	uint64_t	timestamp;
 
-void	ft_putchar(char c)
-{
-	write(1, &c, 1);
-}
-
-void	ft_putstr(char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
+	pthread_mutex_lock(&p->data->print_mutex);
+	if (!p->data->finished)
 	{
-		ft_putchar(s[i]);
-		i++;
+		timestamp = get_time() - p->data->start_time;
+		printf("%llu %d %s\n", timestamp, p->id, msg);
 	}
+	pthread_mutex_unlock(&p->data->print_mutex);
 }

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/25 09:45:28 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/28 23:23:40 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,11 @@ int	main(int argc, char **argv, char **envp)
 	t_parsing	*parse;
 	t_parsing	*p;
 	pid_t		pid;
-	char		*pwd;
 
+	// char		*pwd;
 	(void)argc;
 	(void)argv;
+	setbuf(stdout, NULL);
 	c_envp = ft_env_init(envp);
 	if (!c_envp)
 		return (1);

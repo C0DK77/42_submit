@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/25 09:33:47 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/28 18:02:51 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct s_parsing
 	int					heredoc;
 	t_sep				sep;
 	struct s_parsing	*next;
+	struct s_parsing	*prev;
 }						t_parsing;
 
 //	STRUCTURE HISTORIQUE

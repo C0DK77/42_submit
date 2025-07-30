@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/22 11:20:23 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/07/28 22:24:33 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,10 @@ t_parsing	*ft_parse_line(t_token *t)
 			if (!a)
 				a = n;
 			if (prev)
+			{
 				prev->next = n;
+				n->prev = prev;
+			}
 		}
 		if (t->type == WRD && t->value)
 			n->line = ft_parse_add(n->line, t->value);

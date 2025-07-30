@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   ft_convert_bit_char.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:49:12 by codk              #+#    #+#             */
-/*   Updated: 2025/05/27 17:26:03 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:37:50 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <libft.h>
 
 char	ft_convert_bit_to_char(char *s)
 {
@@ -20,6 +18,7 @@ char	ft_convert_bit_to_char(char *s)
 
 	i = 0;
 	j = 128;
+	c = '\0';
 	while (j > 0)
 	{
 		c += (s[i] - 48) * j;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 15:55:42 by corentindes       #+#    #+#             */
-/*   Updated: 2025/06/24 12:38:02 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/06/26 01:52:01 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,5 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (NULL);
 	ft_strcpy(str, s1);
 	ft_strcpy(str + ft_strlen(s1), s2);
-	return (free(s1), free(s2), str);
+	return (str);
 }
