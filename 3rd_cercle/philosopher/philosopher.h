@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosopher.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/13 16:04:01 by corentindes       #+#    #+#             */
+/*   Updated: 2025/08/13 16:14:04 by corentindes      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILOSOPHER_H
 # define PHILOSOPHER_H
 
@@ -7,10 +19,6 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
-
-# define LIMIT_MAX_INT64_T 9223372036854775807
-
-struct s_data;
 
 typedef struct s_philo
 {
@@ -31,23 +39,24 @@ typedef struct s_data
 	uint64_t		time_to_sleep;
 	int				nb_times_to_eat;
 	uint64_t		start_time;
-	int				finished;
+	volatile int	finished;
 
 	t_philo			*philos;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
 }					t_data;
 
-int64_t				ft_atoi_int64(char *s);
-uint64_t			get_time(void);
-void				print_action(t_philo *p, char *msg);
+int64_t				ft_atoi64(char *s);
+uint64_t			ft_time(void);
+void				ft_print_action(t_philo *p, char *s);
+void				ft_check_sleep(uint64_t duration_ms, t_data *d);
 
-int					check_args(int argc, char **argv);
-void				variables_data_init(int argc, char **argv, t_data *d);
-int					variables_philos_init(t_data *d);
-int					thread_init(t_data *d);
-void				*routine(void *args);
+int					ft_check_av(int ac, char **av);
+void				ft_init_var_data(int ac, char **av, t_data *d);
+int					ft_init_var_philo(t_data *d);
+int					ft_init_thread(t_data *d);
+void				*routine(void *arg);
 void				*monitor(void *arg);
-void				free_data(t_data *d);
+void				ft_free_data(t_data *d);
 
 #endif
