@@ -1,7 +1,7 @@
 
 # ==== PROGRAM NAME ==== #
 
-NAME 				= 	minishell.a
+NAME 				= 	minishell
 
 # ==== FLAGS AND COMPILER ==== #
 

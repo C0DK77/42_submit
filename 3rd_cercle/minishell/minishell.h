@@ -6,14 +6,14 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/14 17:49:59 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/14 18:18:09 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "libft.h"
+# include "libft.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -24,6 +24,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/stat.h>
+# include <sys/wait.h>
 # include <unistd.h>
 
 # define HEREDOC_FILE "/tmp/.minishell_heredoc"
