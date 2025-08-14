@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   var.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:32:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/16 11:49:12 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/14 17:47:51 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 t_var	g_var[] = {{"PATH"}, {"PWD"}, {"SHLVL"}, {"HOME"}, {"TERM"}, {"OLDPWD"},

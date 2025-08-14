@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/28 18:02:51 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/14 17:49:59 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+#include "libft.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -189,5 +190,10 @@ void					update_pwd_vars(t_envp *l, char *s);
 
 void					ft_print_token(t_token *l);
 void					ft_print_parsing(t_parsing *lst);
+
+/*SIGNAUX*/
+void					reset_signals(void);
+void					ft_sigint_handler(int sig);
+void					setup_signals(void);
 
 #endif

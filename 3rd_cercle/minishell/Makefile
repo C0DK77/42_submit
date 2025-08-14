@@ -12,7 +12,7 @@ CFLAGS 				= 	-Wall -Wextra -Werror		\
 
 # ==== FILES ==== #
 
-SRC 				= 	main.c parse.c var.c var_utils.c token.c token_utils.c exec.c exec_utils.c functions.c print.c
+SRC 				= 	main.c parse.c var.c var_utils.c token.c token_utils.c exec.c exec_utils.c functions.c print.c signals.c
 OBJ_DIR 			= 	obj
 
 OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)

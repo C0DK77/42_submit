@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/28 23:23:40 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/14 17:50:34 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 int			g_exit_status = 0;
@@ -36,8 +35,7 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	if (!ft_vars_check(&c_envp))
 		return (0);
-	signal(SIGINT, ft_sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
+	setup_signals();
 	while (1)
 	{
 		line = readline(ft_env_prompt());
@@ -87,6 +85,7 @@ int	main(int argc, char **argv, char **envp)
 				{
 					// printf("[CHILD] Je suis le fils pour : %s\n",
 					// p->line[0]);
+					reset_signals();
 					if (ft_exec_redirections_init(p) != 0)
 						exit(1);
 					if (p->sep != SEP_NONE && ft_exec_builtin(p->line, &c_envp))

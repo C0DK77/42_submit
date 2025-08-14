@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/22 14:42:58 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/14 17:46:31 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,15 +200,6 @@ char	**ft_env_to_tab(t_envp *l)
 	}
 	env_tab[i] = NULL;
 	return (env_tab);
-}
-
-void	ft_sigint_handler(int sig)
-{
-	(void)sig;
-	rl_replace_line("", 0);
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_redisplay();
 }
 
 void	ft_env_set(t_envp **l, char *s, char *value, int i)
