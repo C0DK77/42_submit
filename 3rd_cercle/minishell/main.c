@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/15 18:21:50 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/15 21:11:23 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ int	main(int argc, char **argv, char **envp)
 	t_envp		*c_envp;
 	t_token		*tokens;
 	t_parsing	*parse;
-	t_parsing	*p;
-	pid_t		pid;
 
 	// char		*pwd;
 	(void)argc;
@@ -70,42 +68,9 @@ int	main(int argc, char **argv, char **envp)
 		}
 		parse = ft_parse_line(tokens);
 		// ft_print_parsing(parse);
-		p = parse;
-		while (p)
-		{
-			if (p->sep == SEP_NONE && ft_exec_builtin(p->line, &c_envp))
-			{
-				// printf("[PARENT] Builtin exécuté : %s\n", p->line[0]);
-				p = p->next;
-			}
-			else
-			{
-				pid = fork();
-				if (pid == 0)
-				{
-					// printf("[CHILD] Je suis le fils pour : %s\n",
-					// p->line[0]);
-					reset_signals();
-					if (ft_exec_redirections_init(p) != 0)
-						exit(1);
-					if (p->sep != SEP_NONE && ft_exec_builtin(p->line, &c_envp))
-					{
-						// printf("[CHILD] Builtin exécuté dans pipe : %s\n",
-						// p->line[0]);
-						exit(g_exit_status);
-					}
-					// printf("[CHILD] Commande externe : %s\n", p->line[0]);
-					ft_exec_cmd(p->line, c_envp);
-					exit(1);
-				}
-				else
-				{
-					waitpid(pid, &g_exit_status, 0);
-					unlink("/tmp/.minishell_heredoc");
-				}
-				p = p->next;
-			}
-		}
+		ft_exec(parse, c_envp);
+		unlink("/tmp/.minishell_heredoc");
+		
 		ft_token_free(tokens);
 		free(line);
 	}

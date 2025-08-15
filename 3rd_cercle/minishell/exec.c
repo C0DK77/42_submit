@@ -6,85 +6,172 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/15 19:42:40 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/15 21:24:25 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* ft_exec*/
-void	ft_exec(t_parsing *p, t_envp *l)
+/*ft_exect*/
+static void ft_exec_pipeline(t_parsing *p_head, t_envp *l)
 {
-	int		fd[2];
-	int		prev_fd;
-	int		saved_stdin;
-	int		saved_stdout;
-	pid_t	pid;
+    int         fds[2];
+    int         prev_fd = -1;
+    t_parsing   *p = p_head;
+    pid_t       pid;
 
-	prev_fd = -1;
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
-	while (p)
-	{
-		if (p->prev && p->prev->sep == SEP_AND_IF && g_exit_status != 0)
-		{
-			p = p->next;
-			continue ;
-		}
-		if (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0)
-		{
-			p = p->next;
-			continue ;
-		}
-		ft_exec_redirections_init(p);
-		if (p->sep == SEP_NONE && ft_exec_builtin(p->line, &l))
-		{
-			p = p->next;
-			continue ;
-		}
-		if (p->sep == SEP_PIPE)
-			pipe(fd);
-		pid = fork();
-		if (pid == 0)
-		{
-			if (prev_fd != -1)
-			{
-				dup2(prev_fd, STDIN_FILENO);
-				close(prev_fd);
-			}
-			if (p->sep == SEP_PIPE)
-			{
-				close(fd[0]);
-				dup2(fd[1], STDOUT_FILENO);
-				close(fd[1]);
-			}
-			ft_exec_cmd(p->line, l);
-			exit(1);
-		}
-		else
-		{
-			if (prev_fd != -1)
-				close(prev_fd);
-			if (p->sep == SEP_PIPE)
-			{
-				close(fd[1]);
-				prev_fd = fd[0];
-			}
-			else
-			{
-				waitpid(pid, &g_exit_status, 0);
-				prev_fd = -1;
-			}
-		}
-		p = p->next;
-	}
-	while (wait(NULL) > 0)
-		;
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdin);
-	close(saved_stdout);
+    while (p)
+    {
+        if (p->next)
+        {
+            if (pipe(fds) == -1)
+            {
+                perror("minishell");
+                return;
+            }
+        }
+
+        pid = fork();
+        if (pid == -1)
+        {
+            perror("minishell");
+            return;
+        }
+        else if (pid == 0) 
+        {
+            reset_signals();
+            if (prev_fd != -1)
+            {
+                dup2(prev_fd, STDIN_FILENO);
+                close(prev_fd);
+            }
+            if (p->next)
+            {
+                dup2(fds[1], STDOUT_FILENO);
+                close(fds[0]);
+                close(fds[1]);
+            }
+
+            if (ft_exec_redirections_init(p) != 0)
+                _exit(1);
+            if (ft_exec_builtin(p->line, &l))
+                _exit(g_exit_status);
+            ft_exec_cmd(p->line, l);
+            _exit(127);
+        }
+        else
+        {
+            if (prev_fd != -1)
+                close(prev_fd);
+            if (p->next)
+            {
+                close(fds[1]);
+                prev_fd = fds[0];
+            }
+            p = p->next;
+        }
+    }
+    while (wait(NULL) > 0);
 }
+
+static void ft_exec_child(t_parsing *cmd, t_envp *l, int fd_in, int fd_out)
+{
+    reset_signals();
+    if (fd_in != STDIN_FILENO) { dup2(fd_in, STDIN_FILENO); close(fd_in); }
+    if (fd_out != STDOUT_FILENO) { dup2(fd_out, STDOUT_FILENO); close(fd_out); }
+    if (ft_exec_redirections_init(cmd) != 0) exit(1);
+    if (ft_exec_builtin(cmd->line, &l)) exit(g_exit_status);
+    ft_exec_cmd(cmd->line, l);
+    exit(127);
+}
+
+static void ft_exec_parent(pid_t pid)
+{
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
+    waitpid(pid, &g_exit_status, 0);
+    setup_signals();
+}
+
+static void ft_exec_single_cmd(t_parsing *p, t_envp *l, int prev_fd)
+{
+    pid_t pid = fork();
+    if (pid == -1)
+    {
+        perror("minishell");
+        return;
+    }
+    if (pid == 0)
+    {
+        if (prev_fd != -1)
+        {
+            dup2(prev_fd, STDIN_FILENO);
+            close(prev_fd);
+        }
+        ft_exec_child(p, l, STDIN_FILENO, STDOUT_FILENO);
+    }
+    else
+        ft_exec_parent(pid);
+}
+void ft_exec(t_parsing *p, t_envp *l)
+{
+    int saved_stdin = dup(STDIN_FILENO);
+    int saved_stdout = dup(STDOUT_FILENO);
+
+    while (p)
+    {
+        if (p->prev && ((p->prev->sep == SEP_AND_IF && g_exit_status != 0) ||
+                        (p->prev->sep == SEP_OR_IF  && g_exit_status == 0)))
+        {
+            p = p->next;
+            continue;
+        }
+        if (p->sep == SEP_PIPE)
+        {
+            ft_exec_pipeline(p, l);
+
+            while (p && p->sep == SEP_PIPE)
+                p = p->next;
+        }
+        else
+        {
+            int b_saved_in  = dup(STDIN_FILENO);
+            int b_saved_out = dup(STDOUT_FILENO);
+
+            if (ft_exec_redirections_init(p) != 0)
+            {
+                g_exit_status = 1;
+            }
+            else if (ft_exec_builtin(p->line, &l))
+            {
+
+                dup2(b_saved_in,  STDIN_FILENO);
+                dup2(b_saved_out, STDOUT_FILENO);
+                close(b_saved_in);
+                close(b_saved_out);
+
+                p = p->next;
+                continue; 
+            }
+            dup2(b_saved_in,  STDIN_FILENO);
+            dup2(b_saved_out, STDOUT_FILENO);
+            close(b_saved_in);
+            close(b_saved_out);
+
+            ft_exec_single_cmd(p, l, -1);
+        }
+
+        p = p->next;
+    }
+    while (wait(NULL) > 0)
+    continue;
+    dup2(saved_stdin, STDIN_FILENO);
+    dup2(saved_stdout, STDOUT_FILENO);
+    close(saved_stdin);
+    close(saved_stdout);
+}
+
+
 void	ft_exec_cmd(char **s, t_envp *l)
 {
 	char	*p;
@@ -130,6 +217,7 @@ void	ft_exec_cmd(char **s, t_envp *l)
 	exit(126);
 }
 
+
 char	**ft_exec_env_array(t_envp *l)
 {
 	int		i;
@@ -166,3 +254,5 @@ char	**ft_exec_env_array(t_envp *l)
 	env[i] = NULL;
 	return (env);
 }
+
+
