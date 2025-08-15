@@ -6,32 +6,40 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/14 17:47:27 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/15 20:31:52 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**ft_parse_add(char **s, char *v)
+char **ft_parse_add(char **s, char *v)
 {
-	int		i;
-	char	**n;
+    int     i;
+    char    **n;
+    int     j;
 
-	i = 0;
-	if (!v)
-		return (s);
-	while (s && s[i])
-		i++;
-	n = malloc(sizeof(char *) * (i + 2));
-	if (!n)
-		return (NULL);
-	for (int j = 0; j < i; j++)
-		n[j] = s[j];
-	n[i] = ft_strdup(v);
-	n[i + 1] = NULL;
-	free(s);
-	return (n);
+    i = 0;
+    if (!v)
+        return (s);
+    while (s && s[i])
+        i++;
+    n = malloc(sizeof(char *) * (i + 2));
+    if (!n)
+        return (NULL);
+    
+    j = 0;
+    while(j < i)
+    {
+        n[j] = s[j];
+        j++;
+    }
+    
+    n[i] = ft_strdup(v);
+    n[i + 1] = NULL;
+    free(s);
+    return (n);
 }
+
 
 static int	handle_redirection(t_parsing *n, t_token **t)
 {
