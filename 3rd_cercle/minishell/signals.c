@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 17:45:17 by ecid              #+#    #+#             */
-/*   Updated: 2025/08/14 17:45:53 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/15 17:04:41 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	ft_sigint_handler(int sig)
 		write(STDERR_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 	else if (sig == SIGQUIT)
 	{

@@ -6,11 +6,10 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/14 17:46:31 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/15 14:48:41 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 int	ft_exec_redirections_init(t_parsing *s)
@@ -210,7 +209,7 @@ void	ft_env_set(t_envp **l, char *s, char *value, int i)
 	t = *l;
 	while (t)
 	{
-		if (strcmp(t->var, s) == 0)
+		if (ft_strcmp(t->var, s) == 0)
 		{
 			if (value)
 			{
@@ -225,41 +224,57 @@ void	ft_env_set(t_envp **l, char *s, char *value, int i)
 	}
 	n = malloc(sizeof(t_envp));
 	n->var = ft_strdup(s);
-	n->value = value ? ft_strdup(value) : NULL;
+	if(value)
+		n->value = ft_strdup(value);
+	else
+		n->value= NULL;
 	n->export = i;
 	n->next = (*l)->next;
 	(*l)->next = n;
 }
+/*en_sorted*/
+static void    ft_swap(t_envp **a, t_envp **b)
+{
+    t_envp  *tmp;
 
+    tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
 void	ft_env_sorted(t_envp *envp)
 {
 	int		i;
-	t_envp	*tmp;
+	int		j;
+	int		k;
 	t_envp	*arr[1000];
-
+	/*attention tableau non dynamique*/
 	i = 0;
 	while (envp && i < 1000)
 	{
 		arr[i++] = envp;
 		envp = envp->next;
 	}
-	for (int j = 0; j < i - 1; j++)
+	j=0;
+	while(j<i-1)
 	{
-		for (int k = j + 1; k < i; k++)
+		k = j+1;
+		while(k<i)
 		{
-			if (ft_strcmp(arr[j]->var, arr[k]->var) > 0)
+			if(ft_strcmp(arr[j]->var, arr[k]->var)>0)
 			{
-				tmp = arr[j];
-				arr[j] = arr[k];
-				arr[k] = tmp;
+				ft_swap(&arr[j], &arr[i]);
 			}
+			k++;
 		}
+		j++;
 	}
-	for (int j = 0; j < i; j++)
+	j=0;
+	while(j<i)
 	{
 		printf("declare -x %s", arr[j]->var);
-		if (arr[j]->value)
-			printf("=\"%s\"", arr[j]->value);
-		printf("\n");
+        if (arr[j]->value)
+            printf("=\"%s\"", arr[j]->value);
+        printf("\n");
+        j++;
 	}
 }

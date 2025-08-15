@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:54:44 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/25 09:34:26 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/15 15:17:21 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 int	ft_exec_builtin(char **s, t_envp **l)
@@ -390,7 +389,12 @@ void	ft_history_add(t_history **h, const char *s)
 	n = malloc(sizeof(t_history));
 	if (!n)
 		return ;
-	n->line = strdup(s);
+	n->line = ft_strdup(s);
+	if(!n->line)
+	{
+		free(n);
+		return;
+	}
 	n->next = NULL;
 	if (!*h)
 		*h = n;
