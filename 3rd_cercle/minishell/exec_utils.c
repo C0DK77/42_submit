@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/15 14:48:41 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/15 18:44:24 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,7 +262,7 @@ void	ft_env_sorted(t_envp *envp)
 		{
 			if(ft_strcmp(arr[j]->var, arr[k]->var)>0)
 			{
-				ft_swap(&arr[j], &arr[i]);
+				ft_swap(&arr[j], &arr[k]);
 			}
 			k++;
 		}
