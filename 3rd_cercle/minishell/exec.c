@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/15 21:24:25 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/16 13:04:07 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,36 +16,48 @@
 static void ft_exec_pipeline(t_parsing *p_head, t_envp *l)
 {
     int         fds[2];
-    int         prev_fd = -1;
+    int         prev_fd;
+    int         do_pipe;
+    int   status;
     t_parsing   *p = p_head;
     pid_t       pid;
+    pid_t       pid_last;
+    pid_t w;
 
-    while (p)
+    pid_last = -1;
+    prev_fd = -1;
+
+  while (p)
     {
-        if (p->next)
+        do_pipe = (p->sep == SEP_PIPE);
+
+        if (do_pipe && pipe(fds) == -1)
         {
-            if (pipe(fds) == -1)
-            {
-                perror("minishell");
-                return;
-            }
+            perror("minishell");
+            if (prev_fd != -1) close(prev_fd);
+            return;
         }
 
         pid = fork();
         if (pid == -1)
         {
             perror("minishell");
+            if (do_pipe) { close(fds[0]); close(fds[1]); }
+            if (prev_fd != -1) close(prev_fd);
             return;
         }
-        else if (pid == 0) 
+
+        if (pid == 0)
         {
             reset_signals();
+
             if (prev_fd != -1)
             {
                 dup2(prev_fd, STDIN_FILENO);
                 close(prev_fd);
             }
-            if (p->next)
+
+            if (do_pipe)
             {
                 dup2(fds[1], STDOUT_FILENO);
                 close(fds[0]);
@@ -54,8 +66,10 @@ static void ft_exec_pipeline(t_parsing *p_head, t_envp *l)
 
             if (ft_exec_redirections_init(p) != 0)
                 _exit(1);
+
             if (ft_exec_builtin(p->line, &l))
                 _exit(g_exit_status);
+
             ft_exec_cmd(p->line, l);
             _exit(127);
         }
@@ -63,15 +77,37 @@ static void ft_exec_pipeline(t_parsing *p_head, t_envp *l)
         {
             if (prev_fd != -1)
                 close(prev_fd);
-            if (p->next)
+
+            if (do_pipe)
             {
                 close(fds[1]);
                 prev_fd = fds[0];
             }
-            p = p->next;
+            else
+            {
+                prev_fd = -1;
+                pid_last = pid;
+            }
+        }
+        
+        if (!do_pipe)
+            break;
+
+        p = p->next;
+    }
+
+    if (prev_fd != -1)
+        close(prev_fd);
+    while ((w = wait(&status)) > 0)
+    {
+        if (w == pid_last)
+        {
+            if (WIFEXITED(status))
+                g_exit_status = WEXITSTATUS(status);
+            else if (WIFSIGNALED(status))
+                g_exit_status = 128 + WTERMSIG(status);
         }
     }
-    while (wait(NULL) > 0);
 }
 
 static void ft_exec_child(t_parsing *cmd, t_envp *l, int fd_in, int fd_out)
@@ -163,8 +199,6 @@ void ft_exec(t_parsing *p, t_envp *l)
 
         p = p->next;
     }
-    while (wait(NULL) > 0)
-    continue;
     dup2(saved_stdin, STDIN_FILENO);
     dup2(saved_stdout, STDOUT_FILENO);
     close(saved_stdin);
