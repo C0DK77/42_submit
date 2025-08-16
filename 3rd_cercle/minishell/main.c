@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/15 21:11:23 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/16 20:27:08 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
 	char		*next;
+	char		*prompt;
 	char		*t;
 	t_envp		*c_envp;
 	t_token		*tokens;
@@ -36,7 +37,9 @@ int	main(int argc, char **argv, char **envp)
 	setup_signals();
 	while (1)
 	{
-		line = readline(ft_env_prompt());
+		prompt = ft_env_prompt();
+		line = readline(prompt);
+		free(prompt);//changement pour liberer la memoire sinon fuite 
 		if (line && *line)
 			ft_history_add(&g_history, line);
 		if (!line)
