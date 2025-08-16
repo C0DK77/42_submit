@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 17:35:30 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/16 20:57:48 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -77,6 +78,14 @@ typedef struct s_token
 
 extern int				g_exit_status;
 
+//	STRUCTURE OPERATOR
+
+typedef struct s_operator
+{
+	char				*s;
+	int					type;
+}						t_operator;
+
 //	STRUCTURE PARSING
 
 typedef enum s_sep
@@ -122,8 +131,9 @@ t_envp					*ft_env_var_copy(char *s);
 char					*ft_env_search_value(t_envp *l, char *v);
 t_envp					*ft_env_search_node(t_envp *l, char *v);
 void					ft_env_free(t_envp *l);
+void					ft_free_all(int argc, ...);
 
-//	ENVIRONMENT / ENV_VARS
+//	ENVIRONMENT / ENV_VARS_INIT
 
 t_var					*ft_env_vars_init_table(void);
 int						ft_env_vars_check(t_envp **l);
@@ -139,6 +149,7 @@ void					ft_token_free(t_token *l);
 
 //	TOKEN / TOKEN_OPE_UTILS
 
+t_operator				*ft_token_ope_init_table(void);
 char					*ft_token_ope_dollar(t_envp *l, char **w, char *s);
 char					*ft_token_ope(t_token **l, char *s);
 

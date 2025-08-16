@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 15:34:51 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/16 20:58:56 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,24 @@ t_envp	*ft_env_search_node(t_envp *l, char *v)
 	return (NULL);
 }
 
+void	ft_free_all(int argc, ...)
+{
+	int		i;
+	va_list	argv;
+	char	*s;
+
+	i = 0;
+	va_start(argv, argc);
+	while (i < argc)
+	{
+		s = va_arg(argv, void *);
+		if (s)
+			free(s);
+		i++;
+	}
+	va_end(argv);
+}
+
 void	ft_env_free(t_envp *l)
 {
 	t_envp	*t;
@@ -42,9 +60,7 @@ void	ft_env_free(t_envp *l)
 	while (l)
 	{
 		t = l->next;
-		free(l->var);
-		free(l->value);
-		free(l);
+		ft_free_all(l->var, l->value, l);
 		l = t;
 	}
 }

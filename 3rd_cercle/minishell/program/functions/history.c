@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:03:58 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 16:04:37 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/16 21:01:05 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_history_add(t_history **h, const char *s)
 	n = malloc(sizeof(t_history));
 	if (!n)
 		return ;
-	n->line = strdup(s);
+	n->line = ft_strdup(s);
 	n->next = NULL;
 	if (!*h)
 		*h = n;
@@ -54,8 +54,7 @@ void	ft_history_clear(t_history **h)
 	while (*h)
 	{
 		t = (*h)->next;
-		free((*h)->line);
-		free(*h);
+		ft_free_all((*h)->line, *h);
 		*h = t;
 	}
 }

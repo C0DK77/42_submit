@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:32:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 15:34:36 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/16 20:59:46 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,11 @@ int	ft_env_vars_create(t_envp **l, t_envp *t, char *v)
 	else if (ft_strcmp(v, "PWD") == 0)
 	{
 		if (!getcwd(cwd, sizeof(cwd)))
-			return (perror("getcwd"), free(t->var), free(t), 0);
+			return (perror("getcwd"), ft_free_all(t->var, t), 0);
 		t->value = ft_strdup(cwd);
 	}
 	if (!t->var || !t->value)
-		return (free(t->var), free(t->value), free(t), 0);
+		return (ft_free_all(t->var, t->value, t), 0);
 	t->next = *l;
 	*l = t;
 	return (1);
