@@ -6,29 +6,29 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 19:10:25 by corentindes       #+#    #+#             */
-/*   Updated: 2025/06/24 12:07:20 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/14 16:47:10 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_atoi(const char *str)
-{
-	int		sign;
-	long	result;
+#include "libft.h"
 
+int	ft_atoi(const char *s)
+{
+	long	res;
+	int		sign;
+
+	res = 0;
 	sign = 1;
-	result = 0;
-	while (*str == ' ' || (*str >= 9 && *str <= 13))
-		str++;
-	if (*str == '-' || *str == '+')
+	while (ft_isspace(*s))
+		s++;
+	if (*s == '-')
+		sign = -1;
+	while (*s == '-' || *s == '+')
+		s++;
+	while (ft_isdigit(*s))
 	{
-		if (*str == '-')
-			sign = -1;
-		str++;
+		res = res * 10 + (*s - '0');
+		s++;
 	}
-	while (*str >= '0' && *str <= '9')
-	{
-		result = result * 10 + (*str - '0');
-		str++;
-	}
-	return (sign * result);
+	return (sign * res);
 }

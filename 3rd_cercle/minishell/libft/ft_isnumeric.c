@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isnumeric.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:52:44 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/22 09:56:14 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/13 18:22:18 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,26 @@
 
 int	ft_is_numeric(char *s)
 {
-	int				i;
 	unsigned long	res;
 	int				sign;
+	long			limit;
 
-	i = 0;
 	res = 0;
 	sign = 1;
-	if (s[0] == '-')
+	limit = -(LONG_MIN % 10);
+	if (*s == '-')
 		sign = -1;
-	if (s[0] == '+' || s[0] == '-')
-		i++;
-	while (s[i])
+	while (*s == '-' || *s == '+')
+		s++;
+	while (*s)
 	{
-		if (!ft_isdigit(s[i]))
+		if (sign == 1)
+			limit = LONG_MAX % 10;
+		if (!ft_isdigit(*s) || res > (unsigned long)(LONG_MAX / 10)
+			|| (res == (unsigned long)(LONG_MAX / 10) && (*s - '0') > limit))
 			return (0);
-		if (res > (unsigned long)(LONG_MAX / 10)
-			|| (res == (unsigned long)(LONG_MAX / 10) && (s[i]
-					- '0') > (sign == 1 ? LONG_MAX % 10 : -(LONG_MIN % 10))))
-			return (0);
-		res = (res * 10) + (s[i] - 48);
-		i++;
+		res = (res * 10) + (*s - 48);
+		s++;
 	}
 	return (1);
 }

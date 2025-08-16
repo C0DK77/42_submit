@@ -6,27 +6,26 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 10:07:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/04 10:25:57 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/14 16:49:20 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_has_unclosed_quote(char *str)
+int	ft_has_unclosed_quote(char *s)
 {
-	int i;
-	int sg;
-	int db;
-	i = 0;
+	int	sg;
+	int	db;
+
 	sg = 0;
 	db = 0;
-	while (str[i])
+	while (*s)
 	{
-		if (str[i] == '\'')
+		if (*s == '\'')
 			sg++;
-		if (str[i] == '\"')
+		if (*s == '\"')
 			db++;
-		i++;
+		s++;
 	}
 	if (sg % 2 != 0 || db % 2 != 0)
 		return (1);
