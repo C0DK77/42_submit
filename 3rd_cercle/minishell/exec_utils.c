@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/15 18:44:24 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/16 13:54:40 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,39 +167,39 @@ void	ft_free_split(char **arr)
 	free(arr);
 }
 
-char	**ft_env_to_tab(t_envp *l)
-{
-	int		i;
-	t_envp	*t;
-	char	**env_tab;
-	char	*entry;
+// char	**ft_env_to_tab(t_envp *l)
+// {
+// 	int		i;
+// 	t_envp	*t;
+// 	char	**env_tab;
+// 	char	*entry;
 
-	i = 0;
-	t = l;
-	while (t)
-	{
-		i++;
-		t = t->next;
-	}
-	env_tab = malloc(sizeof(char *) * (i + 1));
-	if (!env_tab)
-		return (NULL);
-	t = l;
-	i = 0;
-	while (t)
-	{
-		entry = ft_strjoin_three(t->var, "=", t->value);
-		if (!entry)
-		{
-			ft_free_split(env_tab);
-			return (NULL);
-		}
-		env_tab[i++] = entry;
-		t = t->next;
-	}
-	env_tab[i] = NULL;
-	return (env_tab);
-}
+// 	i = 0;
+// 	t = l;
+// 	while (t)
+// 	{
+// 		i++;
+// 		t = t->next;
+// 	}
+// 	env_tab = malloc(sizeof(char *) * (i + 1));
+// 	if (!env_tab)
+// 		return (NULL);
+// 	t = l;
+// 	i = 0;
+// 	while (t)
+// 	{
+// 		entry = ft_strjoin_three(t->var, "=", t->value);
+// 		if (!entry)
+// 		{
+// 			ft_free_split(env_tab);
+// 			return (NULL);
+// 		}
+// 		env_tab[i++] = entry;
+// 		t = t->next;
+// 	}
+// 	env_tab[i] = NULL;
+// 	return (env_tab);
+// }
 
 void	ft_env_set(t_envp **l, char *s, char *value, int i)
 {
@@ -224,22 +224,22 @@ void	ft_env_set(t_envp **l, char *s, char *value, int i)
 	}
 	n = malloc(sizeof(t_envp));
 	n->var = ft_strdup(s);
-	if(value)
+	if (value)
 		n->value = ft_strdup(value);
 	else
-		n->value= NULL;
+		n->value = NULL;
 	n->export = i;
 	n->next = (*l)->next;
 	(*l)->next = n;
 }
 /*en_sorted*/
-static void    ft_swap(t_envp **a, t_envp **b)
+static void	ft_swap(t_envp **a, t_envp **b)
 {
-    t_envp  *tmp;
+	t_envp	*tmp;
 
-    tmp = *a;
-    *a = *b;
-    *b = tmp;
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
 }
 void	ft_env_sorted(t_envp *envp)
 {
@@ -247,6 +247,7 @@ void	ft_env_sorted(t_envp *envp)
 	int		j;
 	int		k;
 	t_envp	*arr[1000];
+
 	/*attention tableau non dynamique*/
 	i = 0;
 	while (envp && i < 1000)
@@ -254,13 +255,13 @@ void	ft_env_sorted(t_envp *envp)
 		arr[i++] = envp;
 		envp = envp->next;
 	}
-	j=0;
-	while(j<i-1)
+	j = 0;
+	while (j < i - 1)
 	{
-		k = j+1;
-		while(k<i)
+		k = j + 1;
+		while (k < i)
 		{
-			if(ft_strcmp(arr[j]->var, arr[k]->var)>0)
+			if (ft_strcmp(arr[j]->var, arr[k]->var) > 0)
 			{
 				ft_swap(&arr[j], &arr[k]);
 			}
@@ -268,13 +269,13 @@ void	ft_env_sorted(t_envp *envp)
 		}
 		j++;
 	}
-	j=0;
-	while(j<i)
+	j = 0;
+	while (j < i)
 	{
 		printf("declare -x %s", arr[j]->var);
-        if (arr[j]->value)
-            printf("=\"%s\"", arr[j]->value);
-        printf("\n");
-        j++;
+		if (arr[j]->value)
+			printf("=\"%s\"", arr[j]->value);
+		printf("\n");
+		j++;
 	}
 }

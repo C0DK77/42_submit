@@ -6,205 +6,229 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 13:04:07 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/16 13:32:29 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /*ft_exect*/
-static void ft_exec_pipeline(t_parsing *p_head, t_envp *l)
+/*Fonctions chez les childs*/
+static void	ft_pipe_child(t_parsing *p, t_envp *l, int prev_fd, int *fds,
+		int do_pipe)
 {
-    int         fds[2];
-    int         prev_fd;
-    int         do_pipe;
-    int   status;
-    t_parsing   *p = p_head;
-    pid_t       pid;
-    pid_t       pid_last;
-    pid_t w;
-
-    pid_last = -1;
-    prev_fd = -1;
-
-  while (p)
-    {
-        do_pipe = (p->sep == SEP_PIPE);
-
-        if (do_pipe && pipe(fds) == -1)
-        {
-            perror("minishell");
-            if (prev_fd != -1) close(prev_fd);
-            return;
-        }
-
-        pid = fork();
-        if (pid == -1)
-        {
-            perror("minishell");
-            if (do_pipe) { close(fds[0]); close(fds[1]); }
-            if (prev_fd != -1) close(prev_fd);
-            return;
-        }
-
-        if (pid == 0)
-        {
-            reset_signals();
-
-            if (prev_fd != -1)
-            {
-                dup2(prev_fd, STDIN_FILENO);
-                close(prev_fd);
-            }
-
-            if (do_pipe)
-            {
-                dup2(fds[1], STDOUT_FILENO);
-                close(fds[0]);
-                close(fds[1]);
-            }
-
-            if (ft_exec_redirections_init(p) != 0)
-                _exit(1);
-
-            if (ft_exec_builtin(p->line, &l))
-                _exit(g_exit_status);
-
-            ft_exec_cmd(p->line, l);
-            _exit(127);
-        }
-        else
-        {
-            if (prev_fd != -1)
-                close(prev_fd);
-
-            if (do_pipe)
-            {
-                close(fds[1]);
-                prev_fd = fds[0];
-            }
-            else
-            {
-                prev_fd = -1;
-                pid_last = pid;
-            }
-        }
-        
-        if (!do_pipe)
-            break;
-
-        p = p->next;
-    }
-
-    if (prev_fd != -1)
-        close(prev_fd);
-    while ((w = wait(&status)) > 0)
-    {
-        if (w == pid_last)
-        {
-            if (WIFEXITED(status))
-                g_exit_status = WEXITSTATUS(status);
-            else if (WIFSIGNALED(status))
-                g_exit_status = 128 + WTERMSIG(status);
-        }
-    }
+	reset_signals();
+	if (prev_fd != -1)
+	{
+		dup2(prev_fd, STDIN_FILENO);
+		close(prev_fd);
+	}
+	if (do_pipe)
+	{
+		dup2(fds[1], STDOUT_FILENO);
+		close(fds[0]);
+		close(fds[1]);
+	}
+	if (ft_exec_redirections_init(p) != 0)
+		_exit(1);
+	if (ft_exec_builtin(p->line, &l))
+		_exit(g_exit_status);
+	ft_exec_cmd(p->line, l);
+	_exit(127);
 }
 
-static void ft_exec_child(t_parsing *cmd, t_envp *l, int fd_in, int fd_out)
+static void	ft_wait_all_children(pid_t pid_last)
 {
-    reset_signals();
-    if (fd_in != STDIN_FILENO) { dup2(fd_in, STDIN_FILENO); close(fd_in); }
-    if (fd_out != STDOUT_FILENO) { dup2(fd_out, STDOUT_FILENO); close(fd_out); }
-    if (ft_exec_redirections_init(cmd) != 0) exit(1);
-    if (ft_exec_builtin(cmd->line, &l)) exit(g_exit_status);
-    ft_exec_cmd(cmd->line, l);
-    exit(127);
+	int		status;
+	pid_t	w;
+
+	while ((w = wait(&status)) > 0)
+	{
+		if (w == pid_last)
+		{
+			if (WIFEXITED(status))
+				g_exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				g_exit_status = 128 + WTERMSIG(status);
+		}
+	}
 }
 
-static void ft_exec_parent(pid_t pid)
+static void	ft_exec_child(t_parsing *cmd, t_envp *l, int fd_in, int fd_out)
 {
-    signal(SIGINT, SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
-    waitpid(pid, &g_exit_status, 0);
-    setup_signals();
+	reset_signals();
+	if (fd_in != STDIN_FILENO)
+	{
+		dup2(fd_in, STDIN_FILENO);
+		close(fd_in);
+	}
+	if (fd_out != STDOUT_FILENO)
+	{
+		dup2(fd_out, STDOUT_FILENO);
+		close(fd_out);
+	}
+	if (ft_exec_redirections_init(cmd) != 0)
+		exit(1);
+	if (ft_exec_builtin(cmd->line, &l))
+		exit(g_exit_status);
+	ft_exec_cmd(cmd->line, l);
+	exit(127);
+}
+/*Fonctions chez les parents*/
+static void	ft_pipe_parent(int *prev_fd, int *fds, int do_pipe)
+{
+	if (*prev_fd != -1)
+		close(*prev_fd);
+	if (do_pipe)
+	{
+		close(fds[1]);
+		*prev_fd = fds[0];
+	}
+	else
+	{
+		*prev_fd = -1;
+	}
 }
 
-static void ft_exec_single_cmd(t_parsing *p, t_envp *l, int prev_fd)
+static void	ft_exec_parent(pid_t pid)
 {
-    pid_t pid = fork();
-    if (pid == -1)
-    {
-        perror("minishell");
-        return;
-    }
-    if (pid == 0)
-    {
-        if (prev_fd != -1)
-        {
-            dup2(prev_fd, STDIN_FILENO);
-            close(prev_fd);
-        }
-        ft_exec_child(p, l, STDIN_FILENO, STDOUT_FILENO);
-    }
-    else
-        ft_exec_parent(pid);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	waitpid(pid, &g_exit_status, 0);
+	setup_signals();
 }
-void ft_exec(t_parsing *p, t_envp *l)
+/*Gestion 1 cmd*/
+static void	ft_exec_single_cmd(t_parsing *p, t_envp *l, int prev_fd)
 {
-    int saved_stdin = dup(STDIN_FILENO);
-    int saved_stdout = dup(STDOUT_FILENO);
+	pid_t	pid;
 
-    while (p)
-    {
-        if (p->prev && ((p->prev->sep == SEP_AND_IF && g_exit_status != 0) ||
-                        (p->prev->sep == SEP_OR_IF  && g_exit_status == 0)))
-        {
-            p = p->next;
-            continue;
-        }
-        if (p->sep == SEP_PIPE)
-        {
-            ft_exec_pipeline(p, l);
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("minishell");
+		return ;
+	}
+	if (pid == 0)
+	{
+		if (prev_fd != -1)
+		{
+			dup2(prev_fd, STDIN_FILENO);
+			close(prev_fd);
+		}
+		ft_exec_child(p, l, STDIN_FILENO, STDOUT_FILENO);
+	}
+	else
+		ft_exec_parent(pid);
+}
+/*Gestion pipes*/
+static void	ft_exec_pipes(t_parsing *p_head, t_envp *l)
+{
+	int			fds[2];
+	int			prev_fd;
+	int			do_pipe;
+	t_parsing	*p;
+	pid_t		pid;
+	pid_t		pid_last;
 
-            while (p && p->sep == SEP_PIPE)
-                p = p->next;
-        }
-        else
-        {
-            int b_saved_in  = dup(STDIN_FILENO);
-            int b_saved_out = dup(STDOUT_FILENO);
-
-            if (ft_exec_redirections_init(p) != 0)
-            {
-                g_exit_status = 1;
-            }
-            else if (ft_exec_builtin(p->line, &l))
-            {
-
-                dup2(b_saved_in,  STDIN_FILENO);
-                dup2(b_saved_out, STDOUT_FILENO);
-                close(b_saved_in);
-                close(b_saved_out);
-
-                p = p->next;
-                continue; 
-            }
-            dup2(b_saved_in,  STDIN_FILENO);
-            dup2(b_saved_out, STDOUT_FILENO);
-            close(b_saved_in);
-            close(b_saved_out);
-
-            ft_exec_single_cmd(p, l, -1);
-        }
-
-        p = p->next;
-    }
-    dup2(saved_stdin, STDIN_FILENO);
-    dup2(saved_stdout, STDOUT_FILENO);
-    close(saved_stdin);
-    close(saved_stdout);
+	prev_fd = -1;
+	p = p_head;
+	pid_last = -1;
+	while (p)
+	{
+		do_pipe = (p->sep == SEP_PIPE);
+		if (do_pipe && pipe(fds) == -1)
+		{
+			perror("minishell");
+			if (prev_fd != -1)
+				close(prev_fd);
+			return ;
+		}
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("minishell");
+			if (do_pipe)
+			{
+				close(fds[0]);
+				close(fds[1]);
+			}
+			if (prev_fd != -1)
+				close(prev_fd);
+			return ;
+		}
+		if (pid == 0)
+			ft_pipe_child(p, l, prev_fd, fds, do_pipe);
+		else
+		{
+			ft_pipe_parent(&prev_fd, fds, do_pipe);
+			if (!do_pipe)
+				pid_last = pid;
+		}
+		if (!do_pipe)
+			break ;
+		p = p->next;
+	}
+	if (prev_fd != -1)
+		close(prev_fd);
+	ft_wait_all_children(pid_last);
 }
 
+void	ft_exec(t_parsing *p, t_envp *l)
+{
+	int	saved_stdin;
+	int	saved_stdout;
+	int	b_saved_in;
+	int	b_saved_out;
+
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	while (p)
+	{
+		if (p->prev && ((p->prev->sep == SEP_AND_IF && g_exit_status != 0)
+				|| (p->prev->sep == SEP_OR_IF && g_exit_status == 0)))
+		{
+			p = p->next;
+			continue ;
+		}
+		if (p->sep == SEP_PIPE)
+		{
+			ft_exec_pipes(p, l);
+			while (p && p->sep == SEP_PIPE)
+				p = p->next;
+		}
+		else
+		{
+			b_saved_in = dup(STDIN_FILENO);
+			b_saved_out = dup(STDOUT_FILENO);
+			if (ft_exec_redirections_init(p) != 0)
+			{
+				g_exit_status = 1;
+			}
+			else if (ft_exec_builtin(p->line, &l))
+			{
+				dup2(b_saved_in, STDIN_FILENO);
+				dup2(b_saved_out, STDOUT_FILENO);
+				close(b_saved_in);
+				close(b_saved_out);
+				p = p->next;
+				continue ;
+			}
+			dup2(b_saved_in, STDIN_FILENO);
+			dup2(b_saved_out, STDOUT_FILENO);
+			close(b_saved_in);
+			close(b_saved_out);
+			ft_exec_single_cmd(p, l, -1);
+		}
+		p = p->next;
+	}
+	while (wait(NULL) > 0)
+		continue ;
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
+}
+/* end ft_exec*/
 
 void	ft_exec_cmd(char **s, t_envp *l)
 {
@@ -251,7 +275,6 @@ void	ft_exec_cmd(char **s, t_envp *l)
 	exit(126);
 }
 
-
 char	**ft_exec_env_array(t_envp *l)
 {
 	int		i;
@@ -288,5 +311,3 @@ char	**ft_exec_env_array(t_envp *l)
 	env[i] = NULL;
 	return (env);
 }
-
-

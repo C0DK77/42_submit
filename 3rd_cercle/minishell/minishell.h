@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/14 18:18:09 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/16 13:54:21 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int						ft_exec_is_directory(char *p);
 char					*ft_exec_find_cmd(char *s, t_envp *l);
 char					*ft_strjoin_three(char *s1, char *s2, char *s3);
 void					ft_free_split(char **arr);
-char					**ft_env_to_tab(t_envp *l);
+// char					**ft_env_to_tab(t_envp *l);
 void					ft_sigint_handler(int sig);
 void					ft_env_set(t_envp **l, char *s, char *value, int i);
 void					ft_env_sorted(t_envp *envp);

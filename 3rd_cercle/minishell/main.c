@@ -70,7 +70,6 @@ int	main(int argc, char **argv, char **envp)
 		// ft_print_parsing(parse);
 		ft_exec(parse, c_envp);
 		unlink("/tmp/.minishell_heredoc");
-		
 		ft_token_free(tokens);
 		free(line);
 	}

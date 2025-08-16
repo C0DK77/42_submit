@@ -390,10 +390,10 @@ void	ft_history_add(t_history **h, const char *s)
 	if (!n)
 		return ;
 	n->line = ft_strdup(s);
-	if(!n->line)
+	if (!n->line)
 	{
 		free(n);
-		return;
+		return ;
 	}
 	n->next = NULL;
 	if (!*h)
