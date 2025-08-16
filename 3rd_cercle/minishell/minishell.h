@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 15:55:45 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/16 17:35:30 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,24 +131,29 @@ int						ft_env_list_var_check(t_envp **l, char *v);
 int						ft_env_vars_create(t_envp **l, t_envp *t, char *v);
 int						ft_var_increase_shlvl(t_envp *l);
 
-//	TOKEN / PARSE
-
-int						ft_token_word_dbquote(t_envp *l, char **w, char *s,
-							int z, int i);
-int						ft_token_ope_dollar(t_envp *l, char **w, char *s,
-							int i);
-int						ft_token_word_noquote(char **w, char *s, int i);
-int						ft_token_word_sgquote(char **w, char *s, int i, int j);
-int						ft_token_word(t_token **n, char *s, int i, t_envp *l);
-int						ft_token_ope(t_token **l, char *s, int i);
-
-//	TOKEN / UTILS
+//	TOKEN / TOKEN_LIST_UTILS
 
 t_token					*ft_token_init(t_token_type t, char *v);
 void					ft_token_add(t_token **l, t_token *n);
+void					ft_token_free(t_token *l);
+
+//	TOKEN / TOKEN_OPE_UTILS
+
+char					*ft_token_ope_dollar(t_envp *l, char **w, char *s);
+char					*ft_token_ope(t_token **l, char *s);
+
+//	TOKEN / TOKEN_WORD_UTILS
+
+char					*ft_token_word_dbquote(t_envp *l, char **w, char *s,
+							int end);
+char					*ft_token_word_noquote(char **w, char *s);
+char					*ft_token_word_sgquote(char **w, char *s, int i);
+char					*ft_token_word(t_token **n, char *s, t_envp *l);
+
+//	TOKEN / UTILS
+
 t_token					*ft_token(char *s, t_envp *l);
 int						ft_token_check(t_token *n);
-void					ft_token_free(t_token *l);
 
 //	PARSE / PARSE
 

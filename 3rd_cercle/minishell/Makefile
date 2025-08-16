@@ -12,10 +12,14 @@ CFLAGS 				= 	-Wall -Wextra -Werror			\
 
 # ==== FILES ==== #
 
-SRC 				= 	environment/env_list_init.c 	\
-						environment/env_vars_check.c 	\
-						environment/env_utils.c 		\
-						main.c parse.c token.c token_utils.c exec.c exec_utils.c functions.c print.c
+SRC 				= 	program/environment/env_prompt_and_list_init.c	\
+						program/environment/env_vars_check.c 			\
+						program/environment/env_utils.c 				\
+						program/token/token_list_utils.c 				\
+						program/token/token_ope_utils.c 				\
+						program/token/token_word_utils.c 				\
+						program/token/token.c			 				\
+						main.c parse.c exec.c exec_utils.c functions.c print.c
 						
 OBJ_DIR 			= 	obj
 
