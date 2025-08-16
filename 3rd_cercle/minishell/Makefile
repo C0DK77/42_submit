@@ -6,13 +6,17 @@ NAME 				= 	minishell.a
 # ==== FLAGS AND COMPILER ==== #
 
 CC 					= 	cc
-CFLAGS 				= 	-Wall -Wextra -Werror		\
-						-I.						 	\
+CFLAGS 				= 	-Wall -Wextra -Werror			\
+						-I.						 		\
 						-I$(LIBFT_DIR)
 
 # ==== FILES ==== #
 
-SRC 				= 	main.c parse.c var.c var_utils.c token.c token_utils.c exec.c exec_utils.c functions.c print.c
+SRC 				= 	environment/env_list_init.c 	\
+						environment/env_vars_check.c 	\
+						environment/env_utils.c 		\
+						main.c parse.c token.c token_utils.c exec.c exec_utils.c functions.c print.c
+						
 OBJ_DIR 			= 	obj
 
 OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)

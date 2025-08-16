@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/28 18:02:51 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/16 15:55:45 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,21 +111,25 @@ typedef struct s_history
 	struct s_history	*next;
 }						t_history;
 
-//	ENV / UTILS
+//	ENVIRONMENT / ENV_PROMPT_AND_LIST_INIT
 
 char					*ft_env_prompt(void);
-t_envp					*ft_env_copy(char *s);
-t_envp					*ft_env_init(char **l);
+t_envp					*ft_env_list_init(char **l);
+t_envp					*ft_env_var_copy(char *s);
+
+//	ENVIRONMENT / ENV_UTILS
+
 char					*ft_env_search_value(t_envp *l, char *v);
 t_envp					*ft_env_search_node(t_envp *l, char *v);
 void					ft_env_free(t_envp *l);
 
-//	ENV / VAR
+//	ENVIRONMENT / ENV_VARS
 
-int						ft_vars_check(t_envp **l);
-int						ft_var_check(t_envp **l, char *v);
-int						ft_var_init(t_envp **l, t_envp *t, char *v);
-int						ft_var_shlvl(t_envp *l);
+t_var					*ft_env_vars_init_table(void);
+int						ft_env_vars_check(t_envp **l);
+int						ft_env_list_var_check(t_envp **l, char *v);
+int						ft_env_vars_create(t_envp **l, t_envp *t, char *v);
+int						ft_var_increase_shlvl(t_envp *l);
 
 //	TOKEN / PARSE
 
@@ -189,5 +193,6 @@ void					update_pwd_vars(t_envp *l, char *s);
 
 void					ft_print_token(t_token *l);
 void					ft_print_parsing(t_parsing *lst);
+int						program(int argc, char **argv, t_envp *c_envp);
 
 #endif
