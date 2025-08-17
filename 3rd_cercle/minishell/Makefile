@@ -12,12 +12,15 @@ CFLAGS 				= 	-Wall -Wextra -Werror		\
 
 # ==== FILES ==== #
 
-SRC 				= 	main.c parse.c var.c var_utils.c token.c token_utils.c exec.c exec_utils.c functions.c print.c signals.c
+SRC 				= 	main.c var.c var_utils.c token.c token_utils.c exec.c exec_utils.c functions.c print.c signals.c
 
-BUILTINS 			= builtins/ft_exit.c builtins/ft_env.c builtins/ft_export.c builtins/ft_echo.c builtins/ft_unset.c
+BUILTINS 			= builtins/ft_exit.c builtins/ft_env.c builtins/ft_export.c builtins/ft_echo.c builtins/ft_unset.c builtins/ft_pwd.c\
+						builtins/ft_cd.c
+
+PARSER 				= parser/parse.c 
 						
 OBJ_DIR 			= 	obj
-SRC					+= $(BUILTINS)
+SRC					+= $(BUILTINS) $(PARSER)
 
 OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
 
