@@ -13,7 +13,11 @@ CFLAGS 				= 	-Wall -Wextra -Werror		\
 # ==== FILES ==== #
 
 SRC 				= 	main.c parse.c var.c var_utils.c token.c token_utils.c exec.c exec_utils.c functions.c print.c signals.c
+
+BUILTINS 			= builtins/ft_exit.c builtins/ft_env.c builtins/ft_export.c builtins/ft_echo.c builtins/ft_unset.c
+						
 OBJ_DIR 			= 	obj
+SRC					+= $(BUILTINS)
 
 OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
 
@@ -36,6 +40,7 @@ $(NAME) 			: 	$(OBJ)
 
 $(OBJ_DIR)/%.o		: 	%.c
 					  	@mkdir -p $(dir $@)
+						@echo "DEBUG: OBJ_DIR is '$(OBJ_DIR)'"
 			  		  	@echo "Compilation de $< → $@"
 			  		  	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 

@@ -53,20 +53,20 @@ extern t_var			g_vars_to_check[];
 
 typedef enum e_token_type
 {
-	WRD,// ls, echo , file,txt ...
-	PIPE,// |
-	R_IN,// <
-	R_OUT,// >
-	R_APPEND,// >>
-	HERE,// <<
-	SEMIC, // ;
-	AND, // && mais aussi AND_IF (dans ft_token_check)
-	AND_IF,// && 
-	OR,// || mais aussi OR_IF(apparemment nul part)
-	OR_IF,// ||
-	BACKGRD, // & execute 1commande en arriere plan
-	O_PAREN, // (
-	C_PAREN // )
+	WRD,      // ls, echo , file,txt ...
+	PIPE,     // |
+	R_IN,     // <
+	R_OUT,    // >
+	R_APPEND, // >>
+	HERE,     // <<
+	SEMIC,    // ;
+	AND,      // && mais aussi AND_IF (dans ft_token_check)
+	AND_IF,   // &&
+	OR,       // || mais aussi OR_IF(apparemment nul part)
+	OR_IF,    // ||
+	BACKGRD,  // & execute 1commande en arriere plan
+	O_PAREN,  // (
+	C_PAREN   // )
 }						t_token_type;
 
 typedef struct s_token
