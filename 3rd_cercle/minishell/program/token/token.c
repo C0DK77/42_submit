@@ -5,13 +5,38 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 20:01:25 by corentindes      ###   ########.fr       */
+/*   Created: 2025/08/16 16:53:32 by corentindes       #+#    #+#             */
+/*   Updated: 2025/08/18 17:34:52 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
+
+t_operator	*ft_token_operator_init_table(void)
+{
+	static t_operator	tb[9];
+
+	tb[0].s = ">>";
+	tb[0].type = R_APPEND;
+	tb[1].s = ">";
+	tb[1].type = R_OUT;
+	tb[2].s = "<<";
+	tb[2].type = HERE;
+	tb[3].s = "<";
+	tb[3].type = R_IN;
+	tb[4].s = "||";
+	tb[4].type = OR_IF;
+	tb[5].s = "|";
+	tb[5].type = PIPE;
+	tb[6].s = "&&";
+	tb[6].type = AND_IF;
+	tb[7].s = "&";
+	tb[7].type = AND;
+	tb[8].s = NULL;
+	tb[8].type = 0;
+	return (tb);
+}
 
 t_token	*ft_token(char *s, t_envp *l)
 {
@@ -27,50 +52,51 @@ t_token	*ft_token(char *s, t_envp *l)
 		if (!(*s))
 			break ;
 		else if (ft_isoperator(*s))
-			s = ft_token_ope(&t, s);
+			s = ft_token_operator(&t, s);
 		else
 			s = ft_token_word(&t, s, l);
 	}
 	return (t);
 }
 
-int	ft_token_check(t_token *n)
+t_token	*ft_token_init(t_token_type t, char *v)
 {
-	t_token			*prev;
-	t_token_type	t;
+	t_token	*n;
 
-	prev = NULL;
-	while (n)
+	n = malloc(sizeof(t_token));
+	if (!n)
+		return (NULL);
+	n->type = t;
+	n->value = ft_strdup(v);
+	n->next = NULL;
+	return (n);
+}
+
+void	ft_token_add(t_token **l, t_token *n)
+{
+	t_token	*t;
+
+	if (!*l)
+		*l = n;
+	else
 	{
-		t = n->type;
-		if ((t == R_IN || t == R_OUT || t == R_APPEND || t == HERE))
-		{
-			if (!n->next)
-				return (fprintf(stderr,
-						"minishell: syntax error near unexpected token `newline'\n"),
-					0);
-			if (n->next->type != WRD)
-				return (fprintf(stderr,
-						"minishell: syntax error near unexpected token `%s'\n",
-						n->next->value), 0);
-		}
-		if ((t == PIPE || t == AND_IF || t == OR_IF || t == SEMIC || t == AND)
-			&& !prev)
-			return (fprintf(stderr,
-					"minishell: syntax error near unexpected token `%s'\n",
-					n->value), 0);
-		if ((t == PIPE || t == AND_IF || t == OR_IF || t == SEMIC || t == AND)
-			&& (!n->next || n->next->type != WRD))
-			return (fprintf(stderr,
-					"minishell: syntax error near unexpected token `newline'\n"),
-				0);
-		if (prev && (prev->type >= PIPE && prev->type <= BACKGRD) && (t >= PIPE
-				&& t <= BACKGRD))
-			return (fprintf(stderr,
-					"minishell: syntax error near unexpected token `%s'\n",
-					n->value), 0);
-		prev = n;
-		n = n->next;
+		t = *l;
+		while (t->next)
+			t = t->next;
+		t->next = n;
 	}
-	return (1);
+}
+
+void	ft_token_free(t_token *l)
+{
+	t_token	*t;
+
+	while (l)
+	{
+		t = l->next;
+		if (l->value)
+			free(l->value);
+		free(l);
+		l = t;
+	}
 }
