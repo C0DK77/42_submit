@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 20:58:56 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/18 22:26:21 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	ft_env_free(t_envp *l)
 	while (l)
 	{
 		t = l->next;
-		ft_free_all(l->var, l->value, l);
+		ft_free_all(2, l->var, l->value, l);
 		l = t;
 	}
 }

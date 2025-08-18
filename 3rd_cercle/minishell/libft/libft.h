@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:38:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/14 17:10:35 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/18 18:24:08 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,5 +106,6 @@ char				*ft_strndup(char *s1, int n);
 long long			ft_atoll(char *s);
 int					ft_is_numeric(char *s);
 int64_t				ft_atoi64(char *s);
+int					ft_strslen(char **s);
 
 #endif

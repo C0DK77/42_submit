@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:53:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/18 17:34:52 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/18 22:42:19 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,8 @@ t_operator	*ft_token_operator_init_table(void)
 
 t_token	*ft_token(char *s, t_envp *l)
 {
-	int		i;
 	t_token	*t;
 
-	i = 0;
 	t = NULL;
 	while (*s)
 	{

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/18 17:49:51 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/18 22:32:22 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 char	*ft_token_word(t_token **n, char *s, t_envp *l)
 {
 	char	*w;
-	char	quote;
-	int		j;
 
 	w = ft_strdup("");
 	while (*s && !ft_isspace(*s) && !ft_isoperator(*s))
@@ -49,7 +47,7 @@ char	*ft_token_word_dbquote(t_envp *l, char **w, char *s, char *end)
 			s++;
 		t = ft_strndup(i, s - i);
 		a = ft_strjoin(*w, t);
-		ft_free_all(*w, t);
+		ft_free_all(2, *w, t);
 		*w = a;
 	}
 	return (s);
@@ -64,7 +62,7 @@ char	*ft_token_word_sgquote(char **w, char *s, char *i)
 	if (!t)
 		return (s);
 	a = ft_strjoin(*w, t);
-	ft_free_all(*w, t);
+	ft_free_all(2, *w, t);
 	*w = a;
 	return (s);
 }
@@ -106,7 +104,7 @@ char	*ft_token_word_noquote(char **w, char *s)
 	}
 	t[i] = '\0';
 	res = ft_strjoin(*w, t);
-	ft_free_all(*w, t);
+	ft_free_all(2, *w, t);
 	*w = res;
 	return (s);
 }

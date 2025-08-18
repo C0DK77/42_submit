@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/18 17:50:21 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/18 22:41:53 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ char	*ft_token_isquote(t_envp *l, char *w, char *s)
 	while (*s && *s != quote)
 		s++;
 	if (quote == '"')
-		ft_token_word_dbquote(l, &w, start, s - start);
+		ft_token_word_dbquote(l, &w, start, s);
 	else
-		ft_token_word_sgquote(&w, start, s - start);
+		ft_token_word_sgquote(&w, start, s);
 	if (*s)
 		s++;
 	return (s);
@@ -42,26 +42,11 @@ int	ft_token_check(t_token *n)
 	{
 		t = n->type;
 		if ((t == R_IN || t == R_OUT || t == R_APPEND || t == HERE))
-		{
-			if (!n->next)
-				return (fprintf(stderr,
-						"minishell: syntax error near unexpected token `newline'\n"),
-					0);
-			if (n->next->type != WRD)
-				return (fprintf(stderr,
-						"minishell: syntax error near unexpected token `%s'\n",
-						n->next->value), 0);
-		}
-		if ((t == PIPE || t == AND_IF || t == OR_IF || t == SEMIC || t == AND)
-			&& !prev)
-			return (fprintf(stderr,
-					"minishell: syntax error near unexpected token `%s'\n",
-					n->value), 0);
-		if ((t == PIPE || t == AND_IF || t == OR_IF || t == SEMIC || t == AND)
-			&& (!n->next || n->next->type != WRD))
-			return (fprintf(stderr,
-					"minishell: syntax error near unexpected token `newline'\n"),
-				0);
+			if (!ft_token_check_rin_rout_rappend_here(n))
+				return (0);
+		if (t == PIPE || t == AND_IF || t == OR_IF || t == SEMIC || t == AND)
+			if (!ft_token_check_rin_rout_rappend_here(n))
+				return (0);
 		if (prev && (prev->type >= PIPE && prev->type <= BACKGRD) && (t >= PIPE
 				&& t <= BACKGRD))
 			return (fprintf(stderr,
@@ -70,5 +55,31 @@ int	ft_token_check(t_token *n)
 		prev = n;
 		n = n->next;
 	}
+	return (1);
+}
+
+int	ft_token_check_rin_rout_rappend_here(t_token *n)
+{
+	if (!n->next)
+		return (fprintf(stderr,
+				"minishell: syntax error near unexpected token `newline'\n"),
+			0);
+	if (n->next->type != WRD)
+		return (fprintf(stderr,
+				"minishell: syntax error near unexpected token `%s'\n",
+				n->next->value), 0);
+	return (1);
+}
+
+int	ft_token_check_pipe_andif_orif_semic_and(t_token *n, t_token *prev)
+{
+	if (!prev)
+		return (fprintf(stderr,
+				"minishell: syntax error near unexpected token `%s'\n",
+				n->value), 0);
+	if (!n->next || n->next->type != WRD)
+		return (fprintf(stderr,
+				"minishell: syntax error near unexpected token `newline'\n"),
+			0);
 	return (1);
 }

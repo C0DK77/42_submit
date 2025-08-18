@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 19:12:01 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/18 22:20:36 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,19 +138,19 @@ char	*ft_strjoin_three(char *s1, char *s2, char *s3)
 	return (res);
 }
 
-void	ft_free_split(char **arr)
+void	ft_free_split(char **s)
 {
 	int	i;
 
-	if (!arr)
+	if (!s)
 		return ;
 	i = 0;
-	while (arr[i])
+	while (s[i])
 	{
-		free(arr[i]);
+		free(s[i]);
 		i++;
 	}
-	free(arr);
+	free(s);
 }
 
 char	**ft_env_to_tab(t_envp *l)

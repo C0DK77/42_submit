@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_ope_utils.c                                  :+:      :+:    :+:   */
+/*   token_operator_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/08/18 17:33:36 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/18 22:28:10 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*ft_token_operator_dollar(t_envp *l, char **w, char *s)
 		t = ft_strjoin(*w, n->value);
 	else
 		t = ft_strdup(*w);
-	ft_free_all(*w, v);
+	ft_free_all(2, *w, v);
 	*w = t;
 	return (s);
 }
@@ -73,7 +73,7 @@ char	*ft_token_operator_dollar_interrogation(char **w, char *s)
 	if (!t)
 		return (s + 1);
 	r = ft_strjoin(*w, t);
-	ft_free_all(*w, t);
+	ft_free_all(2, *w, t);
 	*w = r;
 	return (s + 1);
 }

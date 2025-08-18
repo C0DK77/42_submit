@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 14:31:50 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 20:58:25 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/18 22:26:10 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_envp	*ft_env_var_copy(char *s)
 		return (free(n), NULL);
 	n->var = ft_strndup(s, a - s);
 	if (!n->var)
-		return (ft_free_all(n->var, n->value), NULL);
+		return (ft_free_all(2, n->var, n->value), NULL);
 	n->value = ft_strdup(a + 1);
 	if (!n->value)
 		return (free(n), NULL);

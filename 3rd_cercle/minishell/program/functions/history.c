@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:03:58 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 21:01:05 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/18 22:45:28 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	ft_history_clear(t_history **h)
 	while (*h)
 	{
 		t = (*h)->next;
-		ft_free_all((*h)->line, *h);
+		ft_free_all(2, (*h)->line, *h);
 		*h = t;
 	}
 }

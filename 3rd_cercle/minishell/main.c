@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 21:03:21 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/18 22:28:48 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGINT, ft_sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
-		if (!program(c_envp))
+		if (!ft_program(c_envp))
 			break ;
 	ft_env_free(c_envp);
 	return (0);
 }
 
-int	program(t_envp *c_envp)
+int	ft_program(t_envp *c_envp)
 {
 	char		*line;
 	char		*next;
@@ -60,7 +60,7 @@ int	program(t_envp *c_envp)
 		t = ft_strjoin(line, "\n");
 		free(line);
 		line = ft_strjoin(t, next);
-		ft_free_all(t, next);
+		ft_free_all(2, t, next);
 	}
 	if (*line)
 		add_history(line);
