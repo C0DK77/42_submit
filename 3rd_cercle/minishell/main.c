@@ -6,14 +6,13 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 20:27:08 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/18 18:13:19 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int			g_exit_status = 0;
-t_history	*g_history = NULL;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -40,8 +39,6 @@ int	main(int argc, char **argv, char **envp)
 		prompt = ft_env_prompt();
 		line = readline(prompt);
 		free(prompt);//changement pour liberer la memoire sinon fuite 
-		if (line && *line)
-			ft_history_add(&g_history, line);
 		if (!line)
 		{
 			printf("exit\n");

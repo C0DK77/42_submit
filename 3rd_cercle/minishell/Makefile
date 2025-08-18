@@ -12,10 +12,12 @@ CFLAGS 				= 	-Wall -Wextra -Werror		\
 
 # ==== FILES ==== #
 
-SRC 				= 	main.c var.c var_utils.c token.c token_utils.c exec.c exec_utils.c functions.c print.c signals.c
+SRC 				= 	main.c var.c var_utils.c token.c token_utils.c exec.c exec_utils.c print.c signals.c
 
-BUILTINS 			= builtins/ft_exit.c builtins/ft_env.c builtins/ft_export.c builtins/ft_echo.c builtins/ft_unset.c builtins/ft_pwd.c\
-						builtins/ft_cd.c
+BUILTINS 			= builtins/ft_exit.c builtins/ft_env.c \
+					builtins/ft_export.c builtins/ft_echo.c \
+					builtins/ft_unset.c builtins/ft_pwd.c\
+					builtins/ft_cd.c builtins/functions.c 
 
 PARSER 				= parser/parse.c 
 						

@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:54:44 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/17 17:33:43 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/18 18:12:25 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,63 +56,6 @@ int	ft_exec_builtin(char **s, t_envp **l)
 		g_exit_status = 0;
 		return (1);
 	}
-	else if (ft_strcmp(s[0], "history") == 0)
-	{
-		ft_history_print(g_history);
-		return (1);
-	}
 	return (0);
 }
 
-
-void	ft_history_add(t_history **h, const char *s)
-{
-	t_history	*n;
-	t_history	*t;
-
-	n = malloc(sizeof(t_history));
-	if (!n)
-		return ;
-	n->line = ft_strdup(s);
-	if (!n->line)
-	{
-		free(n);
-		return ;
-	}
-	n->next = NULL;
-	if (!*h)
-		*h = n;
-	else
-	{
-		t = *h;
-		while (t->next)
-			t = t->next;
-		t->next = n;
-	}
-}
-
-void	ft_history_print(t_history *h)
-{
-	int	i;
-
-	i = 1;
-	while (h)
-	{
-		printf("%5d  %s\n", i, h->line);
-		h = h->next;
-		i++;
-	}
-}
-
-void	ft_history_clear(t_history **h)
-{
-	t_history	*t;
-
-	while (*h)
-	{
-		t = (*h)->next;
-		free((*h)->line);
-		free(*h);
-		*h = t;
-	}
-}

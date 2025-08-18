@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 20:21:37 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/18 18:11:59 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # include <unistd.h>
 
 # define HEREDOC_FILE "/tmp/.minishell_heredoc"
-extern struct s_history	*g_history;
 
 //	STRUCTURE ENV
 
@@ -105,14 +104,6 @@ typedef struct s_parsing
 	struct s_parsing	*prev;
 }						t_parsing;
 
-//	STRUCTURE HISTORIQUE
-
-typedef struct s_history
-{
-	char				*line;
-	struct s_history	*next;
-}						t_history;
-
 //	ENV / UTILS
 
 char					*ft_env_prompt(void);
@@ -183,9 +174,6 @@ int						ft_env(t_envp *l);
 int						ft_cd(char **s, t_envp *l);
 int						ft_export(char **s, t_envp **envp);
 int						ft_unset(char **s, t_envp **envp);
-void					ft_history_add(t_history **h, const char *s);
-void					ft_history_print(t_history *h);
-void					ft_history_clear(t_history **h);
 int						parse_pwd_opts(char **s, int *p);
 void					update_pwd_vars(t_envp *l, char *s);
 
