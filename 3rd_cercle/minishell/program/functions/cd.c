@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 19:22:46 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 01:37:01 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/19 16:50:39 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,36 +26,22 @@ int	ft_cd(char **s, t_envp *l)
 		i++;
 	if (i == 1)
 	{
-		target = ft_env_search_value(l, "HOME");
-		if (!target)
-		{
-			g_exit_status = 1;
-			return (fprintf(stderr, "minishell: cd: HOME not set\n"), 1);
-		}
+		if (!ft_cd_search_var(l, "HOME"))
+			return (1);
 	}
 	else
 	{
 		if (ft_strcmp(s[1], "-") == 0)
 		{
-			target = ft_env_search_value(l, "OLDPWD");
-			if (!target)
-			{
-				g_exit_status = 1;
-				return (fprintf(stderr, "minishell: cd: OLDPWD not set\n"), 1);
-			}
-			printf("%s\n", target);
+			if (!ft_cd_search_var(l, "OLDPWD"))
+				return (1);
 		}
 		else if (ft_strcmp(s[1], "--") == 0)
 		{
 			if (i == 2)
 			{
-				target = ft_env_search_value(l, "HOME");
-				if (!target)
-				{
-					fprintf(stderr, "minishell: cd: HOME not set\n");
-					g_exit_status = 1;
+				if (!ft_cd_search_var(l, "HOME"))
 					return (1);
-				}
 			}
 			else if (i == 3)
 				target = s[2];
@@ -65,17 +51,27 @@ int	ft_cd(char **s, t_envp *l)
 		else if (s[1][0] == '-' && s[1][1] != '\0')
 			return (ft_cd_error(2, s[1]));
 		else
-		{
-			if (i > 2)
-				return (ft_cd_error(0, NULL));
 			target = s[1];
-		}
 	}
 	if (chdir(target) != 0)
 		return (ft_cd_error(1, NULL));
 	update_pwd_vars(l, pwd_before);
 	g_exit_status = 0;
 	return (0);
+}
+
+int	ft_cd_search_var(t_envp *l, char *v)
+{
+	v = ft_env_search_value(l, v);
+	if (!v)
+	{
+		g_exit_status = 1;
+		fprintf(stderr, "minishell: cd: %s not set\n", v);
+		return (0);
+	}
+	if (ft_strcmp(v, "OLDPWD"))
+		printf("%s\n", v);
+	return (1);
 }
 
 int	ft_cd_error(int i, char *c)

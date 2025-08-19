@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 03:15:17 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/19 15:44:42 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ int						ft_var_increase_shlvl(t_envp *l);
 
 //	TOKEN / TOKEN_UTILS
 
-char					*ft_token_isquote(t_envp *l, char *w, char *s);
+char					*ft_token_isquote(t_envp *l, char **w, char *s);
 int						ft_token_check(t_token *n);
 int						ft_token_check_rin_rout_rappend_here(t_token *n);
 int						ft_token_check_pipe_andif_orif_semic_and(t_token *n,
@@ -257,5 +257,15 @@ void					ft_history_clear(t_history **h);
 //	FUNCTIONS / EXPORT
 
 int						ft_export(char **s, t_envp **envp);
+int						ft_export_no_arguments(t_envp **l);
+int						ft_export_arguments(char **s, t_envp **l, char *a);
+int						ft_export_check_valid_var(char *s, int *i);
+int						ft_export_error(char *t);
+
+//	FUNCTIONS / EXPORT_UTILS
+
+int						ft_export_check_value(t_envp **l, char *n, char *a,
+							int i);
+int						ft_export_value(t_envp **l, char *v, char *n, int *i);
 
 #endif

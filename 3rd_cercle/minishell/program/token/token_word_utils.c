@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/18 22:32:22 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/19 10:28:42 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_token_word(t_token **n, char *s, t_envp *l)
 	while (*s && !ft_isspace(*s) && !ft_isoperator(*s))
 	{
 		if (ft_isquote(*s))
-			s = ft_token_isquote(l, w, s);
+			s = ft_token_isquote(l, &w, s);
 		else if (*s == '$')
 			s = ft_token_operator_dollar(l, &w, s + 1);
 		else
@@ -41,7 +41,7 @@ char	*ft_token_word_dbquote(t_envp *l, char **w, char *s, char *end)
 	while (s < end)
 	{
 		if (*s == '$')
-			s = ft_token_operator_dollar(l, w, s);
+			s = ft_token_operator_dollar(l, w, s + 1);
 		i = s;
 		while (s < end && *s != '$')
 			s++;

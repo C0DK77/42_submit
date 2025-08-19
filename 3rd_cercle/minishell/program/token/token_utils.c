@@ -6,14 +6,14 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/18 22:41:53 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/19 10:39:10 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-char	*ft_token_isquote(t_envp *l, char *w, char *s)
+char	*ft_token_isquote(t_envp *l, char **w, char *s)
 {
 	char	quote;
 	char	*start;
@@ -24,9 +24,9 @@ char	*ft_token_isquote(t_envp *l, char *w, char *s)
 	while (*s && *s != quote)
 		s++;
 	if (quote == '"')
-		ft_token_word_dbquote(l, &w, start, s);
+		ft_token_word_dbquote(l, w, start, s);
 	else
-		ft_token_word_sgquote(&w, start, s);
+		ft_token_word_sgquote(w, s, start);
 	if (*s)
 		s++;
 	return (s);

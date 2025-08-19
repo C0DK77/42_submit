@@ -1,13 +1,13 @@
 
 # ==== PROGRAM NAME ==== #
 
-NAME 				= 	minishell.a
+NAME 				= 	minishell
 
 # ==== FLAGS AND COMPILER ==== #
 
 CC 					= 	cc
-CFLAGS 				= 	-Wall -Wextra -Werror			\
-						-I.						 		\
+CFLAGS 				= 	-Wall -Wextra -Werror							\
+						-I.						 						\
 						-I$(LIBFT_DIR)
 
 # ==== FILES ==== #
@@ -29,6 +29,7 @@ SRC 				= 	program/environment/env_prompt_and_list_init.c	\
 						program/functions/exit.c						\
 						program/functions/unset.c						\
 						program/functions/export.c						\
+						program/functions/export_utils.c				\
 						program/functions/functions.c					\
 						program/functions/cd.c							\
 						program/functions/history.c						\
