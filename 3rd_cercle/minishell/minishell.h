@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 01:29:39 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/19 03:03:24 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,10 @@ typedef struct s_history
 	struct s_history	*next;
 }						t_history;
 
+//	MAIN
+
+int						ft_program(t_envp *c_envp);
+
 //	ENVIRONMENT / ENV_PROMPT_AND_LIST_INIT
 
 char					*ft_env_prompt(void);
@@ -206,6 +210,11 @@ void					ft_exec(t_parsing *p, t_envp *l);
 void					ft_exec_cmd(char **s, t_envp *l);
 char					**ft_exec_env_array(t_envp *l);
 
+//	FUNCTIONS / FUNCTIONS
+
+int						ft_exec_builtin(char **s, t_envp **l);
+void					update_pwd_vars(t_envp *l, char *s);
+
 //	FUNCTIONS / PWD
 
 int						ft_pwd(char **s, t_envp *l);
@@ -231,17 +240,21 @@ int						ft_env(t_envp *l);
 int						ft_cd(char **s, t_envp *l);
 int						ft_cd_error(int i, char *c);
 
-void					ft_exec_cmd(char **s, t_envp *l);
-int						ft_exec_builtin(char **s, t_envp **l);
-int						ft_export(char **s, t_envp **envp);
-int						ft_unset(char **s, t_envp **envp);
+//	FUNCTIONS / UNSET
+
+int						ft_unset(char **s, t_envp **l);
+int						ft_unset_check_identifier(char **s);
+void					ft_unset_change(char **s, t_envp **l);
+int						ft_unset_error(int i, char *s);
+
+//	FUNCTIONS / HISTORY
+
 void					ft_history_add(t_history **h, const char *s);
 void					ft_history_print(t_history *h);
 void					ft_history_clear(t_history **h);
-void					update_pwd_vars(t_envp *l, char *s);
 
-void					ft_print_token(t_token *l);
-void					ft_print_parsing(t_parsing *lst);
+//	FUNCTIONS / EXPORT
 
-int						ft_program(t_envp *c_envp);
+int						ft_export(char **s, t_envp **envp);
+
 #endif

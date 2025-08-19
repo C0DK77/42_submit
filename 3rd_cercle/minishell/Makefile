@@ -27,7 +27,9 @@ SRC 				= 	program/environment/env_prompt_and_list_init.c	\
 						program/functions/pwd.c							\
 						program/functions/env.c 						\
 						program/functions/exit.c						\
-						program/functions/functions_2.c					\
+						program/functions/unset.c						\
+						program/functions/export.c						\
+						program/functions/functions.c					\
 						program/functions/cd.c							\
 						program/functions/history.c						\
 						main.c
