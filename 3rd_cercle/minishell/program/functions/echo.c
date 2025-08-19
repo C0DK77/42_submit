@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 22:49:06 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 01:51:36 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/19 03:16:33 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,14 @@
 
 int	ft_echo(char **s)
 {
-	int i;
-	int l;
-	int j;
+	int	i;
+	int	o;
 
 	i = 1;
-	l = 1;
-	while (s[i] && s[i][0] == '-' && s[i][1] == 'n')
+	o = 0;
+	while (s[i] && ft_echo_option(s[i]))
 	{
-		j = 2;
-		while (s[i][j] == 'n')
-			j++;
-		if (s[i][j] != '\0')
-			break ;
-		l = 0;
+		o = 1;
 		i++;
 	}
 	while (s[i])
@@ -38,9 +32,22 @@ int	ft_echo(char **s)
 			printf(" ");
 		i++;
 	}
-	if (l)
+	if (!o)
 		printf("\n");
-	fflush(stdout);
 	g_exit_status = 0;
 	return (0);
+}
+
+int	ft_echo_option(char *arg)
+{
+	int	i;
+
+	if (!arg || arg[0] != '-' || arg[1] != 'n')
+		return (0);
+	i = 1;
+	while (arg[i] == 'n')
+		i++;
+	if (arg[i])
+		return (0);
+	return (1);
 }

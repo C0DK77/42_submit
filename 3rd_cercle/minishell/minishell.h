@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 03:03:24 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/19 03:15:17 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,6 +226,7 @@ int						ft_pwd_error(int i, int c);
 //	FUNCTIONS / ECHO
 
 int						ft_echo(char **s);
+int						ft_echo_option(char *arg);
 
 //	FUNCTIONS / EXIT
 
