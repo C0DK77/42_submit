@@ -90,7 +90,6 @@ int	ft_pwd(char **s, t_envp *l)
 	return (0);
 }
 
-
 void	update_pwd_vars(t_envp *l, char *s)
 {
 	char	c[PATH_MAX];

@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/18 18:11:59 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/19 18:43:16 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef struct s_var
 
 extern t_var			g_vars_to_check[];
 
-//	STRUCTURE TOKEN
+//	STRUCTURES TOKEN
 
 typedef enum e_token_type
 {
@@ -78,7 +78,7 @@ typedef struct s_token
 
 extern int				g_exit_status;
 
-//	STRUCTURE PARSING
+//	STRUCTURES PARSING
 
 typedef enum s_sep
 {
