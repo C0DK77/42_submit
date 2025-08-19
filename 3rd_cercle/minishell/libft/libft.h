@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:38:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/16 15:53:34 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/18 18:24:08 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFT_H
 
 # include <ctype.h>
+# include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -104,5 +105,7 @@ char				*ft_strjoin_free(char *s1, char *s2);
 char				*ft_strndup(char *s1, int n);
 long long			ft_atoll(char *s);
 int					ft_is_numeric(char *s);
+int64_t				ft_atoi64(char *s);
+int					ft_strslen(char **s);
 
 #endif

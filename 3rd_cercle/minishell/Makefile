@@ -6,23 +6,31 @@ NAME 				= 	minishell
 # ==== FLAGS AND COMPILER ==== #
 
 CC 					= 	cc
-CFLAGS 				= 	-Wall -Wextra -Werror		\
-						-I.						 	\
+CFLAGS 				= 	-Wall -Wextra -Werror							\
+						-I.						 						\
 						-I$(LIBFT_DIR)
 
 # ==== FILES ==== #
 
-SRC 				= 	main.c var.c var_utils.c token.c token_utils.c exec.c exec_utils.c print.c signals.c
+BUILTINS 			= srcs/builtins/ft_exit.c srcs/builtins/ft_env.c \
+					srcs/builtins/ft_export.c srcs/builtins/ft_echo.c \
+					srcs/builtins/ft_unset.c srcs/builtins/ft_pwd.c\
+					srcs/builtins/ft_cd.c srcs/builtins/functions.c 
 
-BUILTINS 			= builtins/ft_exit.c builtins/ft_env.c \
-					builtins/ft_export.c builtins/ft_echo.c \
-					builtins/ft_unset.c builtins/ft_pwd.c\
-					builtins/ft_cd.c builtins/functions.c 
+EXEC				= srcs/exec/exec_utils.c srcs/exec/exec.c
 
-PARSER 				= parser/parse.c 
+ENVIRONNEMENT		= srcs/environnement/env_utils.c \
+					srcs/environnement/env_prompt_and_list_init.c\
+					srcs/environnement/env_vars_init.c
+
+PARSER 				= srcs/parser/parse.c srcs/parser/parse_utils.c
+
+TOKEN 				= srcs/token/token_operator_utils.c srcs/token/token_utils.c\
+					srcs/token/token_word_utils.c srcs/token/token.c
 						
 OBJ_DIR 			= 	obj
-SRC					+= $(BUILTINS) $(PARSER)
+
+SRC					= main.c signals.c print.c $(BUILTINS) $(ENVIRONNEMENT) $(EXEC) $(PARSER) $(TOKEN)
 
 OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
 
