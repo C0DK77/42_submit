@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 19:22:46 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 16:50:39 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/22 19:04:50 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,76 +24,77 @@ int	ft_cd(char **s, t_envp *l)
 	i = 0;
 	while (s[i])
 		i++;
-	if (i == 1)
-	{
-		if (!ft_cd_search_var(l, "HOME"))
-			return (1);
-	}
+	if (!ft_cd_conditions(s, l, target, i))
+		return (1);
 	else
-	{
-		if (ft_strcmp(s[1], "-") == 0)
-		{
-			if (!ft_cd_search_var(l, "OLDPWD"))
-				return (1);
-		}
-		else if (ft_strcmp(s[1], "--") == 0)
-		{
-			if (i == 2)
-			{
-				if (!ft_cd_search_var(l, "HOME"))
-					return (1);
-			}
-			else if (i == 3)
-				target = s[2];
-			else
-				return (ft_cd_error(1, NULL));
-		}
-		else if (s[1][0] == '-' && s[1][1] != '\0')
-			return (ft_cd_error(2, s[1]));
-		else
-			target = s[1];
-	}
+		target = ft_cd_conditions(s, l, target, i);
 	if (chdir(target) != 0)
-		return (ft_cd_error(1, NULL));
+	{
+		ft_cd_error(1, NULL);
+		return (1);
+	}
 	update_pwd_vars(l, pwd_before);
 	g_exit_status = 0;
 	return (0);
 }
 
+char	*ft_cd_conditions(char **s, t_envp *l, char *target, int i)
+{
+	if (i == 1 && !ft_cd_search_var(l, "HOME"))
+		return (NULL);
+	else
+	{
+		if (ft_strcmp(s[1], "-") == 0 && !ft_cd_search_var(l, "OLDPWD"))
+			return (NULL);
+		else if (i == 2 && ft_strcmp(s[1], "--") == 0 && !ft_cd_search_var(l,
+				"HOME"))
+			return (NULL);
+		else if (i == 3 && ft_strcmp(s[1], "--") == 0)
+			target = s[2];
+		else if (ft_strcmp(s[1], "--") == 0)
+			return (ft_cd_error(1, NULL));
+		else if (s[1][0] == '-' && s[1][1] != '\0')
+			return (ft_cd_error(2, s[1]));
+		else
+			target = s[1];
+	}
+	return (target);
+}
+
 int	ft_cd_search_var(t_envp *l, char *v)
 {
-	v = ft_env_search_value(l, v);
-	if (!v)
+	char	*t;
+
+	t = ft_env_search_value(l, v);
+	if (!t)
 	{
 		g_exit_status = 1;
-		fprintf(stderr, "minishell: cd: %s not set\n", v);
-		return (0);
+		return (ft_putstr_fd("minishell: cd: ", 2), ft_putstr_fd(v, 2),
+			ft_putstr_fd("not set\n", 2), 0);
 	}
-	if (ft_strcmp(v, "OLDPWD"))
-		printf("%s\n", v);
+	if (ft_strcmp(t, "OLDPWD"))
+		printf("%s\n", t);
 	return (1);
 }
 
-int	ft_cd_error(int i, char *c)
+char	*ft_cd_error(int i, char *c)
 {
 	if (i == 0)
 	{
-		fprintf(stderr, "minishell: cd: too many arguments\n");
 		g_exit_status = 1;
-		return (1);
+		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), NULL);
 	}
 	if (i == 1)
 	{
-		perror("minishell: cd");
 		g_exit_status = 1;
-		return (1);
+		return (perror("minishell: cd"), NULL);
 	}
 	if (i == 2)
 	{
-		fprintf(stderr, "minishell: cd: %s: invalid option\n", c);
-		fprintf(stderr, "cd: usage: cd [dir]\n");
 		g_exit_status = 2;
-		return (1);
+		return (ft_putstr_fd("minishell: cd: ", 2), ft_putstr_fd(c, 2),
+			ft_putstr_fd(": invalid option\n", 2),
+			ft_putstr_fd("cd: usage: cd [dir]\n", 2), NULL);
 	}
-	return (1);
+	return (NULL);
 }

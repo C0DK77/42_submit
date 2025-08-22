@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/28 23:01:26 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/22 18:24:00 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ void	ft_exec(t_parsing *p, t_envp *l)
 	int		saved_stdin;
 	int		saved_stdout;
 	pid_t	pid;
+	pid_t	last_pid;
+		int status;
 
+	last_pid = -1;
 	prev_fd = -1;
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
@@ -32,12 +35,6 @@ void	ft_exec(t_parsing *p, t_envp *l)
 			continue ;
 		}
 		if (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0)
-		{
-			p = p->next;
-			continue ;
-		}
-		ft_exec_redirections_init(p);
-		if (p->sep == SEP_NONE && ft_exec_builtin(p->line, &l))
 		{
 			p = p->next;
 			continue ;
@@ -58,6 +55,8 @@ void	ft_exec(t_parsing *p, t_envp *l)
 				dup2(fd[1], STDOUT_FILENO);
 				close(fd[1]);
 			}
+			if (ft_exec_redirections_init(p) != 0)
+				exit(1);
 			ft_exec_cmd(p->line, l);
 			exit(1);
 		}
@@ -71,12 +70,18 @@ void	ft_exec(t_parsing *p, t_envp *l)
 				prev_fd = fd[0];
 			}
 			else
-			{
-				waitpid(pid, &g_exit_status, 0);
 				prev_fd = -1;
-			}
+			last_pid = pid;
 		}
 		p = p->next;
+	}
+	if (last_pid > 0)
+	{
+		waitpid(last_pid, &status, 0);
+		if (WIFEXITED(status))
+			g_exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_exit_status = 128 + WTERMSIG(status);
 	}
 	while (wait(NULL) > 0)
 		;
@@ -85,6 +90,7 @@ void	ft_exec(t_parsing *p, t_envp *l)
 	close(saved_stdin);
 	close(saved_stdout);
 }
+
 void	ft_exec_cmd(char **s, t_envp *l)
 {
 	char	*p;
@@ -92,7 +98,7 @@ void	ft_exec_cmd(char **s, t_envp *l)
 
 	if (!s || !s[0] || s[0][0] == '\0')
 	{
-		fprintf(stderr, "minishell: %s: command not found\n", s[0] ? s[0] : "");
+		ft_putstr_fd("minishell: command not found\n", 2);
 		exit(127);
 	}
 	if (ft_strchr(s[0], '/'))
@@ -101,24 +107,32 @@ void	ft_exec_cmd(char **s, t_envp *l)
 		p = ft_exec_find_cmd(s[0], l);
 	if (!p)
 	{
-		fprintf(stderr, "minishell: %s: command not found\n", s[0]);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(s[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
 		exit(127);
 	}
 	if (access(p, F_OK) != 0)
 	{
-		fprintf(stderr, "minishell: %s: No such file or directory\n", s[0]);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(s[0], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		free(p);
 		exit(127);
 	}
 	if (ft_exec_is_directory(p))
 	{
-		fprintf(stderr, "minishell: %s: Is a directory\n", s[0]);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(s[0], 2);
+		ft_putstr_fd(": is a directory\n", 2);
 		free(p);
 		exit(126);
 	}
 	if (access(p, X_OK) != 0)
 	{
-		fprintf(stderr, "minishell: %s: Permission denied\n", s[0]);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(s[0], 2);
+		ft_putstr_fd(": Permission denied\n", 2);
 		free(p);
 		exit(126);
 	}

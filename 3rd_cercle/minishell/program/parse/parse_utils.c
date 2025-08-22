@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 18:24:59 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/18 21:39:58 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/22 18:57:16 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,28 @@ char	**ft_parse_add_value(char **s, char *v)
 	n[j] = ft_strdup(v);
 	n[j + 1] = NULL;
 	return (free(s), n);
+}
+
+int	*ft_parse_add_append(int *s, int a)
+{
+	int	i;
+	int	j;
+	int	*n;
+
+	i = 0;
+	j = 0;
+	while (s && s[i] != -1)
+		i++;
+	n = malloc(sizeof(int) * (i + 2));
+	if (!n)
+		return (NULL);
+	while (j < i)
+	{
+		n[j] = s[j];
+		j++;
+	}
+	n[i] = a;
+	n[i + 1] = -1;
+	free(s);
+	return (n);
 }

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 01:43:17 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 03:07:39 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/22 19:15:13 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,14 @@ int	ft_unset_check_identifier(char **s)
 
 	t = *s;
 	if (!(ft_isalpha((unsigned char)t[0]) || t[0] == '_'))
-	{
-		fprintf(stderr, "minishell: unset: `%s': not a valid identifier\n", *s);
-		return (0);
-	}
+		return (ft_putstr_fd("minishell: unset: ", 2), ft_putstr_fd(*s, 2),
+			ft_putstr_fd("': not a valid identifier\n", 2), 0);
 	i = 1;
 	while (t[i])
 	{
 		if (!(ft_isalnum((unsigned char)t[i]) || t[i] == '_'))
-		{
-			fprintf(stderr, "minishell: unset: `%s': not a valid identifier\n",
-				*s);
-			return (0);
-		}
+			return (ft_putstr_fd("minishell: unset: ", 2), ft_putstr_fd(*s, 2),
+				ft_putstr_fd("': not a valid identifier\n", 2), 0);
 		i++;
 	}
 	return (1);
@@ -93,10 +88,10 @@ int	ft_unset_error(int i, char *s)
 {
 	if (i == 0)
 	{
-		fprintf(stderr, "minishell: unset: %s: invalid option\n", s);
-		fprintf(stderr, "unset: usage: unset name [name ...]\n");
 		g_exit_status = 2;
-		return (2);
+		return (ft_putstr_fd("minishell: unset: ", 2), ft_putstr_fd(s, 2),
+			ft_putstr_fd(": invalid option\nunset: usage: unset name [name ...]\n",
+				2), 2);
 	}
 	return (1);
 }

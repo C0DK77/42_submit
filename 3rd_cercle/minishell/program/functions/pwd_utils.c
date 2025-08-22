@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_has_unclosed_quote.c                            :+:      :+:    :+:   */
+/*   pwd_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 10:07:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 17:36:54 by corentindes      ###   ########.fr       */
+/*   Created: 2025/08/22 14:12:03 by corentindes       #+#    #+#             */
+/*   Updated: 2025/08/22 14:35:56 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "minishell.h"
 
-int	ft_has_unclosed_quote(char *s)
+void	update_pwd_vars(t_envp *l, char *s)
 {
-	int	sg;
-	int	db;
+	char	c[PATH_MAX];
 
-	sg = 0;
-	db = 0;
-	while (*s)
-	{
-		if (*s == '\'' && db == 0)
-			sg = !sg;
-		else if (*s == '\"' && sg == 0)
-			db = !db;
-		s++;
-	}
-	return (sg || db);
+	if (s)
+		ft_env_set(&l, "OLDPWD", s, 1);
+	if (getcwd(c, sizeof(c)))
+		ft_env_set(&l, "PWD", c, 1);
 }

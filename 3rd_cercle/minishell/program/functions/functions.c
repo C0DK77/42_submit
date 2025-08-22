@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   functions_2.c                                      :+:      :+:    :+:   */
+/*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:54:44 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 01:45:00 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/22 14:12:13 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,4 @@ int	ft_exec_builtin(char **s, t_envp **l)
 		return (1);
 	}
 	return (0);
-}
-
-void	update_pwd_vars(t_envp *l, char *s)
-{
-	char	c[PATH_MAX];
-
-	if (s)
-		ft_env_set(&l, "OLDPWD", s, 1);
-	if (getcwd(c, sizeof(c)))
-		ft_env_set(&l, "PWD", c, 1);
 }

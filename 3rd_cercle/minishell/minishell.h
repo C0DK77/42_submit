@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 15:44:42 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/22 18:56:30 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_var
 
 extern t_var			g_vars_to_check[];
 extern int				g_exit_status;
+
 //	STRUCTURE TOKEN
 
 typedef enum e_token_type
@@ -102,9 +103,9 @@ typedef enum s_sep
 typedef struct s_parsing
 {
 	char				**line;
-	char				*infile;
-	char				*outfile;
-	int					append;
+	char				**infiles;
+	char				**outfiles;
+	int					*append;
 	int					heredoc;
 	t_sep				sep;
 	struct s_parsing	*next;
@@ -190,9 +191,11 @@ int						ft_handle_redirection(t_parsing *n, t_token **t);
 char					**ft_parse_add_value(char **s, char *v);
 t_parsing				*ft_parse_add_node(t_parsing **n, t_parsing **p,
 							t_parsing **a);
+int						*ft_parse_add_append(int *s, int a);
 
 //	EXEC / EXEC_UTILS
 
+void					ft_set_status_from_wait(int st);
 int						ft_exec_redirections_init(t_parsing *s);
 int						ft_exec_create_heredoc(char *delimiter);
 int						ft_exec_is_directory(char *p);
@@ -213,7 +216,6 @@ char					**ft_exec_env_array(t_envp *l);
 //	FUNCTIONS / FUNCTIONS
 
 int						ft_exec_builtin(char **s, t_envp **l);
-void					update_pwd_vars(t_envp *l, char *s);
 
 //	FUNCTIONS / PWD
 
@@ -222,6 +224,10 @@ char					**ft_pwd_check_options(char **s, int *p);
 int						ft_pwd_options(char *pwd, int o);
 char					**ft_pwd_put_options(char **s, int *p);
 int						ft_pwd_error(int i, int c);
+
+//	FUNCTIONS / PWD_UTILS
+
+void					update_pwd_vars(t_envp *l, char *s);
 
 //	FUNCTIONS / ECHO
 
@@ -239,7 +245,10 @@ int						ft_env(t_envp *l);
 //	FUNCTIONS / CD
 
 int						ft_cd(char **s, t_envp *l);
-int						ft_cd_error(int i, char *c);
+char					*ft_cd_conditions(char **s, t_envp *l, char *target,
+							int i);
+int						ft_cd_search_var(t_envp *l, char *v);
+char					*ft_cd_error(int i, char *c);
 
 //	FUNCTIONS / UNSET
 

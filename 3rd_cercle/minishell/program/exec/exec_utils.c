@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 01:50:27 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/22 18:49:39 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,46 +15,48 @@
 
 int	ft_exec_redirections_init(t_parsing *s)
 {
-	int	fd;
+	int	app;
 
-	if (s->infile)
-	{
-		if (s->heredoc)
-		{
-			fd = open(s->infile, O_RDONLY);
-			if (fd < 0)
-				return (perror("heredoc open"), 1);
-		}
-		else
-		{
-			fd = open(s->infile, O_RDONLY);
-			if (fd < 0)
-				return (perror("open infile"), 1);
-		}
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-	}
-	if (s->outfile)
-	{
-		if (s->append)
-			fd = open(s->outfile, O_CREAT | O_WRONLY | O_APPEND, 0644);
-		else
-			fd = open(s->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (fd < 0)
-			return (perror("open outfile"), 1);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
+	int fd, i;
 	if (s->heredoc)
 	{
-		if (ft_exec_create_heredoc(s->infile) != 0)
+		i = 0;
+		while (s->infiles && s->infiles[i + 1])
+			i++;
+		if (ft_exec_create_heredoc(s->infiles[i]) != 0)
 			return (1);
 		fd = open(HEREDOC_FILE, O_RDONLY);
 		if (fd < 0)
 			return (perror("heredoc open for reading"), 1);
 		dup2(fd, STDIN_FILENO);
 		close(fd);
-		return (0);
+	}
+	else
+	{
+		i = 0;
+		while (s->infiles && s->infiles[i])
+		{
+			fd = open(s->infiles[i], O_RDONLY);
+			if (fd < 0)
+				return (perror(s->infiles[i]), 1);
+			dup2(fd, STDIN_FILENO);
+			close(fd);
+			i++;
+		}
+	}
+	i = 0;
+	while (s->outfiles && s->outfiles[i])
+	{
+		app = (s->append && s->append[i]) ? 1 : 0;
+		if (app)
+			fd = open(s->outfiles[i], O_CREAT | O_WRONLY | O_APPEND, 0644);
+		else
+			fd = open(s->outfiles[i], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		if (fd < 0)
+			return (perror(s->outfiles[i]), 1);
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+		i++;
 	}
 	return (0);
 }

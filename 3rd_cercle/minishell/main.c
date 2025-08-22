@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 10:21:23 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/22 16:51:50 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,12 @@ int	ft_program(t_envp *c_envp)
 			}
 			else
 			{
-				waitpid(pid, &g_exit_status, 0);
+				int status;
+				waitpid(pid, &status, 0);
+				if (WIFEXITED(status))
+					g_exit_status = WEXITSTATUS(status);
+				else if (WIFSIGNALED(status))
+					g_exit_status = 128 + WTERMSIG(status);
 				unlink("/tmp/.minishell_heredoc");
 			}
 			p = p->next;

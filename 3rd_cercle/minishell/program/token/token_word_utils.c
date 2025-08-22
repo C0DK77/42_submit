@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 10:28:42 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/22 17:45:17 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ char	*ft_token_word(t_token **n, char *s, t_envp *l)
 		else
 			s = ft_token_word_noquote(&w, s);
 	}
-	ft_token_add(n, ft_token_init(WRD, w));
+	if (w && *w != '\0')
+		ft_token_add(n, ft_token_init(WRD, w));
 	free(w);
 	return (s);
 }
