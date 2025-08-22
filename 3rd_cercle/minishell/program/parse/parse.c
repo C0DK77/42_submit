@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 19:22:50 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/22 19:36:07 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,16 @@ int	ft_handle_redirection(t_parsing *n, t_token **t)
 
 	l = *t;
 	if (!l->next)
-		return (ft_putstr_fd("minishell: syntax error near unexpected token `lline'\n",
-				2), 1);
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `lline'\n",
+			2);
+		return (1);
+	}
 	if (l->next->type != WRD)
-		return (ft_putstr_fd("minishell: syntax error near unexpected token `",
-				2), ft_putstr_fd(l->next->value, 2), ft_putstr_fd("'\n", 2), 1);
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+		return (ft_putstr_fd(l->next->value, 2), ft_putstr_fd("'\n", 2), 1);
+	}
 	ft_redirection_type(n, l->type, l->next->value);
 	*t = l->next;
 	return (0);
