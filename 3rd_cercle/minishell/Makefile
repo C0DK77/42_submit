@@ -13,7 +13,7 @@ CFLAGS 				= 	-Wall -Wextra -Werror							\
 # ==== FILES ==== #
 
 BUILTINS 			= srcs/builtins/ft_exit.c srcs/builtins/ft_env.c \
-					srcs/builtins/ft_export.c srcs/builtins/ft_echo.c \
+					srcs/builtins/ft_export.c srcs/builtins/export_utils.c srcs/builtins/ft_echo.c \
 					srcs/builtins/ft_unset.c srcs/builtins/ft_pwd.c\
 					srcs/builtins/ft_cd.c srcs/builtins/functions.c 
 
@@ -49,7 +49,7 @@ LIBFT_A 			= 	$(LIBFT_DIR)/libft.a
 all 				: 	$(LIBFT_A) $(NAME)
 
 $(NAME) 			: 	$(OBJ)
-						@$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ $(LIBFT_A) $(LDFLAGS)
+						@$(CC) $(CFLAGS) $(CPPFLAGS) $(OBJ) $(LIBFT_A) $(LDFLAGS) -o $(NAME)
 
 $(OBJ_DIR)/%.o		: 	%.c
 					  	@mkdir -p $(dir $@)

@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 21:41:39 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/22 18:38:31 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ int                     ft_unset_check_identifier(char **s);
 void                    ft_unset_change(char **s, t_envp **l);
 
 // export
-int                     ft_export(char **s, t_envp **envp); // <-- Assurez-vous que ce prototype existe et est correct
+int                     ft_export(char **s, t_envp **envp);
 int                     ft_export_no_arguments(t_envp **l);
 int                     ft_export_arguments(char **s, t_envp **l, char *a);
 int                     ft_export_check_valid_var(char *s, int *i);

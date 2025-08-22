@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 20:35:28 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/22 19:00:46 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,40 +151,6 @@ void	ft_free_split(char **s)
 	}
 	free(s);
 }
-
-// char	**ft_env_to_tab(t_envp *l)
-// {
-// 	int		i;
-// 	t_envp	*t;
-// 	char	**env_tab;
-// 	char	*entry;
-
-// 	i = 0;
-// 	t = l;
-// 	while (t)
-// 	{
-// 		i++;
-// 		t = t->next;
-// 	}
-// 	env_tab = malloc(sizeof(char *) * (i + 1));
-// 	if (!env_tab)
-// 		return (NULL);
-// 	t = l;
-// 	i = 0;
-// 	while (t)
-// 	{
-// 		entry = ft_strjoin_three(t->var, "=", t->value);
-// 		if (!entry)
-// 		{
-// 			ft_free_split(env_tab);
-// 			return (NULL);
-// 		}
-// 		env_tab[i++] = entry;
-// 		t = t->next;
-// 	}
-// 	env_tab[i] = NULL;
-// 	return (env_tab);
-// }
 
 void	ft_env_set(t_envp **l, char *s, char *value, int i)
 {

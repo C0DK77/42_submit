@@ -70,8 +70,8 @@ int	ft_export_arguments(char **s, t_envp **l, char *a)
 	if (!n)
 		return (0);
 	if (!ft_export_check_value(l, n, a, i))
-        return (free(n), 0);
-	return (free(n), 1); 
+		return (free(n), 0);
+	return (free(n), 1);
 }
 
 int	ft_export_check_valid_var(char *s, int *i)
@@ -91,20 +91,21 @@ int	ft_export_check_valid_var(char *s, int *i)
 	return (0);
 }
 
-int ft_export_error(char *t)
+int	ft_export_error(char *t)
 {
-    char *error_msg;
+	char	*error_msg;
 
-    error_msg = ft_strjoin_three("minishell: export: `", t, "': not a valid identifier\n");
-    if (error_msg)
-    {
-        write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
-        free(error_msg);
-    }
-    else
-    {
-        write(STDERR_FILENO, "minishell: export: not a valid identifier\n", 41);
-    }
-    g_exit_status = 1;
-    return (0);
+	error_msg = ft_strjoin_three("minishell: export: `", t,
+			"': not a valid identifier\n");
+	if (error_msg)
+	{
+		write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
+		free(error_msg);
+	}
+	else
+	{
+		write(STDERR_FILENO, "minishell: export: not a valid identifier\n", 41);
+	}
+	g_exit_status = 1;
+	return (0);
 }

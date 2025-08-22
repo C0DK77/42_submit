@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 13:32:29 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/22 19:35:00 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,38 +276,63 @@ void	ft_exec_cmd(char **s, t_envp *l)
 }
 
 char	**ft_exec_env_array(t_envp *l)
+
 {
-	int		i;
-	int		count;
-	char	**env;
-	char	*entry;
-	t_envp	*t;
+	int i;
+
+	int count;
+
+	char **env;
+
+	char *entry;
+
+	t_envp *t;
 
 	i = 0;
+
 	t = l;
+
 	count = 0;
+
 	while (t)
+
 	{
 		if (t->export && t->value)
+
 			count++;
+
 		t = t->next;
 	}
+
 	env = malloc(sizeof(char *) * (count + 1));
+
 	if (!env)
+
 		return (NULL);
+
 	t = l;
+
 	i = 0;
+
 	while (t)
+
 	{
 		if (t->export && t->value)
+
 		{
 			entry = ft_strjoin(t->var, "=");
+
 			env[i] = ft_strjoin(entry, t->value);
+
 			free(entry);
+
 			i++;
 		}
+
 		t = t->next;
 	}
+
 	env[i] = NULL;
+
 	return (env);
 }
