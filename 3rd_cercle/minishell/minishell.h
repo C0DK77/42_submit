@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 18:56:30 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/23 08:15:36 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ typedef struct s_var
 	char				*var;
 }						t_var;
 
-extern t_var			g_vars_to_check[];
 extern int				g_exit_status;
 
 //	STRUCTURE TOKEN
@@ -123,6 +122,7 @@ typedef struct s_history
 //	MAIN
 
 int						ft_program(t_envp *c_envp);
+void					ft_program_check_has_unclosed_quote(char *line);
 
 //	ENVIRONMENT / ENV_PROMPT_AND_LIST_INIT
 

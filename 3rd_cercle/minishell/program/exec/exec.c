@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 18:24:00 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/22 20:00:34 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_exec(t_parsing *p, t_envp *l)
 	int		saved_stdout;
 	pid_t	pid;
 	pid_t	last_pid;
-		int status;
+	int		status;
 
 	last_pid = -1;
 	prev_fd = -1;

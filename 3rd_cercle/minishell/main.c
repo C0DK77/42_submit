@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 16:51:50 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/23 08:17:36 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,54 +40,40 @@ int	main(int argc, char **argv, char **envp)
 int	ft_program(t_envp *c_envp)
 {
 	char		*line;
-	char		*next;
-	char		*t;
 	t_token		*tokens;
 	t_parsing	*parse;
-	t_parsing	*p;
 	pid_t		pid;
+	int			status;
 
 	line = readline(ft_env_prompt());
-	if (line && *line)
-		ft_history_add(&g_history, line);
 	if (!line)
 		return (printf("exit\n"), 0);
-	while (ft_has_unclosed_quote(line))
-	{
-		next = readline("> ");
-		if (!next)
-			break ;
-		t = ft_strjoin(line, "\n");
-		free(line);
-		line = ft_strjoin(t, next);
-		ft_free_all(2, t, next);
-	}
 	if (*line)
 		add_history(line);
+	ft_program_check_has_unclosed_quote(line);
 	tokens = ft_token(line, c_envp);
 	if (!tokens || !ft_token_check(tokens))
 		return (ft_token_free(tokens), free(line), 1);
 	parse = ft_parse_line(tokens);
-	p = parse;
-	while (p)
+	while (parse)
 	{
-		if (p->sep == SEP_NONE && ft_exec_builtin(p->line, &c_envp))
-			p = p->next;
+		if (parse->sep == SEP_NONE && ft_exec_builtin(parse->line, &c_envp))
+			parse = parse->next;
 		else
 		{
 			pid = fork();
 			if (pid == 0)
 			{
-				if (ft_exec_redirections_init(p) != 0)
+				if (ft_exec_redirections_init(parse) != 0)
 					exit(1);
-				if (p->sep != SEP_NONE && ft_exec_builtin(p->line, &c_envp))
+				if (parse->sep != SEP_NONE && ft_exec_builtin(parse->line,
+						&c_envp))
 					exit(g_exit_status);
-				ft_exec_cmd(p->line, c_envp);
+				ft_exec_cmd(parse->line, c_envp);
 				exit(1);
 			}
 			else
 			{
-				int status;
 				waitpid(pid, &status, 0);
 				if (WIFEXITED(status))
 					g_exit_status = WEXITSTATUS(status);
@@ -95,8 +81,25 @@ int	ft_program(t_envp *c_envp)
 					g_exit_status = 128 + WTERMSIG(status);
 				unlink("/tmp/.minishell_heredoc");
 			}
-			p = p->next;
+			parse = parse->next;
 		}
 	}
 	return (ft_token_free(tokens), free(line), 1);
+}
+
+void	ft_program_check_has_unclosed_quote(char *line)
+{
+	char	*n;
+	char	*t;
+
+	while (ft_has_unclosed_quote(line))
+	{
+		n = readline("> ");
+		if (!n)
+			break ;
+		t = ft_strjoin(line, "\n");
+		free(line);
+		line = ft_strjoin(t, n);
+		ft_free_all(2, t, n);
+	}
 }
