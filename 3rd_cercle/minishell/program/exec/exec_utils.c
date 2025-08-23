@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 20:19:17 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/23 08:58:32 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,21 +125,6 @@ char	*ft_exec_find_cmd(char *s, t_envp *l)
 	return (NULL);
 }
 
-char	*ft_strjoin_three(char *s1, char *s2, char *s3)
-{
-	char	*tmp;
-	char	*res;
-
-	if (!s1 || !s2 || !s3)
-		return (NULL);
-	tmp = ft_strjoin(s1, s2);
-	if (!tmp)
-		return (NULL);
-	res = ft_strjoin(tmp, s3);
-	free(tmp);
-	return (res);
-}
-
 void	ft_free_split(char **s)
 {
 	int	i;
@@ -155,40 +140,6 @@ void	ft_free_split(char **s)
 	free(s);
 }
 
-char	**ft_env_to_tab(t_envp *l)
-{
-	int		i;
-	t_envp	*t;
-	char	**env_tab;
-	char	*entry;
-
-	i = 0;
-	t = l;
-	while (t)
-	{
-		i++;
-		t = t->next;
-	}
-	env_tab = malloc(sizeof(char *) * (i + 1));
-	if (!env_tab)
-		return (NULL);
-	t = l;
-	i = 0;
-	while (t)
-	{
-		entry = ft_strjoin_three(t->var, "=", t->value);
-		if (!entry)
-		{
-			ft_free_split(env_tab);
-			return (NULL);
-		}
-		env_tab[i++] = entry;
-		t = t->next;
-	}
-	env_tab[i] = NULL;
-	return (env_tab);
-}
-
 void	ft_sigint_handler(int sig)
 {
 	(void)sig;
@@ -198,7 +149,7 @@ void	ft_sigint_handler(int sig)
 	rl_redisplay();
 }
 
-void	ft_env_set(t_envp **l, char *s, char *value, int i)
+void	ft_pwd_export_env_set(t_envp **l, char *s, char *value, int i)
 {
 	t_envp	*t;
 	t_envp	*n;
@@ -206,7 +157,7 @@ void	ft_env_set(t_envp **l, char *s, char *value, int i)
 	t = *l;
 	while (t)
 	{
-		if (strcmp(t->var, s) == 0)
+		if (ft_strcmp(t->var, s) == 0)
 		{
 			if (value)
 			{
@@ -225,37 +176,4 @@ void	ft_env_set(t_envp **l, char *s, char *value, int i)
 	n->export = i;
 	n->next = (*l)->next;
 	(*l)->next = n;
-}
-
-void	ft_env_sorted(t_envp *envp)
-{
-	int		i;
-	t_envp	*tmp;
-	t_envp	*arr[1000];
-
-	i = 0;
-	while (envp && i < 1000)
-	{
-		arr[i++] = envp;
-		envp = envp->next;
-	}
-	for (int j = 0; j < i - 1; j++)
-	{
-		for (int k = j + 1; k < i; k++)
-		{
-			if (ft_strcmp(arr[j]->var, arr[k]->var) > 0)
-			{
-				tmp = arr[j];
-				arr[j] = arr[k];
-				arr[k] = tmp;
-			}
-		}
-	}
-	for (int j = 0; j < i; j++)
-	{
-		printf("declare -x %s", arr[j]->var);
-		if (arr[j]->value)
-			printf("=\"%s\"", arr[j]->value);
-		printf("\n");
-	}
 }

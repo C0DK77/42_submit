@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd_utils.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin_three.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/22 14:12:03 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 08:55:03 by corentindes      ###   ########.fr       */
+/*   Created: 2025/08/23 08:45:46 by corentindes       #+#    #+#             */
+/*   Updated: 2025/08/23 08:46:03 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "minishell.h"
 
-void	update_pwd_vars(t_envp *l, char *s)
+char	*ft_strjoin_three(char *s1, char *s2, char *s3)
 {
-	char	c[PATH_MAX];
+	char *t;
+	char *l;
 
-	if (s)
-		ft_pwd_export_env_set(&l, "OLDPWD", s, 1);
-	if (getcwd(c, sizeof(c)))
-		ft_pwd_export_env_set(&l, "PWD", c, 1);
+	if (!s1 || !s2 || !s3)
+		return (NULL);
+	t = ft_strjoin(s1, s2);
+	if (!t)
+		return (NULL);
+	l = ft_strjoin(t, s3);
+	free(t);
+	return (l);
 }

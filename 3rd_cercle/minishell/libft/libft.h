@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:38:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/18 18:24:08 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/23 08:46:23 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,6 @@ long long			ft_atoll(char *s);
 int					ft_is_numeric(char *s);
 int64_t				ft_atoi64(char *s);
 int					ft_strslen(char **s);
+char				*ft_strjoin_three(char *s1, char *s2, char *s3);
 
 #endif
