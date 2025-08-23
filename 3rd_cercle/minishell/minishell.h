@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 08:15:36 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/23 08:27:52 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,8 @@ typedef struct s_history
 //	MAIN
 
 int						ft_program(t_envp *c_envp);
-void					ft_program_check_has_unclosed_quote(char *line);
+char					*ft_program_check_has_unclosed_quote(char *line);
+void					ft_program_parse(t_parsing *parse, t_envp *c_envp);
 
 //	ENVIRONMENT / ENV_PROMPT_AND_LIST_INIT
 

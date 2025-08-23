@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 08:17:36 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/23 08:27:25 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,44 @@ int	ft_program(t_envp *c_envp)
 	char		*line;
 	t_token		*tokens;
 	t_parsing	*parse;
-	pid_t		pid;
-	int			status;
 
 	line = readline(ft_env_prompt());
 	if (!line)
 		return (printf("exit\n"), 0);
 	if (*line)
 		add_history(line);
-	ft_program_check_has_unclosed_quote(line);
+	line = ft_program_check_has_unclosed_quote(line);
 	tokens = ft_token(line, c_envp);
 	if (!tokens || !ft_token_check(tokens))
 		return (ft_token_free(tokens), free(line), 1);
 	parse = ft_parse_line(tokens);
+	ft_program_parse(parse, c_envp);
+	return (ft_token_free(tokens), free(line), 1);
+}
+
+char	*ft_program_check_has_unclosed_quote(char *line)
+{
+	char	*n;
+	char	*t;
+
+	while (ft_has_unclosed_quote(line))
+	{
+		n = readline("> ");
+		if (!n)
+			break ;
+		t = ft_strjoin(line, "\n");
+		free(line);
+		line = ft_strjoin(t, n);
+		ft_free_all(2, t, n);
+	}
+	return (line);
+}
+
+void	ft_program_parse(t_parsing *parse, t_envp *c_envp)
+{
+	pid_t	pid;
+	int		status;
+
 	while (parse)
 	{
 		if (parse->sep == SEP_NONE && ft_exec_builtin(parse->line, &c_envp))
@@ -79,27 +104,9 @@ int	ft_program(t_envp *c_envp)
 					g_exit_status = WEXITSTATUS(status);
 				else if (WIFSIGNALED(status))
 					g_exit_status = 128 + WTERMSIG(status);
-				unlink("/tmp/.minishell_heredoc");
+				unlink(HEREDOC_FILE);
 			}
 			parse = parse->next;
 		}
-	}
-	return (ft_token_free(tokens), free(line), 1);
-}
-
-void	ft_program_check_has_unclosed_quote(char *line)
-{
-	char	*n;
-	char	*t;
-
-	while (ft_has_unclosed_quote(line))
-	{
-		n = readline("> ");
-		if (!n)
-			break ;
-		t = ft_strjoin(line, "\n");
-		free(line);
-		line = ft_strjoin(t, n);
-		ft_free_all(2, t, n);
 	}
 }
