@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin_three.c                                 :+:      :+:    :+:   */
+/*   ft_free_tab.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/23 08:45:46 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 09:00:55 by corentindes      ###   ########.fr       */
+/*   Created: 2025/08/23 09:47:57 by corentindes       #+#    #+#             */
+/*   Updated: 2025/08/23 09:58:33 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin_three(char *s1, char *s2, char *s3)
+void	ft_free_tab(char **s)
 {
-	char	*t;
-	char	*l;
+	int	i;
 
-	if (!s1 || !s2 || !s3)
-		return (NULL);
-	t = ft_strjoin(s1, s2);
-	if (!t)
-		return (NULL);
-	l = ft_strjoin(t, s3);
-	free(t);
-	return (l);
+	if (!s)
+		return ;
+	i = 0;
+	while (s[i])
+	{
+		free(s[i]);
+		i++;
+	}
+	free(s);
 }

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 08:57:33 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/23 09:53:02 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,16 +196,11 @@ int						*ft_parse_add_append(int *s, int a);
 
 //	EXEC / EXEC_UTILS
 
-void					ft_set_status_from_wait(int st);
 int						ft_exec_redirections_init(t_parsing *s);
 int						ft_exec_create_heredoc(char *delimiter);
 int						ft_exec_is_directory(char *p);
 char					*ft_exec_find_cmd(char *s, t_envp *l);
-char					*ft_strjoin_three(char *s1, char *s2, char *s3);
-void					ft_free_split(char **arr);
 void					ft_sigint_handler(int sig);
-void					ft_pwd_export_env_set(t_envp **l, char *s, char *value,
-							int i);
 
 //	EXEC / EXEC
 
@@ -216,6 +211,11 @@ char					**ft_exec_env_array(t_envp *l);
 //	FUNCTIONS / FUNCTIONS
 
 int						ft_exec_builtin(char **s, t_envp **l);
+
+//	FUNCTIONS / FUNCTIONS_UTILS
+
+void					ft_pwd_export_env_set(t_envp **l, char *s, char *value,
+							int i);
 
 //	FUNCTIONS / PWD
 

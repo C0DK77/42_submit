@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 08:58:32 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/23 10:00:01 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,30 +61,29 @@ int	ft_exec_redirections_init(t_parsing *s)
 	return (0);
 }
 
-int	ft_exec_create_heredoc(char *delimiter)
+int	ft_exec_create_heredoc(char *d)
 {
 	int		fd;
-	char	*line;
+	char	*l;
 
 	fd = open(HEREDOC_FILE, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
 		return (perror("heredoc open"), -1);
 	while (1)
 	{
-		line = readline("> ");
-		if (!line)
+		l = readline("> ");
+		if (!l)
 			break ;
-		if (ft_strcmp(line, delimiter) == 0)
+		if (ft_strcmp(l, d) == 0)
 		{
-			free(line);
+			free(l);
 			break ;
 		}
-		write(fd, line, ft_strlen(line));
+		write(fd, l, ft_strlen(l));
 		write(fd, "\n", 1);
-		free(line);
+		free(l);
 	}
-	close(fd);
-	return (0);
+	return (close(fd), 0);
 }
 
 int	ft_exec_is_directory(char *p)
@@ -114,30 +113,11 @@ char	*ft_exec_find_cmd(char *s, t_envp *l)
 	{
 		full_path = ft_strjoin_three(dirs[i], "/", s);
 		if (full_path && access(full_path, X_OK) == 0)
-		{
-			ft_free_split(dirs);
-			return (full_path);
-		}
+			return (ft_free_tab(dirs), full_path);
 		free(full_path);
 		i++;
 	}
-	ft_free_split(dirs);
-	return (NULL);
-}
-
-void	ft_free_split(char **s)
-{
-	int	i;
-
-	if (!s)
-		return ;
-	i = 0;
-	while (s[i])
-	{
-		free(s[i]);
-		i++;
-	}
-	free(s);
+	return (ft_free_tab(dirs), NULL);
 }
 
 void	ft_sigint_handler(int sig)
@@ -147,33 +127,4 @@ void	ft_sigint_handler(int sig)
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_redisplay();
-}
-
-void	ft_pwd_export_env_set(t_envp **l, char *s, char *value, int i)
-{
-	t_envp	*t;
-	t_envp	*n;
-
-	t = *l;
-	while (t)
-	{
-		if (ft_strcmp(t->var, s) == 0)
-		{
-			if (value)
-			{
-				free(t->value);
-				t->value = ft_strdup(value);
-			}
-			if (i)
-				t->export = 1;
-			return ;
-		}
-		t = t->next;
-	}
-	n = malloc(sizeof(t_envp));
-	n->var = ft_strdup(s);
-	n->value = value ? ft_strdup(value) : NULL;
-	n->export = i;
-	n->next = (*l)->next;
-	(*l)->next = n;
 }

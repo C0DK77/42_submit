@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 20:00:34 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/23 10:21:08 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,49 +29,56 @@ void	ft_exec(t_parsing *p, t_envp *l)
 	saved_stdout = dup(STDOUT_FILENO);
 	while (p)
 	{
-		if (p->prev && p->prev->sep == SEP_AND_IF && g_exit_status != 0)
-		{
+		if (p->sep == SEP_NONE && ft_exec_builtin(p->line, &l))
 			p = p->next;
-			continue ;
-		}
-		if (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0)
-		{
-			p = p->next;
-			continue ;
-		}
-		if (p->sep == SEP_PIPE)
-			pipe(fd);
-		pid = fork();
-		if (pid == 0)
-		{
-			if (prev_fd != -1)
-			{
-				dup2(prev_fd, STDIN_FILENO);
-				close(prev_fd);
-			}
-			if (p->sep == SEP_PIPE)
-			{
-				close(fd[0]);
-				dup2(fd[1], STDOUT_FILENO);
-				close(fd[1]);
-			}
-			if (ft_exec_redirections_init(p) != 0)
-				exit(1);
-			ft_exec_cmd(p->line, l);
-			exit(1);
-		}
 		else
 		{
-			if (prev_fd != -1)
-				close(prev_fd);
-			if (p->sep == SEP_PIPE)
+			if (p->prev && p->prev->sep == SEP_AND_IF && g_exit_status != 0)
 			{
-				close(fd[1]);
-				prev_fd = fd[0];
+				p = p->next;
+				continue ;
+			}
+			if (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0)
+			{
+				p = p->next;
+				continue ;
+			}
+			if (p->sep == SEP_PIPE)
+				pipe(fd);
+			pid = fork();
+			if (pid == 0)
+			{
+				if (prev_fd != -1)
+				{
+					dup2(prev_fd, STDIN_FILENO);
+					close(prev_fd);
+				}
+				if (p->sep == SEP_PIPE)
+				{
+					close(fd[0]);
+					dup2(fd[1], STDOUT_FILENO);
+					close(fd[1]);
+				}
+				if (ft_exec_redirections_init(p) != 0)
+					exit(1);
+				if (p->sep != SEP_NONE && ft_exec_builtin(p->line, &l))
+					exit(g_exit_status);
+				ft_exec_cmd(p->line, l);
+				exit(1);
 			}
 			else
-				prev_fd = -1;
-			last_pid = pid;
+			{
+				if (prev_fd != -1)
+					close(prev_fd);
+				if (p->sep == SEP_PIPE)
+				{
+					close(fd[1]);
+					prev_fd = fd[0];
+				}
+				else
+					prev_fd = -1;
+				last_pid = pid;
+			}
 		}
 		p = p->next;
 	}
@@ -139,7 +146,7 @@ void	ft_exec_cmd(char **s, t_envp *l)
 	env = ft_exec_env_array(l);
 	execve(p, s, env);
 	perror("minishell");
-	ft_free_split(env);
+	ft_free_tab(env);
 	free(p);
 	exit(126);
 }
