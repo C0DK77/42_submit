@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:54:44 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 09:57:48 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/23 10:59:20 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_exec_builtin(char **s, t_envp **l)
 	}
 	else if (ft_strcmp(s[0], "exit") == 0)
 	{
-		ft_exit(s); 
+		ft_exit(s);
 		return (1);
 	}
 	else if (ft_strcmp(s[0], "echo") == 0)

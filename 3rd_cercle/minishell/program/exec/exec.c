@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 10:21:08 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/23 10:51:36 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,70 +15,68 @@
 
 void	ft_exec(t_parsing *p, t_envp *l)
 {
-	int		fd[2];
-	int		prev_fd;
-	int		saved_stdin;
-	int		saved_stdout;
-	pid_t	pid;
-	pid_t	last_pid;
-	int		status;
+	int	fd[2];
+	int	prev_fd;
+	int	s_stdin;
+	int	s_stdout;
+	int	status;
 
-	last_pid = -1;
 	prev_fd = -1;
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
+	s_stdin = dup(STDIN_FILENO);
+	s_stdout = dup(STDOUT_FILENO);
+	pid_t pid, last_pid = -1;
 	while (p)
 	{
-		if (p->sep == SEP_NONE && ft_exec_builtin(p->line, &l))
-			p = p->next;
-		else
+		if (p->prev && p->prev->sep == SEP_AND_IF && g_exit_status != 0)
 		{
-			if (p->prev && p->prev->sep == SEP_AND_IF && g_exit_status != 0)
+			p = p->next;
+			continue ;
+		}
+		if (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0)
+		{
+			p = p->next;
+			continue ;
+		}
+		if (p->sep == SEP_NONE && ft_exec_builtin(p->line, &l))
+		{
+			p = p->next;
+			continue ;
+		}
+		if (p->sep == SEP_PIPE)
+			pipe(fd);
+		pid = fork();
+		if (pid == 0)
+		{
+			if (prev_fd != -1)
 			{
-				p = p->next;
-				continue ;
-			}
-			if (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0)
-			{
-				p = p->next;
-				continue ;
+				dup2(prev_fd, STDIN_FILENO);
+				close(prev_fd);
 			}
 			if (p->sep == SEP_PIPE)
-				pipe(fd);
-			pid = fork();
-			if (pid == 0)
 			{
-				if (prev_fd != -1)
-				{
-					dup2(prev_fd, STDIN_FILENO);
-					close(prev_fd);
-				}
-				if (p->sep == SEP_PIPE)
-				{
-					close(fd[0]);
-					dup2(fd[1], STDOUT_FILENO);
-					close(fd[1]);
-				}
-				if (ft_exec_redirections_init(p) != 0)
-					exit(1);
-				if (p->sep != SEP_NONE && ft_exec_builtin(p->line, &l))
-					exit(g_exit_status);
-				ft_exec_cmd(p->line, l);
+				close(fd[0]);
+				dup2(fd[1], STDOUT_FILENO);
+				close(fd[1]);
+			}
+			if (ft_exec_redirections_init(p) != 0)
 				exit(1);
+			if (ft_exec_builtin(p->line, &l))
+				exit(g_exit_status);
+			ft_exec_cmd(p->line, l);
+			exit(1);
+		}
+		else
+		{
+			if (prev_fd != -1)
+				close(prev_fd);
+			if (p->sep == SEP_PIPE)
+			{
+				close(fd[1]);
+				prev_fd = fd[0];
 			}
 			else
-			{
-				if (prev_fd != -1)
-					close(prev_fd);
-				if (p->sep == SEP_PIPE)
-				{
-					close(fd[1]);
-					prev_fd = fd[0];
-				}
-				else
-					prev_fd = -1;
-				last_pid = pid;
-			}
+				prev_fd = -1;
+			last_pid = pid;
 		}
 		p = p->next;
 	}
@@ -92,10 +90,10 @@ void	ft_exec(t_parsing *p, t_envp *l)
 	}
 	while (wait(NULL) > 0)
 		;
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdin);
-	close(saved_stdout);
+	dup2(s_stdin, STDIN_FILENO);
+	dup2(s_stdout, STDOUT_FILENO);
+	close(s_stdin);
+	close(s_stdout);
 }
 
 void	ft_exec_cmd(char **s, t_envp *l)
