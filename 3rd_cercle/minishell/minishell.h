@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 18:38:31 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/23 18:57:44 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 
 # define HEREDOC_FILE "/tmp/.minishell_heredoc"
 
-extern struct s_history *g_history;
 extern int              g_exit_status;
 
 //  STRUCTURE ENV
@@ -158,9 +157,15 @@ char                    **ft_exec_env_array(t_envp *l);
 int                     ft_exec_builtin(char **s, t_envp **l);
 int                     ft_echo(char **s);
 int                     ft_exit(char **s);
-int                     ft_cd(char **s, t_envp *l);
-int                     ft_cd_search_var(t_envp *l, char *v);
-int                     ft_cd_error(int i, char *c);
+
+//cd
+int						ft_cd(char **s, t_envp *l);
+char					*ft_cd_conditions(char **s, t_envp *l, char *target,
+							int i);
+int						ft_cd_search_var(t_envp *l, char *v);
+char					*ft_cd_error(int i, char *c);
+
+//pwd
 int                     ft_pwd(char **s, t_envp *l);
 void                    update_pwd_vars(t_envp *l, char *s);
 // unset
@@ -211,10 +216,5 @@ void                    ft_sigint_handler(int sig);
 void                    setup_signals(void);
 void                    reset_signals(void);
 
-/* ------------------- HISTORY -------------------*/
-
-void                    ft_history_add(t_history **h, const char *s);
-void                    ft_history_print(t_history *h);
-void                    ft_history_clear(t_history **h);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 15:20:41 by ecid              #+#    #+#             */
-/*   Updated: 2025/08/19 21:15:45 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/23 20:18:52 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,19 @@
 
 int	ft_export(char **s, t_envp **l)
 {
-	if (!s || !*s)
-		return (ft_export_no_arguments(l));
-	s++;
+	int status;
+
+	if (!s || !s[1])
+		return (ft_export_no_arguments(l));   // <-- pas d’arguments
+	status = 0;
+	s++;                                      // <-- skip "export"
 	while (*s)
 	{
 		if (!ft_export_arguments(s, l, NULL))
-			return (1);
+			status = 1;                       // on continue mais on note l'erreur
 		s++;
 	}
-	return (0);
+	return (status);
 }
 
 int	ft_export_no_arguments(t_envp **l)
@@ -47,41 +50,42 @@ int	ft_export_no_arguments(t_envp **l)
 
 int	ft_export_arguments(char **s, t_envp **l, char *a)
 {
-	int		i;
-	int		j;
+	int		append;   // 1 si +=
+	int		name_len; // longueur du nom
 	char	*t;
-	char	*n;
+	char	*name;
 
-	i = 0;
-	j = 0;
+	append = 0;
+	name_len = 0;
 	t = *s;
-	if (!ft_export_check_valid_var(t, &j))
+	if (!ft_export_check_valid_var(t, &name_len))
 		return (ft_export_error(t));
-	if (t[j] == '+' && t[j + 1] == '=')
+	if (t[name_len] == '+' && t[name_len + 1] == '=')
 	{
-		i = 1;
-		a = t + j + 2;
+		append = 1;
+		a = t + name_len + 2;
 	}
-	else if (t[j] == '=')
-		a = t + j + 1;
+	else if (t[name_len] == '=')
+		a = t + name_len + 1;
 	else
 		a = NULL;
-	n = ft_strndup(t, i);
-	if (!n)
+	name = ft_strndup(t, name_len);            // <-- corrige: j, pas i
+	if (!name)
 		return (0);
-	if (!ft_export_check_value(l, n, a, i))
-		return (free(n), 0);
-	return (free(n), 1);
+	/* ft_export_check_value prend la propriété de name (elle le free) */
+	if (!ft_export_check_value(l, name, a, append))
+		return (0);
+	return (1);
 }
 
 int	ft_export_check_valid_var(char *s, int *i)
 {
 	char	*t;
 
-	if (!s || (!ft_isalpha(s[0]) && s[0] != '_'))
+	if (!s || (!ft_isalpha((unsigned char)s[0]) && s[0] != '_'))
 		return (0);
 	t = s + 1;
-	while (*t && (ft_isalnum(*t) || *t == '_'))
+	while (*t && (ft_isalnum((unsigned char)*t) || *t == '_'))
 		t++;
 	if (*t == '\0' || *t == '=' || (*t == '+' && *(t + 1) == '='))
 	{
@@ -93,19 +97,6 @@ int	ft_export_check_valid_var(char *s, int *i)
 
 int	ft_export_error(char *t)
 {
-	char	*error_msg;
-
-	error_msg = ft_strjoin_three("minishell: export: `", t,
-			"': not a valid identifier\n");
-	if (error_msg)
-	{
-		write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
-		free(error_msg);
-	}
-	else
-	{
-		write(STDERR_FILENO, "minishell: export: not a valid identifier\n", 41);
-	}
-	g_exit_status = 1;
-	return (0);
+	return (ft_putstr_fd("minishell: export: `", 2), ft_putstr_fd(t, 2),
+		ft_putstr_fd("': not a valid identifier\n", 2), 0);
 }

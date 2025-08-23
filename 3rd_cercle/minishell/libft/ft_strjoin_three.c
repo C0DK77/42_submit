@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_has_unclosed_quote.c                            :+:      :+:    :+:   */
+/*   ft_strjoin_three.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 10:07:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 17:36:54 by corentindes      ###   ########.fr       */
+/*   Created: 2025/08/23 08:45:46 by corentindes       #+#    #+#             */
+/*   Updated: 2025/08/23 09:00:55 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_has_unclosed_quote(char *s)
+char	*ft_strjoin_three(char *s1, char *s2, char *s3)
 {
-	int	sg;
-	int	db;
+	char	*t;
+	char	*l;
 
-	sg = 0;
-	db = 0;
-	while (*s)
-	{
-		if (*s == '\'' && db == 0)
-			sg = !sg;
-		else if (*s == '\"' && sg == 0)
-			db = !db;
-		s++;
-	}
-	return (sg || db);
+	if (!s1 || !s2 || !s3)
+		return (NULL);
+	t = ft_strjoin(s1, s2);
+	if (!t)
+		return (NULL);
+	l = ft_strjoin(t, s3);
+	free(t);
+	return (l);
 }

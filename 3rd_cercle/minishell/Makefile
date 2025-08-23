@@ -6,8 +6,7 @@ NAME 				= 	minishell
 # ==== FLAGS AND COMPILER ==== #
 
 CC 					= 	cc
-CFLAGS 				= 	-Wall -Wextra -Werror							\
-						-I.						 						\
+CFLAGS 				= 	-Wall -Wextra -Werror -g -I. \
 						-I$(LIBFT_DIR)
 
 # ==== FILES ==== #
@@ -17,11 +16,13 @@ BUILTINS 			= srcs/builtins/ft_exit.c srcs/builtins/ft_env.c \
 					srcs/builtins/ft_unset.c srcs/builtins/ft_pwd.c\
 					srcs/builtins/ft_cd.c srcs/builtins/functions.c 
 
-EXEC				= srcs/exec/exec_utils.c srcs/exec/exec.c
-
 ENVIRONNEMENT		= srcs/environnement/env_utils.c \
 					srcs/environnement/env_prompt_and_list_init.c\
 					srcs/environnement/env_vars_init.c
+
+EXEC				= srcs/exec/exec_utils.c srcs/exec/exec.c
+
+SIGNALS				= srcs/signals/signals.c
 
 PARSER 				= srcs/parser/parse.c srcs/parser/parse_utils.c
 
@@ -30,7 +31,7 @@ TOKEN 				= srcs/token/token_operator_utils.c srcs/token/token_utils.c\
 						
 OBJ_DIR 			= 	obj
 
-SRC					= main.c signals.c print.c $(BUILTINS) $(ENVIRONNEMENT) $(EXEC) $(PARSER) $(TOKEN)
+SRC					= main.c print.c $(BUILTINS) $(ENVIRONNEMENT) $(EXEC) $(PARSER) $(TOKEN) $(SIGNALS)
 
 OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
 

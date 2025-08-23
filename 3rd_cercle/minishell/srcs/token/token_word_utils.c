@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_word_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 10:28:42 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/23 20:00:16 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,15 @@ int	ft_token_word_len(char *s)
 	while (s && !ft_isspace(*s) && !ft_isoperator(*s) && !ft_isquote(*s))
 	{
 		if (*s == '\\' && *(s + 1))
+		{
 			s += 2;
+			i+=1;
+		}
 		else
+		{	
 			s++;
-		i++;
+			i++;
+		}
 	}
 	return (i);
 }
