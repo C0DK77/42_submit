@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_word_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 15:02:33 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/24 21:10:40 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,13 @@ int	ft_token_word_len(char *s)
 	int	i;
 
 	i = 0;
-	while (s && !ft_isspace(*s) && !ft_isoperator(*s) && !ft_isquote(*s))
+	//changement ici
+	while (s && *s && !ft_isspace((unsigned char)*s) && !ft_isoperator(*s) && !ft_isquote(*s))
 	{
 		if (*s == '\\' && *(s + 1))
 		{
 			s += 2;
-			i += 1;
+			i += 2;
 		}
 		else
 		{

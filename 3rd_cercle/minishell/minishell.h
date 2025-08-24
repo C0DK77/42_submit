@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 16:57:26 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/24 20:21:35 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif
 
 # include "libft.h"
 # include <errno.h>
@@ -27,6 +31,15 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+// mets-la juste après les includes readline, idéalement dans minishell.h
+#ifndef RL_FUNC_DECLS
+# define RL_FUNC_DECLS
+/* Fallback si le header ne déclare pas rl_replace_line (libedit). */
+void rl_replace_line(const char *text, int clear_undo);
+void rl_redisplay(void);
+#endif
+
 
 # define HEREDOC_FILE "/tmp/.minishell_heredoc"
 

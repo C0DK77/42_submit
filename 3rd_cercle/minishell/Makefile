@@ -5,9 +5,18 @@ NAME 				= 	minishell
 
 # ==== FLAGS AND COMPILER ==== #
 
-CC 					= 	cc
-CFLAGS 				= 	-Wall -Wextra -Werror -g -I. \
+CC 					= 	gcc
+CFLAGS 				= 	-Wall -Wextra -Werror -g3 -I. \
 						-I$(LIBFT_DIR)
+
+READLINE_PREFIX := $(shell brew --prefix readline 2>/dev/null)
+ifeq ($(READLINE_PREFIX),)
+  READLINE_PREFIX := /opt/homebrew/opt/readline
+endif
+
+CPPFLAGS 			+= -I$(READLINE_PREFIX)/include
+LDFLAGS  			+= -L$(READLINE_PREFIX)/lib -Wl,-rpath,$(READLINE_PREFIX)/lib
+LDLIBS   			+= -lreadline -lncurses 
 
 # ==== FILES ==== #
 
@@ -35,11 +44,6 @@ SRC					= main.c $(BUILTINS) $(ENVIRONNEMENT) $(EXEC) $(PARSER) $(TOKEN) $(SIGNA
 
 OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
 
-# ==== READLINE ==== #
-
-CPPFLAGS			= 	-I/opt/homebrew/opt/readline/include
-LDFLAGS				=	-L/opt/homebrew/opt/readline/lib -lreadline
-
 # ==== LIBFT / PRINTF /	GET NEXT LINE ==== #
 
 LIBFT_DIR			= 	./libft
@@ -50,7 +54,7 @@ LIBFT_A 			= 	$(LIBFT_DIR)/libft.a
 all 				: 	$(LIBFT_A) $(NAME)
 
 $(NAME) 			: 	$(OBJ)
-						@$(CC) $(CFLAGS) $(CPPFLAGS) $(OBJ) $(LIBFT_A) $(LDFLAGS) -o $(NAME)
+						@$(CC) $(CFLAGS) $(CPPFLAGS) $(OBJ) $(LIBFT_A) $(LDFLAGS) $(LDLIBS) -o $@
 
 $(OBJ_DIR)/%.o		: 	%.c
 					  	@mkdir -p $(dir $@)
