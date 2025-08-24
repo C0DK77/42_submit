@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 21:57:20 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/24 15:02:23 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,10 @@ int	ft_token_check(t_token *n)
 				return (0);
 		if (prev && (prev->type >= PIPE && prev->type <= BACKGRD) && (t >= PIPE
 				&& t <= BACKGRD))
-			return (fprintf(stderr,
-					"minishell: syntax error near unexpected token `%s'\n",
-					n->value), 0);
+		{
+			ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+			return (ft_putstr_fd(n->value, 2), ft_putstr_fd("'\n", 2), 0);
+		}
 		prev = n;
 		n = n->next;
 	}
@@ -60,25 +61,31 @@ int	ft_token_check(t_token *n)
 int	ft_token_check_rin_rout_rappend_here(t_token *n)
 {
 	if (!n->next)
-		return (fprintf(stderr,
-				"minishell: syntax error near unexpected token `newline'\n"),
-			0);
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
+		return (ft_putstr_fd("`newline'\n", 2), 1);
+	}
 	if (n->next->type != WRD)
-		return (fprintf(stderr,
-				"minishell: syntax error near unexpected token `%s'\n",
-				n->next->value), 0);
+	{
+		g_exit_status = 2;
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+		return (ft_putstr_fd(n->value, 2), ft_putstr_fd("'\n", 2), 0);
+	}
 	return (1);
 }
 
 int	ft_token_check_pipe_andif_orif_semic_and(t_token *n, t_token *prev)
 {
 	if (!prev)
-		return (fprintf(stderr,
-				"minishell: syntax error near unexpected token `%s'\n",
-				n->value), 0);
+	{
+		g_exit_status = 2;
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+		return (ft_putstr_fd(n->value, 2), ft_putstr_fd("'\n", 2), 1);
+	}
 	if (!n->next || n->next->type != WRD)
-		return (fprintf(stderr,
-				"minishell: syntax error near unexpected token `newline'\n"),
-			0);
-	return (1);
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
+		return (ft_putstr_fd("`newline'\n", 2), 1);
+	}
+	return (0);
 }

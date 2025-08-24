@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 13:19:28 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/24 16:27:16 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*ft_env_prompt(void)
 	p[ft_strlen(c) + 1] = '>';
 	p[ft_strlen(c) + 2] = ' ';
 	p[ft_strlen(c) + 3] = '\0';
-	free(c);//ajout ici
+	free(c); // ajout ici
 	return (p);
 }
 
@@ -87,5 +87,6 @@ t_envp	*ft_env_var_copy(char *s)
 	if (!n->value)
 		return (free(n), NULL);
 	n->next = NULL;
+	n->export = 1;
 	return (n);
 }

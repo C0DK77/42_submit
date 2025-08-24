@@ -12,19 +12,19 @@
 
 #include "minishell.h"
 
-int ft_env(t_envp *l)
+int	ft_env(t_envp *l)
 {
-    while (l)
-    {
-        if (l->export)
-        {
-            printf("%s=", l->var);
-            if (l->value)
-                printf("%s", l->value);
-            printf("\n");
-        }
-        l = l->next;
-    }
-    g_exit_status = 0;
-    return 0;
+	while (l)
+	{
+		if (l->export)
+		{
+			printf("%s=", l->var);
+			if (l->value)
+				printf("%s", l->value);
+			printf("\n");
+		}
+		l = l->next;
+	}
+	g_exit_status = 0;
+	return (0);
 }

@@ -31,7 +31,7 @@ TOKEN 				= srcs/token/token_operator_utils.c srcs/token/token_utils.c\
 						
 OBJ_DIR 			= 	obj
 
-SRC					= main.c print.c $(BUILTINS) $(ENVIRONNEMENT) $(EXEC) $(PARSER) $(TOKEN) $(SIGNALS)
+SRC					= main.c $(BUILTINS) $(ENVIRONNEMENT) $(EXEC) $(PARSER) $(TOKEN) $(SIGNALS)
 
 OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
 

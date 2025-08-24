@@ -6,11 +6,10 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 20:00:16 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/24 15:02:33 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 char	*ft_token_word(t_token **n, char *s, t_envp *l)
@@ -77,10 +76,10 @@ int	ft_token_word_len(char *s)
 		if (*s == '\\' && *(s + 1))
 		{
 			s += 2;
-			i+=1;
+			i += 1;
 		}
 		else
-		{	
+		{
 			s++;
 			i++;
 		}

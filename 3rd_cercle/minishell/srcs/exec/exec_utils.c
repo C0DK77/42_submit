@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 14:55:59 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/24 15:12:36 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 int	ft_exec_redirections_init(t_parsing *s)
 {
 	int	app;
+	int	fd;
+	int	i;
 
-	int fd, i;
 	if (s->heredoc)
 	{
 		i = 0;
@@ -118,4 +119,3 @@ char	*ft_exec_find_cmd(char *s, t_envp *l)
 	}
 	return (ft_free_tab(dirs), NULL);
 }
-

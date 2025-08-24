@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   token_operator_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/08/18 22:28:10 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/24 15:00:37 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 char	*ft_token_operator(t_token **l, char *s)

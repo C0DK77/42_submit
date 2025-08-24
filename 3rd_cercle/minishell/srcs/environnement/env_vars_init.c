@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:32:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 20:53:24 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/24 16:29:14 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int	ft_env_vars_create(t_envp **l, t_envp *t, char *v)
 	}
 	if (!t->var || !t->value)
 		return (ft_free_all(3, t->var, t->value, t), 0);
+	t->export = 1;
 	t->next = *l;
 	*l = t;
 	return (1);
