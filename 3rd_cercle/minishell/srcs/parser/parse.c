@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 20:19:24 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/24 14:51:19 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,16 @@ int	ft_handle_redirection(t_parsing *n, t_token **t)
 
 	l = *t;
 	if (!l->next)
-		return (fprintf(stderr,
-				"minishell: syntax error near unexpected token `lline'\n"), 1);
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `lline'\n",
+			2);
+		return (1);
+	}
 	if (l->next->type != WRD)
-		return (fprintf(stderr,
-				"minishell: syntax error near unexpected token `%s'\n",
-				l->next->value), 1);
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+		return (ft_putstr_fd(l->next->value, 2), ft_putstr_fd("'\n", 2), 1);
+	}
 	ft_redirection_type(n, l->type, l->next->value);
 	*t = l->next;
 	return (0);
@@ -33,20 +37,17 @@ int	ft_handle_redirection(t_parsing *n, t_token **t)
 void	ft_redirection_type(t_parsing *n, int t, char *f)
 {
 	if (t == R_IN)
-		n->infile = ft_strdup(f);
-	else if (t == R_OUT)
 	{
-		n->outfile = ft_strdup(f);
-		n->append = 0;
+		n->infiles = ft_parse_add_value(n->infiles, f);
 	}
-	else if (t == R_APPEND)
+	else if (t == R_OUT || t == R_APPEND)
 	{
-		n->outfile = ft_strdup(f);
-		n->append = 1;
+		n->outfiles = ft_parse_add_value(n->outfiles, f);
+		n->append = ft_parse_add_append(n->append, (t == R_APPEND));
 	}
 	else if (t == HERE)
 	{
-		n->infile = ft_strdup(f);
+		n->infiles = ft_parse_add_value(n->infiles, f);
 		n->heredoc = 1;
 	}
 }

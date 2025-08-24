@@ -13,7 +13,7 @@ CFLAGS 				= 	-Wall -Wextra -Werror -g -I. \
 
 BUILTINS 			= srcs/builtins/ft_exit.c srcs/builtins/ft_env.c \
 					srcs/builtins/ft_export.c srcs/builtins/export_utils.c srcs/builtins/ft_echo.c \
-					srcs/builtins/ft_unset.c srcs/builtins/ft_pwd.c\
+					srcs/builtins/ft_unset.c srcs/builtins/ft_pwd.c srcs/builtins/pwd_utils.c\
 					srcs/builtins/ft_cd.c srcs/builtins/functions.c 
 
 ENVIRONNEMENT		= srcs/environnement/env_utils.c \

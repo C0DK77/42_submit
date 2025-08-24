@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 15:20:41 by ecid              #+#    #+#             */
-/*   Updated: 2025/08/23 20:18:52 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/24 13:04:18 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,15 @@
 
 int	ft_export(char **s, t_envp **l)
 {
-	int status;
-
-	if (!s || !s[1])
-		return (ft_export_no_arguments(l));   // <-- pas d’arguments
-	status = 0;
-	s++;                                      // <-- skip "export"
+	if (!s || !*s)
+		return (ft_export_no_arguments(l));
 	while (*s)
 	{
 		if (!ft_export_arguments(s, l, NULL))
-			status = 1;                       // on continue mais on note l'erreur
+			return (1);
 		s++;
 	}
-	return (status);
+	return (0);
 }
 
 int	ft_export_no_arguments(t_envp **l)
@@ -50,30 +46,27 @@ int	ft_export_no_arguments(t_envp **l)
 
 int	ft_export_arguments(char **s, t_envp **l, char *a)
 {
-	int		append;   // 1 si +=
-	int		name_len; // longueur du nom
+	int		i;
+	int		j;
 	char	*t;
-	char	*name;
+	char	*n;
 
-	append = 0;
-	name_len = 0;
+	i = 0;
+	j = 0;
 	t = *s;
-	if (!ft_export_check_valid_var(t, &name_len))
+	if (!ft_export_check_valid_var(t, &j))
 		return (ft_export_error(t));
-	if (t[name_len] == '+' && t[name_len + 1] == '=')
+	if (t[j] == '+' && t[j + 1] == '=')
 	{
-		append = 1;
-		a = t + name_len + 2;
+		i = 1;
+		a = t + j + 2;
 	}
-	else if (t[name_len] == '=')
-		a = t + name_len + 1;
+	else if (t[j] == '=')
+		a = t + j + 1;
 	else
 		a = NULL;
-	name = ft_strndup(t, name_len);            // <-- corrige: j, pas i
-	if (!name)
-		return (0);
-	/* ft_export_check_value prend la propriété de name (elle le free) */
-	if (!ft_export_check_value(l, name, a, append))
+	n = ft_strndup(t, i);
+	if (!n || !ft_export_check_value(l, n, a, i))
 		return (0);
 	return (1);
 }
@@ -82,10 +75,10 @@ int	ft_export_check_valid_var(char *s, int *i)
 {
 	char	*t;
 
-	if (!s || (!ft_isalpha((unsigned char)s[0]) && s[0] != '_'))
+	if (!s || (!ft_isalpha(s[0]) && s[0] != '_'))
 		return (0);
 	t = s + 1;
-	while (*t && (ft_isalnum((unsigned char)*t) || *t == '_'))
+	while (*t && (ft_isalnum(*t) || *t == '_'))
 		t++;
 	if (*t == '\0' || *t == '=' || (*t == '+' && *(t + 1) == '='))
 	{

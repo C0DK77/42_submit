@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/18 22:26:21 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/24 13:20:21 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 char	*ft_env_search_value(t_envp *l, char *v)
@@ -63,4 +62,26 @@ void	ft_env_free(t_envp *l)
 		ft_free_all(2, l->var, l->value, l);
 		l = t;
 	}
+}
+int	ft_env_add_value(t_envp **l, char *s, char *v, int i)
+{
+	t_envp	*t;
+
+	t = *l;
+	while (t)
+	{
+		if (ft_strcmp(t->var, s) == 0)
+		{
+			if (v)
+			{
+				free(t->value);
+				t->value = ft_strdup(v);
+			}
+			if (i)
+				t->export = 0;
+			return (0);
+		}
+		t = t->next;
+	}
+	return (1);
 }

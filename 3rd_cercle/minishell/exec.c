@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 14:55:59 by ecid             ###   ########.fr       */
+/*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
+/*   Updated: 2025/08/24 13:23:58 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,3 +119,11 @@ char	*ft_exec_find_cmd(char *s, t_envp *l)
 	return (ft_free_tab(dirs), NULL);
 }
 
+void	ft_sigint_handler(int sig)
+{
+	(void)sig;
+	rl_replace_line("", 0);
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_redisplay();
+}
