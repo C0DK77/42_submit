@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   functions.c                                        :+:      :+:    :+:   */
+/*   ft_exec_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:54:44 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 21:42:09 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/24 16:51:57 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	ft_exec_builtin(char **s, t_envp **l)
 {
-	if (!s || !s[0]) // Si la commande est vide
+	if (!s || !s[0])
 		return (0);
-	// Comparer la commande avec les built-ins disponibles
+
 	if (ft_strcmp(s[0], "cd") == 0)
 	{
 		g_exit_status = ft_cd(s, *l);
@@ -24,7 +24,7 @@ int	ft_exec_builtin(char **s, t_envp **l)
 	}
 	else if (ft_strcmp(s[0], "exit") == 0)
 	{
-		ft_exit(s); // ft_exit gère son propre exit()
+		ft_exit(s);
 		return (1);
 	}
 	else if (ft_strcmp(s[0], "echo") == 0)
@@ -39,12 +39,12 @@ int	ft_exec_builtin(char **s, t_envp **l)
 	}
 	else if (ft_strcmp(s[0], "env") == 0)
 	{
-		g_exit_status = ft_env(*l); // Appel à ft_env
+		g_exit_status = ft_env(*l);
 		return (1);
 	}
 	else if (ft_strcmp(s[0], "export") == 0)
 	{
-		g_exit_status = ft_export(s, l); // Appel à ft_export
+		g_exit_status = ft_export(s, l);
 		return (1);
 	}
 	else if (ft_strcmp(s[0], "unset") == 0)
@@ -53,10 +53,10 @@ int	ft_exec_builtin(char **s, t_envp **l)
 		return (1);
 	}
 	else if (ft_strcmp(s[0], ":") == 0)
-	// Le built-in ':' qui ne fait rien et retourne 0
+
 	{
 		g_exit_status = 0;
 		return (1);
 	}
-	return (0); // Ce n'est pas un built-in
+	return (0);
 }

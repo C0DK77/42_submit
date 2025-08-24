@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 14:37:04 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/24 16:57:26 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,6 @@ int						ft_exec_create_heredoc(char *delimiter);
 int						ft_exec_is_directory(char *p);
 char					*ft_exec_find_cmd(char *s, t_envp *l);
 char					*ft_strjoin_three(char *s1, char *s2, char *s3);
-void					ft_free_split(char **arr);
 void					ft_exec(t_parsing *p, t_envp *l);
 void					ft_exec_cmd(char **s, t_envp *l);
 char					**ft_exec_env_array(t_envp *l);
