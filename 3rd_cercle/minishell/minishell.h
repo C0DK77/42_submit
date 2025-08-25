@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 10:58:29 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/25 20:36:35 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,7 @@ char					**ft_exec_env_array(t_envp *l);
 //	FUNCTIONS / FUNCTIONS
 
 int						ft_exec_builtin(char **s, t_envp **l);
+int						ft_exec_builtin_bis(char **s, t_envp **l);
 
 //	FUNCTIONS / FUNCTIONS_UTILS
 

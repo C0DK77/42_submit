@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 10:51:36 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/25 20:23:38 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,23 @@
 
 void	ft_exec(t_parsing *p, t_envp *l)
 {
-	int	fd[2];
-	int	prev_fd;
-	int	s_stdin;
-	int	s_stdout;
-	int	status;
+	int		fd[2];
+	int		prev_fd;
+	int		s_stdin;
+	int		s_stdout;
+	int		status;
+	pid_t	pid;
+	pid_t	last_pid;
 
 	prev_fd = -1;
 	s_stdin = dup(STDIN_FILENO);
 	s_stdout = dup(STDOUT_FILENO);
-	pid_t pid, last_pid = -1;
+	last_pid = -1;
 	while (p)
 	{
-		if (p->prev && p->prev->sep == SEP_AND_IF && g_exit_status != 0)
-		{
-			p = p->next;
-			continue ;
-		}
-		if (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0)
-		{
-			p = p->next;
-			continue ;
-		}
-		if (p->sep == SEP_NONE && ft_exec_builtin(p->line, &l))
+		if ((p->prev && p->prev->sep == SEP_AND_IF && g_exit_status != 0)
+			|| (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0)
+			|| (p->sep == SEP_NONE && ft_exec_builtin(p->line, &l)))
 		{
 			p = p->next;
 			continue ;

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 14:31:50 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 17:48:41 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/25 20:32:35 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,27 +44,20 @@ t_envp	*ft_env_list_init(char **l)
 	t_envp	*first_n;
 	t_envp	*last_n;
 	t_envp	*n;
-	int		i;
 
 	first_n = NULL;
 	last_n = NULL;
-	i = 0;
-	while (l[i])
+	while (*l)
 	{
-		n = ft_env_var_copy(l[i]);
+		n = ft_env_var_copy(*l);
 		if (!n)
 			return (NULL);
 		if (!first_n)
-		{
 			first_n = n;
-			last_n = n;
-		}
 		else
-		{
 			last_n->next = n;
-			last_n = n;
-		}
-		i++;
+		last_n = n;
+		l++;
 	}
 	return (first_n);
 }

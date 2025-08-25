@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 10:32:01 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/25 20:11:53 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@
 int	ft_exec_redirections_init(t_parsing *s)
 {
 	int	app;
+	int	fd;
+	int	i;
 
-	int fd, i;
+	i = 0;
+	app = 0;
 	if (s->heredoc)
 	{
-		i = 0;
 		while (s->infiles && s->infiles[i + 1])
 			i++;
 		if (ft_exec_create_heredoc(s->infiles[i]) != 0)
@@ -33,7 +35,6 @@ int	ft_exec_redirections_init(t_parsing *s)
 	}
 	else
 	{
-		i = 0;
 		while (s->infiles && s->infiles[i])
 		{
 			fd = open(s->infiles[i], O_RDONLY);
@@ -47,7 +48,8 @@ int	ft_exec_redirections_init(t_parsing *s)
 	i = 0;
 	while (s->outfiles && s->outfiles[i])
 	{
-		app = (s->append && s->append[i]) ? 1 : 0;
+		if (s->append && s->append[i])
+			app = 1;
 		if (app)
 			fd = open(s->outfiles[i], O_CREAT | O_WRONLY | O_APPEND, 0644);
 		else
