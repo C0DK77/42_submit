@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 22:54:44 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/27 23:06:15 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,12 @@ char    *ft_env_prompt(void)
     c = getcwd(NULL, 0);
     if (!c)
     {
-        /* Fallback simple si getcwd échoue */
         p = malloc(ft_strlen("minishell > ") + 1);
         if (!p)
             return (NULL);
         ft_strcpy(p, "minishell > ");
         return (p);
     }
-    /* "minishell " + cwd + " > " + '\0' */
     p = malloc((sizeof("minishell ") - 1)
                + ft_strlen(c)
                + (sizeof(" > ") - 1)
