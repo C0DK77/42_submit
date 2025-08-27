@@ -1,36 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   ft_putall_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/18 22:47:17 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 19:46:59 by corentindes      ###   ########.fr       */
+/*   Created: 2025/08/27 19:39:31 by corentindes       #+#    #+#             */
+/*   Updated: 2025/08/27 19:41:15 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "minishell.h"
 
-int	ft_exit(char **s)
+void	ft_putall_fd(int fd, int argc, ...)
 {
-	long long	c;
+	int		i;
+	char	*s;
+	va_list	argv;
 
-	printf("exit\n");
-	if (!s[1])
-		exit(0);
-	if (!ft_is_numeric(s[1]))
+	va_start(argv, argc);
+	i = 0;
+	while (i < argc)
 	{
-		ft_putall_fd(2, 3, "minishell: exit: ", s[1],
-			": numeric argument required\n");
-		exit(255);
+		s = va_arg(argv, char *);
+		ft_putstr_fd(s, fd);
+		i++;
 	}
-	if (s[2])
-	{
-		g_exit_status = 1;
-		return (ft_putstr_fd("minishell: exit: too many arguments\n", 2), 1);
-	}
-	c = ft_atoll(s[1]);
-	exit(c % 256);
+	va_end(argv);
 }

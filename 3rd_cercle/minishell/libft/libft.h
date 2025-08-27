@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:38:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 09:48:18 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/27 19:40:48 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFT_H
 
 # include <ctype.h>
+# include <stdarg.h>
 # include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -109,5 +110,6 @@ int64_t				ft_atoi64(char *s);
 int					ft_strslen(char **s);
 char				*ft_strjoin_three(char *s1, char *s2, char *s3);
 void				ft_free_tab(char **s);
+void				ft_putall_fd(int fd, int argc, ...);
 
 #endif

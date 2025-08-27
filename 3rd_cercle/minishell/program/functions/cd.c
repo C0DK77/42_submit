@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 19:22:46 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 19:04:50 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/27 19:45:42 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ int	ft_cd_search_var(t_envp *l, char *v)
 	if (!t)
 	{
 		g_exit_status = 1;
-		return (ft_putstr_fd("minishell: cd: ", 2), ft_putstr_fd(v, 2),
-			ft_putstr_fd("not set\n", 2), 0);
+		return (ft_putall_fd(2, 3, "minishell: cd: ", v, "not set\n"), 0);
 	}
 	if (ft_strcmp(t, "OLDPWD"))
 		printf("%s\n", t);
@@ -92,9 +91,8 @@ char	*ft_cd_error(int i, char *c)
 	if (i == 2)
 	{
 		g_exit_status = 2;
-		return (ft_putstr_fd("minishell: cd: ", 2), ft_putstr_fd(c, 2),
-			ft_putstr_fd(": invalid option\n", 2),
-			ft_putstr_fd("cd: usage: cd [dir]\n", 2), NULL);
+		return (ft_putall_fd(2, 4, "minishell: cd: ", c, ": invalid option\n",
+				"cd: usage: cd [dir]\n"), NULL);
 	}
 	return (NULL);
 }

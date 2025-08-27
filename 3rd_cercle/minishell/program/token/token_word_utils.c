@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 17:45:17 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/25 20:49:55 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,14 @@ int	ft_token_word_len(char *s)
 	int	i;
 
 	i = 0;
-	while (s && !ft_isspace(*s) && !ft_isoperator(*s) && !ft_isquote(*s))
+	while (s && !ft_isspace((unsigned char)*s) && !ft_isoperator(*s)
+		&& !ft_isquote(*s))
 	{
 		if (*s == '\\' && *(s + 1))
+		{
 			s += 2;
+			i += 2;
+		}
 		else
 			s++;
 		i++;

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/25 20:36:35 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/27 19:37:49 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdarg.h>
 # include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>

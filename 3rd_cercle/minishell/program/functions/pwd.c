@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 19:20:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 19:34:14 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/27 19:50:09 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,16 +109,14 @@ int	ft_pwd_error(int i, int c)
 	else if (i == 1)
 	{
 		g_exit_status = 2;
-		ft_putstr_fd("minishell: pwd: -", 2);
-		ft_putchar_fd(c, 2);
-		ft_putstr_fd(": invalid option\npwd: usage: pwd [-LP]\n", 2);
-		return (0);
+		return (ft_putall_fd(2, 2, "minishell: pwd: -", c,
+				"pwd: usage: pwd [-LP]\n"), 0);
 	}
 	else if (i == 2)
 	{
 		g_exit_status = 2;
-		ft_putstr_fd("minishell: pwd: --: invalid option\n", 2);
-		return (ft_putstr_fd("pwd: usage: pwd [-LP]\n", 2), 0);
+		return (ft_putall_fd(2, 2, "minishell: pwd: --: invalid option\n",
+				"pwd: usage: pwd [-LP]\n"), 0);
 	}
 	return (1);
 }
