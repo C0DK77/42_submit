@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 19:40:10 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/27 22:08:09 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,26 @@ int	ft_exec_redirections_init(t_parsing *s)
 	i = 0;
 	while (s->outfiles && s->outfiles[i])
 	{
-		app = (s->append && s->append[i]) ? 1 : 0;
-		if (app)
-			fd = open(s->outfiles[i], O_CREAT | O_WRONLY | O_APPEND, 0644);
+		app= 0;
+		if(s->append && s->append[i])
+			app=1;
+		if(app==1)
+			fd = open(s->outfiles[i],
+				O_CREAT | O_WRONLY | O_APPEND,0664);
 		else
-			fd = open(s->outfiles[i], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			fd= open(s->outfiles[i],
+				O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd < 0)
-			return (perror(s->outfiles[i]), 1);
-		dup2(fd, STDOUT_FILENO);
+		{
+			perror(s->outfiles[i]);
+			return (1);
+		}
+		if (dup2(fd, STDOUT_FILENO) == -1)
+		{
+			perror("dup2 outfile");
+			close(fd);
+			return (1);
+		}
 		close(fd);
 		i++;
 	}
@@ -65,12 +77,11 @@ int	ft_exec_redirections_init(t_parsing *s)
 
 int	ft_exec_create_heredoc(char *d)
 {
-	int		fd;
+	int		hd[2];
 	char	*l;
 
-	fd = open(HEREDOC_FILE, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (fd < 0)
-		return (perror("heredoc open"), -1);
+	if (pipe(hd)==-1)
+		return (perror("heredoc pipe"), -1);
 	while (1)
 	{
 		l = readline("> ");
@@ -81,12 +92,12 @@ int	ft_exec_create_heredoc(char *d)
 			free(l);
 			break ;
 		}
-		write(fd, l, ft_strlen(l));
-		write(fd, "\n", 1);
+		write(hd[1], l, ft_strlen(l));
+		write(hd[1], "\n", 1);
 		free(l);
 	}
-	close(fd);
-	return(0);
+	close(hd[1]);
+	return(hd[0]);
 }
 
 int	ft_exec_is_directory(char *p)

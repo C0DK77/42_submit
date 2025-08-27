@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 21:39:34 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/27 21:45:29 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ void	ft_exec(t_parsing *p, t_envp *l)
 		{
 			if (prev_fd != -1)
 				close(prev_fd);
-			unlink(HEREDOC_FILE);
 			if (p->sep == SEP_PIPE)
 			{
 				close(fd[1]);
