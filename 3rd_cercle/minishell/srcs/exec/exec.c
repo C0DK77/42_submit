@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 21:04:12 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/27 21:39:34 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,61 @@ void	ft_exec(t_parsing *p, t_envp *l)
 		}
 		if (p->sep == SEP_NONE)
 		{
-			if (ft_exec_redirections_init(p) != 0)
-			{
-				g_exit_status = 1;
-				p = p->next;
-				continue ;
+    		int saved_in  = dup(STDIN_FILENO);
+    		int saved_out = dup(STDOUT_FILENO);
+
+    		if (ft_exec_redirections_init(p) != 0)
+    		{
+        		g_exit_status = 1;
+        	if (saved_in  != -1) 
+			{ 
+				dup2(saved_in,  STDIN_FILENO);  
+				close(saved_in);  
 			}
-			if (ft_exec_builtin(p->line, &l))
-			{
-				p = p->next;
-				continue ;
-			}
+        	if (saved_out != -1) 
+			{ 
+				dup2(saved_out, STDOUT_FILENO); 
+				close(saved_out); 
 		}
+        p = p->next;
+        continue ;
+    	}
+
+    if (ft_exec_builtin(p->line, &l))
+    {
+        if (saved_in  != -1) 
+		{ 
+			dup2(saved_in,  STDIN_FILENO);  
+			close(saved_in);  
+		}
+        if (saved_out != -1) 
+		{ 
+			dup2(saved_out, STDOUT_FILENO); 
+			close(saved_out); 
+		}
+        p = p->next;
+        continue ;
+    }
+    if (saved_in  != -1) 
+	{ 
+		dup2(saved_in,  STDIN_FILENO);  
+		close(saved_in);  
+	}
+    if (saved_out != -1) 
+	{ 
+		dup2(saved_out, STDOUT_FILENO); 
+		close(saved_out); 
+	}
+}
+
 		if (p->sep == SEP_PIPE)
 			pipe(fd);
 		pid = fork();
 		if (pid == 0)
 		{
+			reset_signals();
+			signal(SIGPIPE, SIG_DFL);
+			
 			if (prev_fd != -1)
 			{
 				dup2(prev_fd, STDIN_FILENO);
@@ -76,6 +114,7 @@ void	ft_exec(t_parsing *p, t_envp *l)
 		{
 			if (prev_fd != -1)
 				close(prev_fd);
+			unlink(HEREDOC_FILE);
 			if (p->sep == SEP_PIPE)
 			{
 				close(fd[1]);
@@ -95,8 +134,18 @@ void	ft_exec(t_parsing *p, t_envp *l)
 		else if (WIFSIGNALED(status))
 			g_exit_status = 128 + WTERMSIG(status);
 	}
-	while (wait(NULL) > 0)
-		;
+	while(1)
+	{
+		int w = wait(NULL);
+		if(w==-1)
+		{
+			if(errno==EINTR)
+				continue;
+			if(errno==ECHILD)
+				break;
+
+		}
+	}
 	dup2(s_stdin, STDIN_FILENO);
 	dup2(s_stdout, STDOUT_FILENO);
 	close(s_stdin);
