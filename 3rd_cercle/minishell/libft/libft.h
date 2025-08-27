@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:38:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 09:48:18 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/08/27 21:11:49 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <stdarg.h>
+
 
 //  STRUCTURE
 
@@ -109,5 +111,5 @@ int64_t				ft_atoi64(char *s);
 int					ft_strslen(char **s);
 char				*ft_strjoin_three(char *s1, char *s2, char *s3);
 void				ft_free_tab(char **s);
-
+void				ft_putall_fd(int fd, int argc, ...);
 #endif

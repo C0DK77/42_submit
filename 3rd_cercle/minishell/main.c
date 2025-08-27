@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 19:50:15 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/27 20:17:20 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ int main(int argc, char **argv, char **envp)
     if (!ft_env_vars_check(&c_envp))
         return (0);
 
-    signal(SIGINT, ft_sigint_handler);
-    signal(SIGQUIT, SIG_IGN);
+    setup_signals();
+    signal(SIGTSTP, SIG_IGN);
+    signal(SIGPIPE, SIG_IGN);
 
     while (1)
     {

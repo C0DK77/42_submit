@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 15:12:36 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/27 19:40:10 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	ft_exec_redirections_init(t_parsing *s)
 		fd = open(HEREDOC_FILE, O_RDONLY);
 		if (fd < 0)
 			return (perror("heredoc open for reading"), 1);
-		dup2(fd, STDIN_FILENO);
+		if(dup2(fd, STDIN_FILENO)== -1)
+			return(perror("dup2 heredoc"),close(fd),1);
 		close(fd);
 	}
 	else
@@ -39,7 +40,8 @@ int	ft_exec_redirections_init(t_parsing *s)
 			fd = open(s->infiles[i], O_RDONLY);
 			if (fd < 0)
 				return (perror(s->infiles[i]), 1);
-			dup2(fd, STDIN_FILENO);
+			if(dup2(fd, STDIN_FILENO)==-1)
+				return(perror("dup2 infile"), close(fd),1);
 			close(fd);
 			i++;
 		}
@@ -83,7 +85,8 @@ int	ft_exec_create_heredoc(char *d)
 		write(fd, "\n", 1);
 		free(l);
 	}
-	return (close(fd), 0);
+	close(fd);
+	return(0);
 }
 
 int	ft_exec_is_directory(char *p)
@@ -113,9 +116,14 @@ char	*ft_exec_find_cmd(char *s, t_envp *l)
 	{
 		full_path = ft_strjoin_three(dirs[i], "/", s);
 		if (full_path && access(full_path, X_OK) == 0)
-			return (ft_free_tab(dirs), full_path);
+		{
+			ft_free_tab(dirs);
+			return(full_path);
+		}
 		free(full_path);
 		i++;
 	}
-	return (ft_free_tab(dirs), NULL);
+	ft_free_tab(dirs);
+	return(NULL);
 }
+

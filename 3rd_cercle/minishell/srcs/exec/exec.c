@@ -3,43 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 13:25:31 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/27 21:04:12 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "minishell.h"
 
 void	ft_exec(t_parsing *p, t_envp *l)
 {
-	int	fd[2];
-	int	prev_fd;
-	int	s_stdin;
-	int	s_stdout;
-	int	status;
+	int		fd[2];
+	int		prev_fd;
+	int		s_stdin;
+	int		s_stdout;
+	int		status;
+	pid_t	pid;
+	pid_t	last_pid;
 
 	prev_fd = -1;
 	s_stdin = dup(STDIN_FILENO);
 	s_stdout = dup(STDOUT_FILENO);
-	pid_t pid, last_pid = -1;
+	last_pid = -1;
 	while (p)
 	{
-		if (p->prev && p->prev->sep == SEP_AND_IF && g_exit_status != 0)
+		if ((p->prev && p->prev->sep == SEP_AND_IF && g_exit_status != 0)
+			|| (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0))
 		{
 			p = p->next;
 			continue ;
 		}
-		if (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0)
+		if (p->sep == SEP_NONE)
 		{
-			p = p->next;
-			continue ;
-		}
-		if (p->sep == SEP_NONE && ft_exec_builtin(p->line, &l))
-		{
-			p = p->next;
-			continue ;
+			if (ft_exec_redirections_init(p) != 0)
+			{
+				g_exit_status = 1;
+				p = p->next;
+				continue ;
+			}
+			if (ft_exec_builtin(p->line, &l))
+			{
+				p = p->next;
+				continue ;
+			}
 		}
 		if (p->sep == SEP_PIPE)
 			pipe(fd);
@@ -111,32 +119,25 @@ void	ft_exec_cmd(char **s, t_envp *l)
 		p = ft_exec_find_cmd(s[0], l);
 	if (!p)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(s[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
+		ft_putall_fd(2, 3, "minishell: ", s[0], ": command not found\n");
 		exit(127);
 	}
 	if (access(p, F_OK) != 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(s[0], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
+		ft_putall_fd(2, 3, "minishell: ", s[0],
+			": No such file or directory\n");
 		free(p);
 		exit(127);
 	}
 	if (ft_exec_is_directory(p))
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(s[0], 2);
-		ft_putstr_fd(": is a directory\n", 2);
+		ft_putall_fd(2, 3, "minishell: ", s[0], ": is a directory\n");
 		free(p);
 		exit(126);
 	}
 	if (access(p, X_OK) != 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(s[0], 2);
-		ft_putstr_fd(": Permission denied\n", 2);
+		ft_putall_fd(2, 3, "minishell: ", s[0], ": Permission denied\n");
 		free(p);
 		exit(126);
 	}
