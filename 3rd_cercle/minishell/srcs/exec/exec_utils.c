@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 22:08:09 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/27 22:30:29 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,26 @@
 
 int	ft_exec_redirections_init(t_parsing *s)
 {
-	int	app;
 	int	fd;
 	int	i;
+	int	app;
 
 	if (s->heredoc)
 	{
 		i = 0;
 		while (s->infiles && s->infiles[i + 1])
 			i++;
-		if (ft_exec_create_heredoc(s->infiles[i]) != 0)
+		fd = ft_exec_create_heredoc(s->infiles[i]);
+		if (fd == -2)
 			return (1);
-		fd = open(HEREDOC_FILE, O_RDONLY);
 		if (fd < 0)
-			return (perror("heredoc open for reading"), 1);
-		if(dup2(fd, STDIN_FILENO)== -1)
-			return(perror("dup2 heredoc"),close(fd),1);
+			return (1);
+		if (dup2(fd, STDIN_FILENO) == -1)
+		{
+			perror("dup2 heredoc");
+			close(fd);
+			return (1);
+		}
 		close(fd);
 	}
 	else
@@ -39,9 +43,16 @@ int	ft_exec_redirections_init(t_parsing *s)
 		{
 			fd = open(s->infiles[i], O_RDONLY);
 			if (fd < 0)
-				return (perror(s->infiles[i]), 1);
-			if(dup2(fd, STDIN_FILENO)==-1)
-				return(perror("dup2 infile"), close(fd),1);
+			{
+				perror(s->infiles[i]);
+				return (1);
+			}
+			if (dup2(fd, STDIN_FILENO) == -1)
+			{
+				perror("dup2 infile");
+				close(fd);
+				return (1);
+			}
 			close(fd);
 			i++;
 		}
@@ -49,15 +60,13 @@ int	ft_exec_redirections_init(t_parsing *s)
 	i = 0;
 	while (s->outfiles && s->outfiles[i])
 	{
-		app= 0;
-		if(s->append && s->append[i])
-			app=1;
-		if(app==1)
-			fd = open(s->outfiles[i],
-				O_CREAT | O_WRONLY | O_APPEND,0664);
+		app = 0;
+		if (s->append && s->append[i])
+			app = 1;
+		if (app == 1)
+			fd = open(s->outfiles[i], O_CREAT | O_WRONLY | O_APPEND, 0644);
 		else
-			fd= open(s->outfiles[i],
-				O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			fd = open(s->outfiles[i], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd < 0)
 		{
 			perror(s->outfiles[i]);
@@ -75,30 +84,52 @@ int	ft_exec_redirections_init(t_parsing *s)
 	return (0);
 }
 
-int	ft_exec_create_heredoc(char *d)
+int	ft_exec_create_heredoc(char *delim)
 {
 	int		hd[2];
-	char	*l;
+	pid_t	pid;
+	int		st;
 
-	if (pipe(hd)==-1)
+	if (pipe(hd) == -1)
 		return (perror("heredoc pipe"), -1);
-	while (1)
+	pid = fork();
+	if (pid == -1)
+		return (perror("heredoc fork"), close(hd[0]), close(hd[1]), -1);
+	if (pid == 0)
 	{
-		l = readline("> ");
-		if (!l)
-			break ;
-		if (ft_strcmp(l, d) == 0)
+		char	*l;
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
+		close(hd[0]);
+		while (1)
 		{
+			l = readline("> ");
+			if (!l)
+				break ;
+			if (ft_strcmp(l, delim) == 0)
+			{
+				free(l);
+				break ;
+			}
+			write(hd[1], l, ft_strlen(l));
+			write(hd[1], "\n", 1);
 			free(l);
-			break ;
 		}
-		write(hd[1], l, ft_strlen(l));
-		write(hd[1], "\n", 1);
-		free(l);
+		close(hd[1]);
+		_exit(0);
 	}
 	close(hd[1]);
-	return(hd[0]);
+	if (waitpid(pid, &st, 0) == -1)
+		return (perror("heredoc waitpid"), close(hd[0]), -1);
+	if (WIFSIGNALED(st) && WTERMSIG(st) == SIGINT)
+	{
+		g_exit_status = 130;
+		close(hd[0]);
+		return (-2);
+	}
+	return (hd[0]);
 }
+
 
 int	ft_exec_is_directory(char *p)
 {

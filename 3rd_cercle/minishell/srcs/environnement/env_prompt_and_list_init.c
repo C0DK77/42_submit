@@ -3,41 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   env_prompt_and_list_init.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 16:56:47 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/27 22:54:44 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_env_prompt(void)
+char    *ft_env_prompt(void)
 {
-	char	*p;
-	char	*c;
+    char    *p;
+    char    *c;
 
-	c = getcwd(NULL, 0);
-	if (!c)
-	{
-		perror("getcwd");
-		p = malloc(ft_strlen("minishell > ") + 1);
-		if (!p)
-			return (NULL);
-		ft_strcpy(p, "minishell > ");
-		return (p);
-	}
-	p = malloc(ft_strlen(c) + 4);
-	if (!p)
-		return (free(c), NULL);
-	ft_strcpy(p, c);
-	p[ft_strlen(c)] = ' ';
-	p[ft_strlen(c) + 1] = '>';
-	p[ft_strlen(c) + 2] = ' ';
-	p[ft_strlen(c) + 3] = '\0';
-	free(c); // ajout ici
-	return (p);
+    c = getcwd(NULL, 0);
+    if (!c)
+    {
+        /* Fallback simple si getcwd échoue */
+        p = malloc(ft_strlen("minishell > ") + 1);
+        if (!p)
+            return (NULL);
+        ft_strcpy(p, "minishell > ");
+        return (p);
+    }
+    /* "minishell " + cwd + " > " + '\0' */
+    p = malloc((sizeof("minishell ") - 1)
+               + ft_strlen(c)
+               + (sizeof(" > ") - 1)
+               + 1);
+    if (!p)
+        return (free(c), NULL);
+
+    ft_strcpy(p, "minishell ");
+    ft_strcpy(p + (sizeof("minishell ") - 1), c);
+    ft_strcpy(p + (sizeof("minishell ") - 1) + ft_strlen(c), " > ");
+
+    free(c);
+    return (p);
 }
+
 
 t_envp	*ft_env_list_init(char **l)
 {
