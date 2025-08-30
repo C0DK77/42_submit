@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/30 20:33:18 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/30 23:31:46 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,9 +216,10 @@ t_token					*ft_token(char *s, t_envp *l);
 t_token					*ft_token_init(t_token_type t, char *v);
 void					ft_token_add(t_token **l, t_token *n);
 void					ft_token_free(t_token *l);
+char    				*ft_strjoin_and_free(char *s1, char *s2);
 t_operator				*ft_token_operator_init_table(void);
 char					*ft_token_operator(t_token **l, char *s);
-char					*ft_token_operator_dollar(t_envp *l, char **w, char *s);
+char   				    *ft_token_op_doll(t_envp *l, char **w, char *s);
 char					*ft_token_operator_dollar_interrogation(char **w,
 							char *s);
 char					*ft_token_operator_dollar_word(char *s);

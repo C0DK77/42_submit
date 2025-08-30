@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 19:22:46 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 18:37:21 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/30 23:50:59 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ char	*ft_cd_conditions(char **s, t_envp *l, char *target, int i)
 		}
 		else if (s[1][0] == '-' && s[1][1] != '\0')
 			return (ft_cd_error(2, s[1]));
-		else if (i > 2)
-			return (ft_cd_error(0, NULL));
+		// else if (i > 2)
+		// 	return (ft_cd_error(0, NULL));
 		else
 			target = s[1];
 	}
