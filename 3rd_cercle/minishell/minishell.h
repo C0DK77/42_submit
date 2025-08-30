@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 20:21:35 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/30 13:47:27 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ typedef struct s_parsing
 	char				**outfiles;
 	int					*append;
 	int					heredoc;
+	int					heredoc_fd;
 	t_sep				sep;
 	struct s_parsing	*next;
 	struct s_parsing	*prev;
@@ -159,6 +160,7 @@ t_parsing				*ft_parse_add_node(t_parsing **n, t_parsing **p,
 /* ------------------- EXECUTION ------------------- */
 
 int						ft_exec_redirections_init(t_parsing *s);
+int						ft_exec_read_all_heredocs(t_parsing *p);
 int						ft_exec_create_heredoc(char *delimiter);
 int						ft_exec_is_directory(char *p);
 char					*ft_exec_find_cmd(char *s, t_envp *l);

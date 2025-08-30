@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 18:24:59 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/30 12:13:59 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/30 13:30:42 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_parsing	*ft_parse_add_node(t_parsing **n, t_parsing **p, t_parsing **a)
 	if (!l)
 		return (NULL);
 	l->sep = SEP_NONE;
+	l->heredoc_fd = -1;
 	if (!*a)
 		*a = l;
 	if (*p)

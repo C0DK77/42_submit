@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 22:30:29 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/30 14:16:21 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ int	ft_exec_redirections_init(t_parsing *s)
 
 	if (s->heredoc)
 	{
-		i = 0;
-		while (s->infiles && s->infiles[i + 1])
-			i++;
-		fd = ft_exec_create_heredoc(s->infiles[i]);
+		fd = s->heredoc_fd;
 		if (fd == -2)
 			return (1);
 		if (fd < 0)
