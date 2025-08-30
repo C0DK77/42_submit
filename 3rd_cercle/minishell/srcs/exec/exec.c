@@ -6,11 +6,10 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 21:45:29 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/30 13:02:48 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 void	ft_exec(t_parsing *p, t_envp *l)
@@ -37,112 +36,73 @@ void	ft_exec(t_parsing *p, t_envp *l)
 		}
 		if (p->sep == SEP_NONE)
 		{
-    		int saved_in  = dup(STDIN_FILENO);
-    		int saved_out = dup(STDOUT_FILENO);
-
-    		if (ft_exec_redirections_init(p) != 0)
+    
+    		if (ft_exec_builtin(p->line, &l))
     		{
-        		g_exit_status = 1;
-        	if (saved_in  != -1) 
-			{ 
-				dup2(saved_in,  STDIN_FILENO);  
-				close(saved_in);  
-			}
-        	if (saved_out != -1) 
-			{ 
-				dup2(saved_out, STDOUT_FILENO); 
-				close(saved_out); 
+        		p = p->next;
+				continue;
+			} 
 		}
-        p = p->next;
-        continue ;
-    	}
-
-    if (ft_exec_builtin(p->line, &l))
-    {
-        if (saved_in  != -1) 
-		{ 
-			dup2(saved_in,  STDIN_FILENO);  
-			close(saved_in);  
-		}
-        if (saved_out != -1) 
-		{ 
-			dup2(saved_out, STDOUT_FILENO); 
-			close(saved_out); 
-		}
-        p = p->next;
-        continue ;
-    }
-    if (saved_in  != -1) 
-	{ 
-		dup2(saved_in,  STDIN_FILENO);  
-		close(saved_in);  
-	}
-    if (saved_out != -1) 
-	{ 
-		dup2(saved_out, STDOUT_FILENO); 
-		close(saved_out); 
-	}
-}
-
-		if (p->sep == SEP_PIPE)
+		if(p->sep == SEP_PIPE)
 			pipe(fd);
 		pid = fork();
-		if (pid == 0)
+		if(pid==0)
 		{
 			reset_signals();
 			signal(SIGPIPE, SIG_DFL);
 			
-			if (prev_fd != -1)
+			if(prev_fd != -1)
 			{
 				dup2(prev_fd, STDIN_FILENO);
 				close(prev_fd);
 			}
-			if (p->sep == SEP_PIPE)
+			if(p->sep ==SEP_PIPE)
 			{
 				close(fd[0]);
 				dup2(fd[1], STDOUT_FILENO);
 				close(fd[1]);
 			}
-			if (ft_exec_redirections_init(p) != 0)
+			if(ft_exec_redirections_init(p)!=0)
 				exit(1);
-			if (ft_exec_builtin(p->line, &l))
+			if(ft_exec_builtin(p->line, &l))
 				exit(g_exit_status);
 			ft_exec_cmd(p->line, l);
 			exit(1);
 		}
 		else
 		{
-			if (prev_fd != -1)
+			if(prev_fd!= -1)
 				close(prev_fd);
-			if (p->sep == SEP_PIPE)
+			if(p->sep ==SEP_PIPE)
 			{
 				close(fd[1]);
-				prev_fd = fd[0];
+				prev_fd=fd[0];
 			}
 			else
-				prev_fd = -1;
-			last_pid = pid;
+				prev_fd =-1;
+			last_pid =pid;
+
 		}
-		p = p->next;
+		p = p ->next;
+
 	}
-	if (last_pid > 0)
+	if (last_pid >0)
 	{
 		waitpid(last_pid, &status, 0);
-		if (WIFEXITED(status))
+		if(WIFEXITED(status))
 			g_exit_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			g_exit_status = 128 + WTERMSIG(status);
+		else if(WIFSIGNALED(status))
+			g_exit_status = 128 +WTERMSIG(status);
 	}
 	while(1)
 	{
-		int w = wait(NULL);
+		int w =wait(NULL);
 		if(w==-1)
 		{
 			if(errno==EINTR)
 				continue;
 			if(errno==ECHILD)
 				break;
-
 		}
 	}
 	dup2(s_stdin, STDIN_FILENO);

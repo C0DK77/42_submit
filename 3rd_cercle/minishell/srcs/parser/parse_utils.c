@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 18:24:59 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 14:52:29 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/30 12:13:59 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 t_parsing	*ft_parse_add_node(t_parsing **n, t_parsing **p, t_parsing **a)
