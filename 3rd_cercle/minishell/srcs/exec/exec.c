@@ -6,39 +6,11 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/30 13:49:52 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/30 16:10:17 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
-int ft_exec_read_all_heredocs(t_parsing *p)
-{
-	t_parsing	*curr;
-	int		fd;
-
-	curr = p;
-	while(curr)
-	{
-		if(curr->heredoc)
-		{
-			int i =0;
-			while(curr->infiles && curr->infiles[i+1])
-				i++;
-			fd = ft_exec_create_heredoc(curr->infiles[i]);
-			if(fd<0)
-			{
-				if(fd == -2)
-					g_exit_status =130;
-				return(1);
-			}
-			curr ->heredoc_fd = fd;
-		}
-		curr = curr->next;
-	}
-	return(0);
-}
 
 void	ft_exec(t_parsing *p, t_envp *l)
 {

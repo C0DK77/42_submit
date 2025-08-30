@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 14:51:19 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/30 19:36:12 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 int	ft_handle_redirection(t_parsing *n, t_token **t)
@@ -20,7 +19,7 @@ int	ft_handle_redirection(t_parsing *n, t_token **t)
 	l = *t;
 	if (!l->next)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `lline'\n",
+		ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n",
 			2);
 		return (1);
 	}

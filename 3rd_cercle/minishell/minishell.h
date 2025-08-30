@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/30 13:47:27 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/30 20:33:18 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,14 +224,8 @@ char					*ft_token_operator_dollar_interrogation(char **w,
 char					*ft_token_operator_dollar_word(char *s);
 char					*ft_token_operator_dollar_no_word(char **w, char *s);
 int						ft_token_check(t_token *n);
-int						ft_token_check_rin_rout_rappend_here(t_token *n);
 char					*ft_token_word(t_token **n, char *s, t_envp *l);
-char					*ft_token_isquote(t_envp *l, char **w, char *s);
-char					*ft_token_word_dbquote(t_envp *l, char **w, char *s,
-							char *end);
-char					*ft_token_word_sgquote(char **w, char *s, char *i);
-char					*ft_token_word_noquote(char **w, char *s);
-int						ft_token_word_len(char *s);
+
 
 /* ------------------- SIGNALS ------------------- */
 
