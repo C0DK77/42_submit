@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/08/30 23:31:07 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/31 21:40:12 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,14 @@ char    *ft_token_op_doll(t_envp *l, char **w, char *s)
     if (*s == '?')
         return (ft_token_operator_dollar_interrogation(w, s));
     
-    // Si le caractère n'est pas une lettre ou '_', on ne fait pas de substitution
     if (!ft_isalpha(*s) && *s != '_')
     {
         t = ft_strjoin(*w, "$");
         free(*w);
         *w = t;
-        return (s); // On ne consomme pas le caractère après le '$', on le laisse pour la boucle principale
+        return (s);
     }
     
-    // Si c'est un nom de variable valide, on procède à la substitution
     j = s;
     s = ft_token_operator_dollar_word(s);
     v = ft_strndup(j, s - j);

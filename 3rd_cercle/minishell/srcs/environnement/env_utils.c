@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 16:59:59 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/31 21:34:24 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	ft_env_add_value(t_envp **l, char *s, char *v, int i)
 				t->value = ft_strdup(v);
 			}
 			if (i)
-				t->export = 0;
+				t->export = 1;
 			return (0);
 		}
 		t = t->next;

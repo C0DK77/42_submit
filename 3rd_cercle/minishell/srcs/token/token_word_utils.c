@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/31 13:39:32 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/08/31 21:40:37 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ char    *ft_token_word(t_token **n, char *s, t_envp *l)
     char    *w;
     char    quote;
     char    *temp;
-
+    
+    quote = 0;
     w = ft_strdup("");
     if (!w)
         return (s);
@@ -61,6 +62,7 @@ char    *ft_token_word(t_token **n, char *s, t_envp *l)
             }
             if (*s)
                 s++;
+            // quote = 0;
         }
         else if (*s == '$' && *(s + 1))
         {
