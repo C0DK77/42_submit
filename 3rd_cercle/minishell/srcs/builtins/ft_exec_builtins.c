@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exec_builtin.c                                  :+:      :+:    :+:   */
+/*   ft_exec_builtins.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:54:44 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 16:51:57 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/31 14:51:58 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ int	ft_exec_builtin(char **s, t_envp **l)
 	}
 	else if (ft_strcmp(s[0], "export") == 0)
 	{
-		g_exit_status = ft_export(s, l);
+		g_exit_status = ft_export(s+1, l);
 		return (1);
 	}
 	else if (ft_strcmp(s[0], "unset") == 0)
 	{
-		g_exit_status = ft_unset(s, l);
+		g_exit_status = ft_unset(s+1, l);
 		return (1);
 	}
 	else if (ft_strcmp(s[0], ":") == 0)

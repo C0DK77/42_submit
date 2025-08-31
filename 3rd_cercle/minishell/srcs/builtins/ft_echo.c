@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 15:23:32 by ecid              #+#    #+#             */
-/*   Updated: 2025/08/19 21:20:49 by ecid             ###   ########.fr       */
+/*   Updated: 2025/08/31 13:11:30 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	ft_echo_option(char *arg)
 {
 	int	i;
 
-	if (!arg || arg[0] != '-' || arg[1] != 'n')
+	if (!arg || arg[0] != '-')
 		return (0);
 	i = 1;
 	while (arg[i] == 'n')
