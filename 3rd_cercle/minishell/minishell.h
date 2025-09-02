@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/31 21:23:55 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/02 20:08:38 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-// mets-la juste après les includes readline, idéalement dans minishell.h
+//  includes readline
 #ifndef RL_FUNC_DECLS
 # define RL_FUNC_DECLS
 /* Fallback si le header ne déclare pas rl_replace_line (libedit). */
@@ -43,7 +43,7 @@ void rl_redisplay(void);
 
 # define HEREDOC_FILE "/tmp/.minishell_heredoc"
 
-extern int				g_exit_status;
+extern volatile sig_atomic_t	g_exit_status;
 
 //  STRUCTURE ENV
 typedef struct s_envp

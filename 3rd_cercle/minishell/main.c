@@ -6,13 +6,13 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/31 14:56:23 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/02 20:09:34 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int g_exit_status = 0;
+volatile sig_atomic_t g_exit_status = 0;
 
 int main(int argc, char **argv, char **envp)
 {
