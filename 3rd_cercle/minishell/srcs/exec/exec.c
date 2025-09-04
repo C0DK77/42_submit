@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/31 14:55:21 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/02 23:31:32 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,110 +14,99 @@
 
 void	ft_exec(t_parsing *p, t_envp *l)
 {
-	int		fd[2];
-	int		prev_fd;
-	int		s_stdin;
-	int		s_stdout;
-	int		status;
-	pid_t	pid;
-	pid_t	last_pid;
+    int		fd[2];
+    int		prev_fd;
+    int		s_stdin;
+    int		s_stdout;
+    int		status;
+    pid_t	pid;
+    pid_t	last_pid;
 
-	prev_fd = -1;
-	s_stdin = dup(STDIN_FILENO);
-	s_stdout = dup(STDOUT_FILENO);
+    prev_fd = -1;
+    s_stdin = dup(STDIN_FILENO);
+    s_stdout = dup(STDOUT_FILENO);
+    last_pid = -1;
+    while (p)
+    {
+        if ((p->prev && p->prev->sep == SEP_AND_IF && g_exit_status != 0)
+            || (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0))
+        {
+            p = p->next;
+            continue ;
+        }
+        if (p->sep == SEP_NONE)
+        {
+            if (ft_exec_builtin(p->line, &l))
+            {
+                p = p->next;
+                continue;
+            }
+        }
+        if (p->sep == SEP_PIPE)
+            pipe(fd);
+        pid = fork();
+        if (pid == 0)
+        {
+            reset_signals();
+            signal(SIGPIPE, SIG_DFL);
 
-	if(ft_exec_read_all_heredocs(p) != 0)
-	{
-		dup2(s_stdin, STDIN_FILENO);
-		dup2(s_stdout, STDOUT_FILENO);
-		close(s_stdin);
-		close(s_stdout);
-		return;
-	}
-	last_pid = -1;
-	while (p)
-	{
-		if ((p->prev && p->prev->sep == SEP_AND_IF && g_exit_status != 0)
-			|| (p->prev && p->prev->sep == SEP_OR_IF && g_exit_status == 0))
-		{
-			p = p->next;
-			continue ;
-		}
-		if (p->sep == SEP_NONE)
-		{
-    
-    		if (ft_exec_builtin(p->line, &l))
-    		{
-        		p = p->next;
-				continue;
-			} 
-		}
-		if(p->sep == SEP_PIPE)
-			pipe(fd);
-		pid = fork();
-		if(pid==0)
-		{
-			reset_signals();
-			signal(SIGPIPE, SIG_DFL);
-			
-			if(prev_fd != -1)
-			{
-				dup2(prev_fd, STDIN_FILENO);
-				close(prev_fd);
-			}
-			if(p->sep ==SEP_PIPE)
-			{
-				close(fd[0]);
-				dup2(fd[1], STDOUT_FILENO);
-				close(fd[1]);
-			}
-			if(ft_exec_redirections_init(p)!=0)
-				exit(1);
-			if(ft_exec_builtin(p->line, &l))
-				exit(g_exit_status);
-			ft_exec_cmd(p->line, l);
-			exit(1);
-		}
-		else
-		{
-			if(prev_fd!= -1)
-				close(prev_fd);
-			if(p->sep ==SEP_PIPE)
-			{
-				close(fd[1]);
-				prev_fd=fd[0];
-			}
-			else
-				prev_fd =-1;
-			last_pid =pid;
+            if (prev_fd != -1)
+            {
+                dup2(prev_fd, STDIN_FILENO);
+                close(prev_fd);
+            }
+            if (p->sep == SEP_PIPE)
+            {
+                close(fd[0]);
+                dup2(fd[1], STDOUT_FILENO);
+                close(fd[1]);
+            }
+            if (ft_exec_redirections_init(p) != 0)
+                exit(1);
+            if (ft_exec_builtin(p->line, &l))
+                exit(g_exit_status);
+            ft_exec_cmd(p->line, l);
+            exit(1);
+        }
+        else
+        {
+            if (prev_fd != -1)
+                close(prev_fd);
+            if (p->sep == SEP_PIPE)
+            {
+                close(fd[1]);
+                prev_fd = fd[0];
+            }
+            else
+                prev_fd = -1;
+            last_pid = pid;
+        }
+        p = p->next;
+    }
+    if (last_pid > 0)
+    {
+        waitpid(last_pid, &status, 0);
+        if (WIFEXITED(status))
+            g_exit_status = WEXITSTATUS(status);
+        else if (WIFSIGNALED(status))
+            g_exit_status = 128 + WTERMSIG(status);
+    }
+    while (1)
+    {
+        int w = wait(NULL);
+        if (w == -1)
+        {
+            if (errno == EINTR)
+                continue;
+            if (errno == ECHILD)
+                break;
+        }
+    }
+    dup2(s_stdin, STDIN_FILENO);
+    dup2(s_stdout, STDOUT_FILENO);
+    close(s_stdin);
+    close(s_stdout);
 
-		}
-		p = p ->next;
-
-	}
-	if (last_pid >0)
-	{
-		waitpid(last_pid, &status, 0);
-		if(WIFEXITED(status))
-			g_exit_status = WEXITSTATUS(status);
-		else if(WIFSIGNALED(status))
-			g_exit_status = 128 +WTERMSIG(status);
-	}
-	while(1)
-	{
-		int w =wait(NULL);
-		if(w==-1)
-		{
-			if(errno==EINTR)
-				continue;
-			if(errno==ECHILD)
-				break;
-		}
-	}
-	dup2(s_stdin, STDIN_FILENO);
-	dup2(s_stdout, STDOUT_FILENO);
-	close(s_stdin);
-	close(s_stdout);
 }
 
 void	ft_exec_cmd(char **s, t_envp *l)
@@ -194,7 +183,7 @@ char	**ft_exec_env_array(t_envp *l)
 		{
 			entry = ft_strjoin(t->var, "=");
 			env[i] = ft_strjoin(entry, t->value);
-			free(entry);
+			free(entry);	
 			i++;
 		}
 		t = t->next;

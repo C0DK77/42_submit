@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/30 19:36:12 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/02 23:21:44 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,16 @@ int	ft_handle_redirection(t_parsing *n, t_token **t)
 
 void	ft_redirection_type(t_parsing *n, int t, char *f)
 {
-	if (t == R_IN)
-	{
-		n->infiles = ft_parse_add_value(n->infiles, f);
-	}
-	else if (t == R_OUT || t == R_APPEND)
-	{
-		n->outfiles = ft_parse_add_value(n->outfiles, f);
-		n->append = ft_parse_add_append(n->append, (t == R_APPEND));
-	}
-	else if (t == HERE)
-	{
-		n->infiles = ft_parse_add_value(n->infiles, f);
-		n->heredoc = 1;
-	}
+    if (t == R_IN)
+        n->redirs = ft_redir_add(n->redirs, REDIR_IN, f);
+    else if (t == R_OUT)
+        n->redirs = ft_redir_add(n->redirs, REDIR_OUT, f);
+    else if (t == R_APPEND)
+        n->redirs = ft_redir_add(n->redirs, REDIR_APPEND, f);
+    else if (t == HERE)
+        n->redirs = ft_redir_add(n->redirs, REDIR_HEREDOC, f);
 }
+
 
 t_parsing	*ft_parse_line(t_token *t)
 {

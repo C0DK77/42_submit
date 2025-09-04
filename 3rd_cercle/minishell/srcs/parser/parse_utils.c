@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 18:24:59 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/30 13:30:42 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/02 23:38:24 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,26 @@
 
 t_parsing	*ft_parse_add_node(t_parsing **n, t_parsing **p, t_parsing **a)
 {
-	t_parsing	*l;
+    t_parsing	*l;
 
-	l = calloc(1, sizeof(t_parsing));
-	if (!l)
-		return (NULL);
-	l->sep = SEP_NONE;
-	l->heredoc_fd = -1;
-	if (!*a)
-		*a = l;
-	if (*p)
-	{
-		(*p)->next = l;
-		l->prev = *p;
-	}
-	*p = l;
-	*n = l;
-	return (l);
+    l = calloc(1, sizeof(t_parsing));
+    if (!l)
+        return (NULL);
+    l->sep = SEP_NONE;
+    l->redirs = NULL;
+    l->line = NULL;
+    l->next = NULL;
+    l->prev = NULL;
+    if (!*a)
+        *a = l;
+    if (*p)
+    {
+        (*p)->next = l;
+        l->prev = *p;
+    }
+    *p = l;
+    *n = l;
+    return (l);
 }
 
 char	**ft_parse_add_value(char **s, char *v)
@@ -78,3 +81,21 @@ int	*ft_parse_add_append(int *s, int a)
 	free(s);
 	return (n);
 }
+t_redir *ft_redir_add(t_redir *list, t_redir_type type, char *target)
+{
+    t_redir *new = malloc(sizeof(t_redir));
+    if (!new)
+        return list;
+    new->type = type;
+    new->target = ft_strdup(target);
+    new->fd = -1;
+    new->next = NULL;
+    if (!list)
+        return new;
+    t_redir *tmp = list;
+    while (tmp->next)
+        tmp = tmp->next;
+    tmp->next = new;
+    return list;
+}
+
