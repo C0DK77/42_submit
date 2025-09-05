@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 15:20:41 by ecid              #+#    #+#             */
-/*   Updated: 2025/08/31 14:34:37 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/05 18:28:28 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 int	ft_export(char **s, t_envp **l)
 {
-	if (!s || !*s)
+	if (!s || !s[1])
 		return (ft_export_no_arguments(l));
+	s++;
 	while (*s)
 	{
 		if (!ft_export_arguments(s, l, NULL))
