@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/06 16:49:19 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/06 18:25:36 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,6 @@ void	ft_exec_cmd(char **s, t_envp *l)
 	free(p);
 	exit(126);
 }
-
 char	**ft_exec_env_array(t_envp *l)
 {
 	int		i;
@@ -163,12 +162,11 @@ char	**ft_exec_env_array(t_envp *l)
 	char	*entry;
 	t_envp	*t;
 
-	i = 0;
 	t = l;
 	count = 0;
 	while (t)
 	{
-		if (t->export && t->value)
+		if (t->export)
 			count++;
 		t = t->next;
 	}
@@ -179,11 +177,18 @@ char	**ft_exec_env_array(t_envp *l)
 	i = 0;
 	while (t)
 	{
-		if (t->export && t->value)
+		if (t->export)
 		{
 			entry = ft_strjoin(t->var, "=");
-			env[i] = ft_strjoin(entry, t->value);
-			free(entry);	
+			if (!entry)
+				return (NULL);
+			if (t->value)
+			    env[i] = ft_strjoin(entry, t->value);
+            else
+                env[i] = ft_strjoin(entry, "");
+			free(entry);
+			if (!env[i])
+				return (NULL);
 			i++;
 		}
 		t = t->next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 15:09:04 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/06 17:36:25 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,11 @@ int	ft_export_check_value(t_envp **l, char *n, char *a, int i)
 	char	*v;
 
 	if (a == NULL)
-		return (ft_pwd_export_env_set(l, n, NULL, 1), free(n), 1);
+	{
+		ft_pwd_export_env_set(l, n, "", 1);
+		free(n);
+		return (1);
+	}
 	v = ft_strdup(a);
 	if (!v)
 		return (free(n), 0);
@@ -49,3 +53,5 @@ int	ft_export_check_value(t_envp **l, char *n, char *a, int i)
 	free(n);
 	return (1);
 }
+
+

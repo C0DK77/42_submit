@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 14:12:03 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/06 16:42:29 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/06 17:10:06 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,14 @@ void	ft_pwd_export_env_set(t_envp **l, char *s, char *v, int i)
 		n->export = 1;
 	else
 		n->export = 0;	
-	n->next = *l;
-	*l = n;
+	n->next = NULL;
+	if (!*l)
+	{
+    	*l = n;
+    	return ;
+	}
+	e = *l;
+	while (e->next)
+    	e = e->next;
+	e->next = n;
 }
