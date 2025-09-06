@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/04 21:51:30 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/06 16:52:51 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ typedef struct s_parsing
 
 /*------------------- MAIN -------------------*/
 
-int						ft_program(t_envp *c_envp);
+int						ft_program(t_envp **c_envp);
 
 /*------------------- ENVIRONMENT -------------------*/
 
@@ -172,7 +172,7 @@ int						ft_exec_create_heredoc(char *delimiter);
 int						ft_exec_is_directory(char *p);
 char					*ft_exec_find_cmd(char *s, t_envp *l);
 char					*ft_strjoin_three(char *s1, char *s2, char *s3);
-void					ft_exec(t_parsing *p, t_envp *l);
+void					ft_exec(t_parsing *p, t_envp **l);
 void					ft_exec_cmd(char **s, t_envp *l);
 char					**ft_exec_env_array(t_envp *l);
 
@@ -214,7 +214,7 @@ int						ft_export_error(char *t);
 int						ft_export_check_value(t_envp **l, char *n, char *a,
 							int i);
 
-// env (Ajouté car il manquait)
+// env
 int						ft_env(t_envp *l);
 
 /*------------------- TOKENIZER -------------------*/

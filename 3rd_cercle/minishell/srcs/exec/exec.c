@@ -6,13 +6,13 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/02 23:31:32 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/06 16:49:19 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_exec(t_parsing *p, t_envp *l)
+void	ft_exec(t_parsing *p, t_envp **l)
 {
     int		fd[2];
     int		prev_fd;
@@ -36,7 +36,7 @@ void	ft_exec(t_parsing *p, t_envp *l)
         }
         if (p->sep == SEP_NONE)
         {
-            if (ft_exec_builtin(p->line, &l))
+            if (ft_exec_builtin(p->line, l))
             {
                 p = p->next;
                 continue;
@@ -63,9 +63,9 @@ void	ft_exec(t_parsing *p, t_envp *l)
             }
             if (ft_exec_redirections_init(p) != 0)
                 exit(1);
-            if (ft_exec_builtin(p->line, &l))
+            if (ft_exec_builtin(p->line, l))
                 exit(g_exit_status);
-            ft_exec_cmd(p->line, l);
+            ft_exec_cmd(p->line, *l);
             exit(1);
         }
         else

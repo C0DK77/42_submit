@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/02 20:09:34 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/06 16:47:23 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int main(int argc, char **argv, char **envp)
 
     while (1)
     {
-        if (!ft_program(c_envp))
+        if (!ft_program(&c_envp))
             break;
     }
 
@@ -43,7 +43,7 @@ int main(int argc, char **argv, char **envp)
     return (0);
 }
 
-int ft_program(t_envp *c_envp)
+int ft_program(t_envp **c_envp)
 {
     char       *line;
     t_token    *tokens;
@@ -58,7 +58,7 @@ int ft_program(t_envp *c_envp)
     if (*line)
         add_history(line);
 
-    tokens = ft_token(line, c_envp);
+    tokens = ft_token(line, *c_envp);
     if (!tokens || !ft_token_check(tokens))
     {
         ft_token_free(tokens);
@@ -67,15 +67,12 @@ int ft_program(t_envp *c_envp)
     }
 
     parse = ft_parse_line(tokens);
-
     ft_token_free(tokens);
     free(line);
-
     if (!parse)
         return (1);
 
     ft_exec(parse, c_envp); 
-
 
     return (1);
 }
