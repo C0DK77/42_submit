@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:53:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/24 20:49:31 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/06 23:51:53 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,6 @@ t_operator	*ft_token_operator_init_table(void)
 	return (tb);
 }
 
-t_token	*ft_token(char *s, t_envp *l)
-{
-	t_token	*t;
-
-	t = NULL;
-	while (*s)
-	{
-		while (ft_isspace(*s))
-			s++;
-		if (!(*s))
-			break ;
-		else if (ft_isoperator(*s))
-			s = ft_token_operator(&t, s);
-		else
-			s = ft_token_word(&t, s, l);
-	}
-	return (t);
-}
-
 t_token	*ft_token_init(t_token_type t, char *v)
 {
 	t_token	*n;
@@ -67,6 +48,45 @@ t_token	*ft_token_init(t_token_type t, char *v)
 	n->value = ft_strdup(v);
 	n->next = NULL;
 	return (n);
+}
+t_token	*ft_token(char *s, t_envp *l)
+{
+	t_token	*t;
+	int		after_here;
+
+	t = NULL;
+	after_here = 0;
+	while (*s)
+	{
+		while (ft_isspace((unsigned char)*s))
+			s++;
+		if (!(*s))
+			break ;
+		else if (ft_isoperator((unsigned char)*s))
+		{
+			/* si on voit '<<', activer le mode "raw" pour le mot suivant */
+			if (s[0] == '<' && s[1] == '<')
+				after_here = 1;
+			s = ft_token_operator(&t, s);
+		}
+		else
+		{
+			if (after_here)
+			{
+				char	*raw;
+
+				raw = ft_token_word_hd(&s);
+				if (!raw)
+					return (t);
+				ft_token_add(&t, ft_token_init(WRD, raw));
+				free(raw);
+				after_here = 0;
+			}
+			else
+				s = ft_token_word(&t, s, l);
+		}
+	}
+	return (t);
 }
 
 void	ft_token_add(t_token **l, t_token *n)

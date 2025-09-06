@@ -6,13 +6,65 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/04 21:41:50 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/06 22:45:49 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_exec_redirections_init(t_parsing *s)
+static int	write_expanded_line(int fd, const char *s, t_envp *env)
+{
+	size_t	i;
+	size_t	start;
+	char	*name;
+	char	*val;
+	char	*tmp;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] != '$')
+		{
+			if (write(fd, &s[i], 1) < 0)
+				return (0);
+			i++;
+			continue ;
+		}
+		i++;
+		if (s[i] == '?')
+		{
+			tmp = ft_itoa((int)g_exit_status);
+			if (!tmp)
+				return (0);
+			if (write(fd, tmp, ft_strlen(tmp)) < 0)
+				return (free(tmp), 0);
+			free(tmp);
+			i++;
+		}
+		else if (ft_isalpha(s[i]) || s[i] == '_')
+		{
+			start = i;
+			while (ft_isalnum(s[i]) || s[i] == '_')
+				i++;
+			name = ft_substr(s, (unsigned int)start, (size_t)(i - start));
+			if (!name)
+				return (0);
+			val = ft_env_search_value(env, name);
+			if (val && write(fd, val, ft_strlen(val)) < 0)
+				return (free(name), 0);
+			free(name);
+		}
+		else
+		{
+			if (write(fd, "$", 1) < 0)
+				return (0);
+		}
+	}
+	return (1);
+}
+
+
+int ft_exec_redirections_init(t_parsing *s, t_envp *env)
 {
     t_redir *r = s->redirs;
     int fd_in = -1;
@@ -23,7 +75,7 @@ int ft_exec_redirections_init(t_parsing *s)
     {
         if (r->type == REDIR_HEREDOC)
         {
-            int tmp_fd = ft_exec_create_heredoc(r->target);
+            int tmp_fd = ft_exec_create_heredoc(r->target, r->hd_quoted, env);
             if (tmp_fd < 0)
                 return (1);
             if (first_heredoc_fd == -1)
@@ -84,8 +136,7 @@ int ft_exec_redirections_init(t_parsing *s)
     return (0);
 }
 
-
-int ft_exec_create_heredoc(char *delim)
+int ft_exec_create_heredoc(char *delim, int quoted, t_envp *env)
 {
     int     hd[2];
     pid_t   pid;
@@ -104,7 +155,7 @@ int ft_exec_create_heredoc(char *delim)
         close(hd[0]);
         while (1)
         {
-            l = readline("> ");
+            l = readline("heredoc> ");
             if (!l)
                 break ;
             if (ft_strcmp(l, delim) == 0)
@@ -112,7 +163,21 @@ int ft_exec_create_heredoc(char *delim)
                 free(l);
                 break ;
             }
-            write(hd[1], l, ft_strlen(l));
+            if (quoted)
+            {
+                if (write(hd[1], l, ft_strlen(l)) < 0)
+                {
+                    free(l);
+                    close(hd[1]);
+                    _exit(1);
+                }
+            }
+            else if (!write_expanded_line(hd[1], l, env))
+            {
+                free(l);
+                close(hd[1]);
+                _exit(1);
+            }
             write(hd[1], "\n", 1);
             free(l);
         }
@@ -130,7 +195,6 @@ int ft_exec_create_heredoc(char *delim)
     }
     return (hd[0]);
 }
-
 
 int ft_exec_is_directory(char *p)
 {

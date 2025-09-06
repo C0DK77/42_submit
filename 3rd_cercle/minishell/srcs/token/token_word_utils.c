@@ -6,11 +6,43 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/04 21:51:45 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/06 23:45:07 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*ft_token_word_hd(char **ps)
+{
+	char	*s;
+	int		i;
+	int		in_q;
+	char	qch;
+	char	*out;
+
+	s = *ps;
+	i = 0;
+	in_q = 0;
+	qch = 0;
+	while (s[i]
+		&& (!ft_isspace((unsigned char)s[i]) || in_q)
+		&& (!ft_isoperator((unsigned char)s[i]) || in_q))
+	{
+		if (!in_q && (s[i] == '\'' || s[i] == '"'))
+		{
+			in_q = 1;
+			qch = s[i];
+		}
+		else if (in_q && s[i] == qch)
+			in_q = 0;
+		i++;
+	}
+	out = ft_substr(s, 0, (size_t)i);
+	if (!out)
+		return (NULL);
+	*ps += i;
+	return (out);
+}
 
 char    *ft_strjoin_and_free(char *s1, char *s2)
 {
