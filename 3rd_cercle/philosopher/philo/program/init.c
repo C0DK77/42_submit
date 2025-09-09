@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:48:26 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/08/16 12:52:06 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/02 20:23:15 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	ft_init_var_data(int ac, char **av, t_data *d)
 	d->finished = 0;
 	d->start_time = ft_time();
 	pthread_mutex_init(&d->print, NULL);
+	pthread_mutex_init(&d->mutex_finish, NULL);
 }
 
 int	ft_init_var_philo(t_data *d)
@@ -62,6 +63,7 @@ int	ft_init_var_philo(t_data *d)
 	while (i < d->nb)
 	{
 		pthread_mutex_init(&d->forks[i], NULL);
+		pthread_mutex_init(&d->philo[i].mutex_meal, NULL);
 		d->philo[i].id = i + 1;
 		d->philo[i].meals_eaten = 0;
 		d->philo[i].data = d;
@@ -97,9 +99,11 @@ void	ft_free_data(t_data *d)
 	while (i < d->nb)
 	{
 		pthread_mutex_destroy(&d->forks[i]);
+		pthread_mutex_destroy(&d->philo[i].mutex_meal);
 		i++;
 	}
 	pthread_mutex_destroy(&d->print);
+	pthread_mutex_destroy(&d->mutex_finish);
 	free(d->philo);
 	free(d->forks);
 	free(d);

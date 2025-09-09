@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:04:01 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 12:24:53 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/09 09:56:21 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,15 @@
 # define PHILOSOPHER_H
 
 # include <pthread.h>
+# include <stdarg.h>
 # include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
+
+# define DIED "\033[1;31m"
+# define TIME "\033[32m"
 
 typedef struct s_philo
 {
@@ -26,6 +30,7 @@ typedef struct s_philo
 	int				id;
 	int				meals_eaten;
 	uint64_t		last_meal;
+	pthread_mutex_t	mutex_meal;
 	struct s_data	*data;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
@@ -37,9 +42,11 @@ typedef struct s_data
 	uint64_t		time_to_die;
 	uint64_t		time_to_eat;
 	uint64_t		time_to_sleep;
+
 	int				nb_meal;
 	uint64_t		start_time;
 	volatile int	finished;
+	pthread_mutex_t	mutex_finish;
 
 	t_philo			*philo;
 	pthread_mutex_t	*forks;
@@ -50,8 +57,9 @@ typedef struct s_data
 
 uint64_t			ft_time(void);
 void				ft_print_action(t_philo *p, char *s);
-void				ft_check_sleep(uint64_t duration_ms, t_data *d);
+void				ft_check(uint64_t duration_ms, t_data *d);
 void				ft_free_data(t_data *d);
+void				mutex_unlock_all(int argv, ...);
 
 //	INIT
 
@@ -65,6 +73,9 @@ int					ft_init_thread(t_data *d);
 void				*routine(void *arg);
 void				*routine_for_1(t_data *d, t_philo *p);
 int					routine_for_all(t_data *d, t_philo *p);
+int					routine_for_all_b(t_data *d, t_philo *p);
+void				ft_fork_order(t_philo *p, pthread_mutex_t **first,
+						pthread_mutex_t **second);
 
 //	MONITOR
 

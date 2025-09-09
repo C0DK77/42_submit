@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 10:24:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/16 12:42:15 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/09 09:56:06 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,54 @@ uint64_t	ft_time(void)
 void	ft_print_action(t_philo *p, char *s)
 {
 	uint64_t	timestamp;
+	t_data		*d;
+	int			is_finished;
 
-	pthread_mutex_lock(&p->data->print);
-	if (!p->data->finished)
-	{
-		timestamp = ft_time() - p->data->start_time;
-		printf("%llu %d %s\n", timestamp, p->id, s);
-	}
-	pthread_mutex_unlock(&p->data->print);
+	d = p->data;
+	pthread_mutex_lock(&d->mutex_finish);
+	is_finished = d->finished;
+	pthread_mutex_unlock(&d->mutex_finish);
+	if (is_finished)
+		return ;
+	pthread_mutex_lock(&d->print);
+	timestamp = ft_time() - d->start_time;
+	printf(TIME "%lu \033[0m %d %s\n", timestamp, p->id, s);
+	pthread_mutex_unlock(&d->print);
 }
 
-void	ft_check_sleep(uint64_t duration_ms, t_data *d)
+void	ft_check(uint64_t duration_ms, t_data *d)
 {
 	uint64_t	start;
 
 	start = ft_time();
-	while (!d->finished && ft_time() - start < duration_ms)
+	while (1)
+	{
+		pthread_mutex_lock(&d->mutex_finish);
+		if (d->finished)
+		{
+			pthread_mutex_unlock(&d->mutex_finish);
+			break ;
+		}
+		pthread_mutex_unlock(&d->mutex_finish);
+		if (ft_time() - start >= duration_ms)
+			break ;
 		usleep(100);
+	}
+}
+
+void	mutex_unlock_all(int argv, ...)
+{
+	va_list			args;
+	pthread_mutex_t	*mutex;
+	int				i;
+
+	i = 0;
+	va_start(args, argv);
+	while (i < argv)
+	{
+		mutex = va_arg(args, pthread_mutex_t *);
+		pthread_mutex_unlock(mutex);
+		i++;
+	}
+	va_end(args);
 }

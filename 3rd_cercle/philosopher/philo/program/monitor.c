@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 18:12:15 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/08/16 12:33:10 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/09 09:10:39 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,25 @@ void	*monitor(void *arg)
 
 void	monitor_dead(t_data *d, int i)
 {
-	if (ft_time() - d->philo[i].last_meal > d->time_to_die)
+	uint64_t	last_meal_time;
+
+	pthread_mutex_lock(&d->philo[i].mutex_meal);
+	last_meal_time = d->philo[i].last_meal;
+	pthread_mutex_unlock(&d->philo[i].mutex_meal);
+	if (ft_time() - last_meal_time > d->time_to_die)
 	{
-		pthread_mutex_lock(&d->print);
+		pthread_mutex_lock(&d->mutex_finish);
 		if (!d->finished)
 		{
-			printf("%llu %d died\n", ft_time() - d->start_time, d->philo[i].id);
 			d->finished = 1;
+			pthread_mutex_unlock(&d->mutex_finish);
+			pthread_mutex_lock(&d->print);
+			printf(TIME "%lu \033[0m", ft_time() - d->start_time);
+			printf(DIED "%d died\033[0m\n", d->philo[i].id);
+			pthread_mutex_unlock(&d->print);
 		}
-		pthread_mutex_unlock(&d->print);
+		else
+			pthread_mutex_unlock(&d->mutex_finish);
 	}
 }
 
@@ -58,10 +68,16 @@ void	monitor_meal(t_data *d)
 	full = 0;
 	while (i < d->nb)
 	{
+		pthread_mutex_lock(&d->philo[i].mutex_meal);
 		if (d->philo[i].meals_eaten >= d->nb_meal)
 			full++;
+		pthread_mutex_unlock(&d->philo[i].mutex_meal);
 		i++;
 	}
 	if (full == d->nb)
+	{
+		pthread_mutex_lock(&d->mutex_finish);
 		d->finished = 1;
+		pthread_mutex_unlock(&d->mutex_finish);
+	}
 }
