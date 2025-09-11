@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:53:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/10 21:13:18 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/11 22:16:00 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_operator	*ft_token_operator_init_table(void)
     return (tb);
 }
 
-
 t_token	*ft_token_init(t_token_type t, char *v)
 {
 	t_token	*n;
@@ -39,10 +38,20 @@ t_token	*ft_token_init(t_token_type t, char *v)
 	if (!n)
 		return (NULL);
 	n->type = t;
-	n->value = ft_strdup(v);
+	n->value = NULL;
+	if (v)
+	{
+		n->value = ft_strdup(v);
+		if (!n->value)
+		{
+			free(n);
+			return (NULL);
+		}
+	}
 	n->next = NULL;
 	return (n);
 }
+
 t_token	*ft_token(char *s, t_envp *l)
 {
 	t_token	*t;
@@ -70,13 +79,24 @@ t_token	*ft_token(char *s, t_envp *l)
 
 				raw = ft_token_word_hd(&s);
 				if (!raw)
-					return (t);
+				{
+					ft_token_free(t);
+					return NULL;
+				}
 				ft_token_add(&t, ft_token_init(WRD, raw));
 				free(raw);
 				after_here = 0;
 			}
 			else
-				s = ft_token_word(&t, s, l);
+            {
+                char *next = ft_token_word(&t, s, l);
+                if (!next)
+                {
+                    ft_token_free(t);
+                    return NULL;
+                }
+                s = next;
+            }
 		}
 	}
 	return (t);

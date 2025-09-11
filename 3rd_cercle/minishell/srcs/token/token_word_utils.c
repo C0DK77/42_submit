@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/06 23:45:07 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/11 22:11:53 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,17 @@ char    *ft_strjoin_and_free(char *s1, char *s2)
     free(s2);
     return (new_str);
 }
+// token_word_utils.c
 char    *ft_token_word(t_token **n, char *s, t_envp *l)
 {
     char    *w;
     char    quote;
     char    *temp;
-    
+
     quote = 0;
     w = ft_strdup("");
     if (!w)
-        return (s);
+        return NULL;
     while (*s && (!ft_isspace(*s) || quote) && (!ft_isoperator(*s) || quote))
     {
         if (*s == '\'' || *s == '"')
@@ -92,9 +93,20 @@ char    *ft_token_word(t_token **n, char *s, t_envp *l)
                     s++;
                 }
             }
+
+            if (!*s)
+            {
+                ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 2);
+                ft_putchar_fd(quote, 2);
+                ft_putstr_fd("'\n", 2);
+                g_exit_status = 2;
+                free(w);
+                return NULL;
+            }
+
             if (*s)
                 s++;
-            // quote = 0;
+            quote = 0;
         }
         else if (*s == '$' && *(s + 1))
         {

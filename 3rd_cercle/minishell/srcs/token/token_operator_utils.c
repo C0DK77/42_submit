@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/09/07 00:48:41 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/11 22:13:55 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ char	*ft_token_operator(t_token **l, char *s)
 	}
 	if (n)
 		ft_token_add(l, n);
+	else
+		s++;
 	return (s);
 }
 
