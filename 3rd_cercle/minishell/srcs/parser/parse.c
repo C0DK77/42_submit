@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/06 22:26:01 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/10 22:55:40 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,11 @@ t_parsing	*ft_parse_line(t_token *t)
 	p = NULL;
 	while (t)
 	{
-		if (!n && !ft_parse_add_node(&n, &p, &a))
-			return (NULL);
+		if (!n)
+		{
+			if(!ft_parse_add_node(&a, &n, &p))
+				return (NULL);
+		}
 		if (t->type == WRD && t->value)
 			n->line = ft_parse_add_value(n->line, t->value);
 		else if ((t->type == R_IN || t->type == R_OUT || t->type == R_APPEND

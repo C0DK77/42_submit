@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/06 22:45:49 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/10 22:21:29 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,12 @@ static int	write_expanded_line(int fd, const char *s, t_envp *env)
 	return (1);
 }
 
-
 int ft_exec_redirections_init(t_parsing *s, t_envp *env)
 {
     t_redir *r = s->redirs;
     int fd_in = -1;
     int fd_out = -1;
-    int first_heredoc_fd = -1;
+    int last_heredoc_fd = -1;
 
     while (r)
     {
@@ -77,11 +76,22 @@ int ft_exec_redirections_init(t_parsing *s, t_envp *env)
         {
             int tmp_fd = ft_exec_create_heredoc(r->target, r->hd_quoted, env);
             if (tmp_fd < 0)
+            {
+                /* Propager -2 (interruption) vers l'appelant si nécessaire */
+                if (tmp_fd == -2)
+                {
+                    if (last_heredoc_fd != -1)
+                        close(last_heredoc_fd);
+                    return (-2);
+                }
+                if (last_heredoc_fd != -1)
+                    close(last_heredoc_fd);
                 return (1);
-            if (first_heredoc_fd == -1)
-                first_heredoc_fd = tmp_fd;
-            else
-                close(tmp_fd);
+            }
+            /* fermer l'ancien heredoc et garder le dernier (la dernière redir gagne) */
+            if (last_heredoc_fd != -1)
+                close(last_heredoc_fd);
+            last_heredoc_fd = tmp_fd;
         }
         else if (r->type == REDIR_IN)
         {
@@ -104,14 +114,16 @@ int ft_exec_redirections_init(t_parsing *s, t_envp *env)
         }
         r = r->next;
     }
-    if (first_heredoc_fd != -1)
+
+    /* Appliquer la dernière heredoc si présente, sinon appliquer fd_in */
+    if (last_heredoc_fd != -1)
     {
-        if (dup2(first_heredoc_fd, STDIN_FILENO) == -1)
+        if (dup2(last_heredoc_fd, STDIN_FILENO) == -1)
         {
-            close(first_heredoc_fd);
+            close(last_heredoc_fd);
             return (1);
         }
-        close(first_heredoc_fd);
+        close(last_heredoc_fd);
         if (fd_in != -1)
             close(fd_in);
     }
@@ -124,6 +136,7 @@ int ft_exec_redirections_init(t_parsing *s, t_envp *env)
         }
         close(fd_in);
     }
+
     if (fd_out != -1)
     {
         if (dup2(fd_out, STDOUT_FILENO) == -1)
@@ -135,6 +148,7 @@ int ft_exec_redirections_init(t_parsing *s, t_envp *env)
     }
     return (0);
 }
+
 
 int ft_exec_create_heredoc(char *delim, int quoted, t_envp *env)
 {

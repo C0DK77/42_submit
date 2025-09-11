@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/06 21:42:11 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/10 21:52:14 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ void	ft_exec(t_parsing *p, t_envp **l)
         pid = fork();
         if (pid == 0)
         {
-            reset_signals();
-            signal(SIGPIPE, SIG_DFL);
+            //  reset_signals();
+            //signal(SIGPIPE, SIG_DFL);
+		    signal(SIGINT, SIG_DFL);
 
             if (prev_fd != -1)
             {
@@ -63,6 +64,9 @@ void	ft_exec(t_parsing *p, t_envp **l)
             }
             if (ft_exec_redirections_init(p,*l) != 0)
                 exit(1);
+            reset_signals();
+            signal(SIGINT, ft_handler_exec);
+            signal(SIGQUIT, ft_handler_exec);
             if (ft_exec_builtin(p->line, l))
                 exit(g_exit_status);
             ft_exec_cmd(p->line, *l);
@@ -90,6 +94,8 @@ void	ft_exec(t_parsing *p, t_envp **l)
             g_exit_status = WEXITSTATUS(status);
         else if (WIFSIGNALED(status))
             g_exit_status = 128 + WTERMSIG(status);
+        if (g_exit_status == 131)
+            printf("Quit (core dump)\n");
     }
     while (1)
     {

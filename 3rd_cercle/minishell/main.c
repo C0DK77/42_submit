@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/06 16:47:23 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/10 21:55:43 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int main(int argc, char **argv, char **envp)
 
     c_envp = ft_env_list_init(envp);
     if (!c_envp)
-        return (1);
+        init_min_env(c_envp);
     if (!ft_env_vars_check(&c_envp))
         return (0);
 
@@ -72,8 +72,24 @@ int ft_program(t_envp **c_envp)
     if (!parse)
         return (1);
 
+    signal(SIGINT, ft_handler_exec);
+    signal(SIGQUIT, ft_handler_exec);
     ft_exec(parse, c_envp); 
-
+    setup_signals();
     return (1);
 }
+
+void init_min_env(t_envp *c_envp)
+{
+    char	b[PATH_MAX];
+
+	if (!getcwd(b, sizeof(b)))
+       return ;
+		//return (ft_pwd_error(0, 0));
+    ft_pwd_export_env_set(&c_envp, "_", "/bin/env", 0);
+    ft_pwd_export_env_set(&c_envp, "OLDPWD", NULL, 0);
+    ft_pwd_export_env_set(&c_envp, "SHLVL", "1", 0);   
+    ft_pwd_export_env_set(&c_envp, "PWD", b, 0); 
+}
+
 

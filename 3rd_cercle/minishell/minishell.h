@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/06 23:44:17 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/10 21:24:51 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ typedef struct s_parsing
 /*------------------- MAIN -------------------*/
 
 int						ft_program(t_envp **c_envp);
+void 					init_min_env(t_envp *c_envp);
 
 /*------------------- ENVIRONMENT -------------------*/
 
@@ -242,5 +243,6 @@ char					*ft_token_word(t_token **n, char *s, t_envp *l);
 void					ft_sigint_handler(int sig);
 void					setup_signals(void);
 void					reset_signals(void);
+void					ft_handler_exec(int sig);
 
 #endif

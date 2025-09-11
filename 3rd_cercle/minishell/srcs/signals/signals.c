@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 17:45:17 by ecid              #+#    #+#             */
-/*   Updated: 2025/09/05 18:10:51 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/10 21:16:06 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,30 @@ void	ft_sigint_handler(int sig)
 		write(STDERR_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		// rl_redisplay();
+		rl_redisplay();
 	}
 	else if (sig == SIGQUIT)
 	{
 		g_exit_status = 131;
 	}
 }
+
+void	ft_handler_exec(int sig) 
+{
+	if (sig == SIGINT)
+	{
+		g_exit_status = 130;
+		write(STDERR_FILENO, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+	}
+	else if (sig == SIGQUIT)
+	{
+		write(1, "Quit (core dump)\n", 17);
+		g_exit_status = 131;
+	}
+}
+
 
 void	setup_signals(void)
 {
