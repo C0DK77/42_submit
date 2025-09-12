@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:53:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/11 22:16:00 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/12 18:07:12 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,9 @@ t_token	*ft_token(char *s, t_envp *l)
                 char *next = ft_token_word(&t, s, l);
                 if (!next)
                 {
-                    ft_token_free(t);
-                    return NULL;
+                    if (t) 
+						ft_token_free(t);
+        			return NULL;
                 }
                 s = next;
             }

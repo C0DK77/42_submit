@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/11 22:44:27 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/12 18:27:32 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	ft_exec(t_parsing *p, t_envp **l)
             reset_signals();
             signal(SIGINT, ft_handler_exec);
             signal(SIGQUIT, ft_handler_exec);
+            signal(SIGPIPE, SIG_DFL);
             if (ft_exec_builtin(p->line, l))
                 exit(g_exit_status);
             ft_exec_cmd(p->line, *l);

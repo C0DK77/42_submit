@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_word_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/11 22:11:53 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/12 18:00:30 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char    *ft_strjoin_and_free(char *s1, char *s2)
     free(s2);
     return (new_str);
 }
-// token_word_utils.c
+
 char    *ft_token_word(t_token **n, char *s, t_envp *l)
 {
     char    *w;

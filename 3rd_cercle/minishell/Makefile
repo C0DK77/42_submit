@@ -5,7 +5,7 @@ NAME 				= 	minishell
 
 # ==== FLAGS AND COMPILER ==== #
 
-CC 					= 	gcc
+CC 					= 	cc
 CFLAGS 				= 	-Wall -Wextra -Werror -g3 -I. \
 						-I$(LIBFT_DIR)
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/10 22:21:29 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/12 18:37:49 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ int ft_exec_redirections_init(t_parsing *s, t_envp *env)
             int tmp_fd = ft_exec_create_heredoc(r->target, r->hd_quoted, env);
             if (tmp_fd < 0)
             {
-                /* Propager -2 (interruption) vers l'appelant si nécessaire */
                 if (tmp_fd == -2)
                 {
                     if (last_heredoc_fd != -1)
@@ -88,7 +87,6 @@ int ft_exec_redirections_init(t_parsing *s, t_envp *env)
                     close(last_heredoc_fd);
                 return (1);
             }
-            /* fermer l'ancien heredoc et garder le dernier (la dernière redir gagne) */
             if (last_heredoc_fd != -1)
                 close(last_heredoc_fd);
             last_heredoc_fd = tmp_fd;
@@ -115,7 +113,6 @@ int ft_exec_redirections_init(t_parsing *s, t_envp *env)
         r = r->next;
     }
 
-    /* Appliquer la dernière heredoc si présente, sinon appliquer fd_in */
     if (last_heredoc_fd != -1)
     {
         if (dup2(last_heredoc_fd, STDIN_FILENO) == -1)
