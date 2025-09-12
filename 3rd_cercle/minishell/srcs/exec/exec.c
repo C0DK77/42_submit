@@ -6,11 +6,12 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/12 18:27:32 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/12 19:10:25 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 void	ft_exec(t_parsing *p, t_envp **l)
 {
