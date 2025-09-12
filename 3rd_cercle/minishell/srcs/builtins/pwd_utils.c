@@ -26,51 +26,50 @@ void	ft_pwd_export_env_set(t_envp **l, char *s, char *v, int i)
 {
 	t_envp	*e;
 	t_envp	*n;
-	char		*new_val;
+	char	*new_val;
 
-	if(!l || !s)
-		return;
+	if (!l || !s)
+		return ;
 	e = ft_env_search_node(*l, s);
 	if (e)
 	{
-		if(v)
+		if (v)
 		{
 			new_val = ft_strdup(v);
 			if (!new_val)
-				return;
+				return ;
 			free(e->value);
 			e->value = new_val;
 		}
 		if (i)
-    		e->export = 1;
-		return;
+			e->export = 1;
+		return ;
 	}
-
 	n = malloc(sizeof(t_envp));
 	if (!n)
 		return ;
 	n->var = ft_strdup(s);
-	if(v)
+	if (v)
 		n->value = ft_strdup(v);
 	else
-		n->value = NULL;	
+		n->value = NULL;
 	if (!n->var || (v && !n->value))
 	{
 		ft_free_all(3, n->var, n->value, n);
 		return ;
 	}
-	if(i)
+	if (i)
 		n->export = 1;
 	else
-		n->export = 0;	
+		n->export = 0;
 	n->next = NULL;
 	if (!*l)
 	{
-    	*l = n;
-    	return ;
+		*l = n;
+		return ;
 	}
 	e = *l;
 	while (e->next)
-    	e = e->next;
+		e = e->next;
 	e->next = n;
 }

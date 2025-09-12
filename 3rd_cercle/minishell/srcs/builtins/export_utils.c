@@ -53,5 +53,3 @@ int	ft_export_check_value(t_envp **l, char *n, char *a, int i)
 	free(n);
 	return (1);
 }
-
-

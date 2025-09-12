@@ -16,7 +16,6 @@ int	ft_exec_builtin(char **s, t_envp **l)
 {
 	if (!s || !s[0])
 		return (0);
-
 	if (ft_strcmp(s[0], "cd") == 0)
 	{
 		g_exit_status = ft_cd(s, *l);
@@ -53,7 +52,6 @@ int	ft_exec_builtin(char **s, t_envp **l)
 		return (1);
 	}
 	else if (ft_strcmp(s[0], ":") == 0)
-
 	{
 		g_exit_status = 0;
 		return (1);
