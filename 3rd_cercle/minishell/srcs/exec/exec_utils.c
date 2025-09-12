@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/12 18:37:49 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/12 18:54:18 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,16 @@ static int	write_expanded_line(int fd, const char *s, t_envp *env)
 	}
 	return (1);
 }
+/* permission*/
+static void print_file_error(const char *path)
+{
+    ft_putstr_fd("minishell: ", 2);
+    ft_putstr_fd((char *)path, 2);
+    ft_putstr_fd(": ", 2);
+    ft_putstr_fd((char *)strerror(errno), 2);
+    ft_putstr_fd("\n", 2);
+}
+
 
 int ft_exec_redirections_init(t_parsing *s, t_envp *env)
 {
@@ -95,7 +105,10 @@ int ft_exec_redirections_init(t_parsing *s, t_envp *env)
         {
             int tmp_fd = open(r->target, O_RDONLY);
             if (tmp_fd < 0)
+            {
+                print_file_error(r->target);
                 return (1);
+            }
             if (fd_in != -1)
                 close(fd_in);
             fd_in = tmp_fd;
@@ -105,7 +118,10 @@ int ft_exec_redirections_init(t_parsing *s, t_envp *env)
             int flags = O_CREAT | O_WRONLY | (r->type == REDIR_APPEND ? O_APPEND : O_TRUNC);
             int tmp_fd = open(r->target, flags, 0644);
             if (tmp_fd < 0)
-                return (1);
+            {
+                print_file_error(r->target);
+                return(1);
+            }
             if (fd_out != -1)
                 close(fd_out);
             fd_out = tmp_fd;
