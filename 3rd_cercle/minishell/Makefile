@@ -30,7 +30,7 @@ ENVIRONNEMENT		= srcs/environnement/env_utils.c \
 					srcs/environnement/env_prompt_and_list_init.c\
 					srcs/environnement/env_vars_init.c
 
-EXEC				= srcs/exec/exec_utils.c srcs/exec/exec.c
+EXEC				= srcs/execution/exec_utils.c srcs/execution/exec.c
 
 SIGNALS				= srcs/signals/signals.c
 
@@ -45,7 +45,7 @@ SRC					= main.c $(BUILTINS) $(ENVIRONNEMENT) $(EXEC) $(PARSER) $(TOKEN) $(SIGNA
 
 OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
 
-# ==== LIBFT / PRINTF /	GET NEXT LINE ==== #
+# ==== LIBFT ==== #
 
 LIBFT_DIR			= 	./libft
 LIBFT_A 			= 	$(LIBFT_DIR)/libft.a

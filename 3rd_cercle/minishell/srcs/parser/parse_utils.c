@@ -12,52 +12,52 @@
 
 #include "minishell.h"
 
-static char *heredoc_clean_target(const char *s, int *quoted)
+static char	*heredoc_clean_target(const char *s, int *quoted)
 {
-    size_t  i;
-    size_t  j;
-    size_t  last_sig;
-    size_t  n;
-    int     in_q;
-    char    qch;
-    char    *out;
+	size_t	i;
+	size_t	j;
+	size_t	last_sig;
+	size_t	n;
+	int		in_q;
+	char	qch;
+	char	*out;
 
-    *quoted = 0;
-    if (!s)
-        return (NULL);
-    n = ft_strlen(s);
-    out = (char *)malloc(n + 1);
-    if (!out)
-        return (NULL);
-    i = 0;
-    while (s[i] == ' ' || s[i] == '\t')
-        i++;
-    j = 0;
-    last_sig = 0;
-    in_q = 0;
-    qch = 0;
-    while (s[i])
-    {
-        if (!in_q && (s[i] == '\'' || s[i] == '"'))
-        {
-            *quoted = 1;
-            in_q = 1;
-            qch = s[i++];
-            continue ;
-        }
-        if (in_q && s[i] == qch)
-        {
-            in_q = 0;
-            i++;
-            continue ;
-        }
-        out[j++] = s[i];
-        if (in_q || !(s[i] == ' ' || s[i] == '\t'))
-            last_sig = j;
-        i++;
-    }
-    out[last_sig] = '\0';
-    return (out);
+	*quoted = 0;
+	if (!s)
+		return (NULL);
+	n = ft_strlen(s);
+	out = (char *)malloc(n + 1);
+	if (!out)
+		return (NULL);
+	i = 0;
+	while (s[i] == ' ' || s[i] == '\t')
+		i++;
+	j = 0;
+	last_sig = 0;
+	in_q = 0;
+	qch = 0;
+	while (s[i])
+	{
+		if (!in_q && (s[i] == '\'' || s[i] == '"'))
+		{
+			*quoted = 1;
+			in_q = 1;
+			qch = s[i++];
+			continue ;
+		}
+		if (in_q && s[i] == qch)
+		{
+			in_q = 0;
+			i++;
+			continue ;
+		}
+		out[j++] = s[i];
+		if (in_q || !(s[i] == ' ' || s[i] == '\t'))
+			last_sig = j;
+		i++;
+	}
+	out[last_sig] = '\0';
+	return (out);
 }
 
 t_redir	*ft_redir_add(t_redir *list, t_redir_type type, char *target)
