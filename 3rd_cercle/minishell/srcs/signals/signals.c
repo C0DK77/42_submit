@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 17:45:17 by ecid              #+#    #+#             */
-/*   Updated: 2025/09/10 21:16:06 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/13 19:08:15 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	ft_handler_exec(int sig)
 	}
 	else if (sig == SIGQUIT)
 	{
-		write(1, "Quit (core dump)\n", 17);
 		g_exit_status = 131;
 	}
 }
