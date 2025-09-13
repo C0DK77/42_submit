@@ -22,8 +22,9 @@ LDLIBS   			+= -lreadline -lncurses
 
 BUILTINS 			= srcs/builtins/ft_exit.c srcs/builtins/ft_env.c \
 					srcs/builtins/ft_export.c srcs/builtins/export_utils.c srcs/builtins/ft_echo.c \
-					srcs/builtins/ft_unset.c srcs/builtins/ft_pwd.c srcs/builtins/pwd_utils.c\
-					srcs/builtins/ft_cd.c srcs/builtins/ft_exec_builtins.c 
+					srcs/builtins/ft_unset.c srcs/builtins/unset_utils.c \
+					srcs/builtins/pwd_utils.c srcs/builtins/ft_pwd.c \
+					srcs/builtins/cd_utils.c srcs/builtins/ft_cd.c srcs/builtins/ft_exec_builtins.c 
 
 ENVIRONNEMENT		= srcs/environnement/env_utils.c \
 					srcs/environnement/env_prompt_and_list_init.c\
