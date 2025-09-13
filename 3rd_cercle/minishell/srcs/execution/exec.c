@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/12 19:23:37 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/13 20:46:04 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	ft_exec(t_parsing *p, t_envp **l)
 		}
 		if (p->sep == SEP_NONE)
 		{
+			if (ft_exec_redirections_init(p, *l) != 0)
+				exit(1);
 			if (ft_exec_builtin(p->line, l))
 			{
 				p = p->next;
@@ -48,8 +50,6 @@ void	ft_exec(t_parsing *p, t_envp **l)
 		pid = fork();
 		if (pid == 0)
 		{
-			//  reset_signals();
-			// signal(SIGPIPE, SIG_DFL);
 			signal(SIGINT, SIG_DFL);
 			if (prev_fd != -1)
 			{
