@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 19:22:46 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/12 19:48:25 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/13 09:24:29 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,40 +41,43 @@ int	ft_cd(char **s, t_envp *l)
 	g_exit_status = 0;
 	return (0);
 }
+// Pour ft_cd_conditions
+static char	*ft_cd_no_arg(t_envp *l)
+{
+	if (!ft_cd_search_var(l, "HOME"))
+		return (NULL);
+	return (ft_env_search_value(l, "HOME"));
+}
+
+static char	*ft_cd_with_arg(char *arg, t_envp *l)
+{
+	if (ft_strcmp(arg, "-") == 0)
+	{
+		if (!ft_cd_search_var(l, "OLDPWD"))
+			return (NULL);
+		return (ft_env_search_value(l, "OLDPWD"));
+	}
+	else if (ft_strcmp(arg, "--") == 0)
+	{
+		if (!ft_cd_search_var(l, "HOME"))
+			return (NULL);
+		return (ft_env_search_value(l, "HOME"));
+	}
+	else if (arg[0] == '-' && arg[1] != '\0')
+		return (ft_cd_error(2, arg));
+	return (arg);
+}
 
 char	*ft_cd_conditions(char **s, t_envp *l, char *target, int i)
 {
 	if (i > 2)
 		return (ft_cd_error(0, NULL));
 	if (i == 1)
-	{
-		if (!ft_cd_search_var(l, "HOME"))
-			return (NULL);
-		target = ft_env_search_value(l, "HOME");
-	}
+		target = ft_cd_no_arg(l);
 	else if (i > 1 && s[1])
-	{
-		if (ft_strcmp(s[1], "-") == 0)
-		{
-			if (!ft_cd_search_var(l, "OLDPWD"))
-				return (NULL);
-			target = ft_env_search_value(l, "OLDPWD");
-		}
-		else if (ft_strcmp(s[1], "--") == 0)
-		{
-			if (!ft_cd_search_var(l, "HOME"))
-				return (NULL);
-			target = ft_env_search_value(l, "HOME");
-		}
-		else if (s[1][0] == '-' && s[1][1] != '\0')
-			return (ft_cd_error(2, s[1]));
-		else
-			target = s[1];
-	}
+		target = ft_cd_with_arg(s[1], l);
 	else
-	{
 		return (NULL);
-	}
 	return (target);
 }
 

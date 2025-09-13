@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 18:24:59 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/06 22:38:38 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/13 09:41:08 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ t_parsing	*ft_parse_add_node(t_parsing **n, t_parsing **p, t_parsing **a)
 {
 	t_parsing	*l;
 
-	l = calloc(1, sizeof(t_parsing));
+	l = malloc(sizeof(t_parsing));
 	if (!l)
 		return (NULL);
 	l->sep = SEP_NONE;
