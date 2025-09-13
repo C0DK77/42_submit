@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/13 17:54:21 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/13 19:30:56 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,40 @@ int	ft_handle_redirection(t_parsing *n, t_token **t)
 	return (0);
 }
 
-int	parse_step(t_parsing **a, t_parsing **n, t_parsing **p, t_token **t)
-{
-	if (!*n && !ft_parse_add_node(a, n, p))
-		return (0);
-	if ((*t)->type == WRD && (*t)->value)
-		(*n)->line = ft_parse_add_value((*n)->line, (*t)->value);
-	else if (((*t)->type == R_IN || (*t)->type == R_OUT
-			|| (*t)->type == R_APPEND || (*t)->type == HERE)
-		&& ft_handle_redirection(*n, t))
-		return (0);
-	ft_parse_type(*n, *t);
-	if ((*t)->type == PIPE || (*t)->type == AND_IF || (*t)->type == OR_IF
-		|| (*t)->type == AND || (*t)->type == SEMIC)
-		*n = NULL;
-	*t = (*t)->next;
-	return (1);
-}
+// int	parse_step(t_parsing **a, t_parsing **n, t_parsing **p, t_token **t)
+// {
+// 	if (!*n && !ft_parse_add_node(a, n, p))
+// 		return (0);
+// 	if ((*t)->type == WRD && (*t)->value)
+// 		(*n)->line = ft_parse_add_value((*n)->line, (*t)->value);
+// 	else if (((*t)->type == R_IN || (*t)->type == R_OUT
+// 			|| (*t)->type == R_APPEND || (*t)->type == HERE)
+// 		&& ft_handle_redirection(*n, t))
+// 		return (0);
+// 	ft_parse_type(*n, *t);
+// 	if ((*t)->type == PIPE || (*t)->type == AND_IF || (*t)->type == OR_IF
+// 		|| (*t)->type == AND || (*t)->type == SEMIC)
+// 		*n = NULL;
+// 	*t = (*t)->next;
+// 	return (1);
+// }
+
+// t_parsing	*ft_parse_line(t_token *t)
+// {
+// 	t_parsing	*a;
+// 	t_parsing	*n;
+// 	t_parsing	*p;
+
+// 	a = NULL;
+// 	n = NULL;
+// 	p = NULL;
+// 	while (t)
+// 	{
+// 		if (!parse_step(&a, &n, &p, &t))
+// 			return (NULL);
+// 	}
+// 	return (a);
+// }
 
 t_parsing	*ft_parse_line(t_token *t)
 {
@@ -62,8 +79,18 @@ t_parsing	*ft_parse_line(t_token *t)
 	p = NULL;
 	while (t)
 	{
-		if (!parse_step(&a, &n, &p, &t))
+		if (!n && !ft_parse_add_node(&n, &p, &a))
 			return (NULL);
+		if (t->type == WRD && t->value)
+			n->line = ft_parse_add_value(n->line, t->value);
+		else if ((t->type == R_IN || t->type == R_OUT || t->type == R_APPEND
+				|| t->type == HERE) && ft_handle_redirection(n, &t))
+			return (NULL);
+		ft_parse_type(n, t);
+		if (t->type == PIPE || t->type == AND_IF || t->type == OR_IF
+			|| t->type == AND || t->type == SEMIC)
+			n = NULL;
+		t = t->next;
 	}
 	return (a);
 }

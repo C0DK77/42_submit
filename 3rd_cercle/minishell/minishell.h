@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/13 18:02:22 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/13 19:31:05 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,8 +162,6 @@ void							ft_free_all(int argc, ...);
 
 int								ft_handle_redirection(t_parsing *n,
 									t_token **t);
-int								parse_step(t_parsing **a, t_parsing **n,
-									t_parsing **p, t_token **t);
 t_parsing						*ft_parse_line(t_token *t);
 void							ft_redirection_type(t_parsing *n, int t,
 									char *f);
