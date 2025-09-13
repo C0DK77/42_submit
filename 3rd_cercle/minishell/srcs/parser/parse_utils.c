@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 18:24:59 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/13 09:41:08 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/13 20:07:20 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*heredoc_clean_target(const char *s, int *quoted)
+char	*heredoc_clean_target(const char *s, int *quoted)
 {
 	size_t	i;
 	size_t	j;
@@ -58,43 +58,6 @@ static char	*heredoc_clean_target(const char *s, int *quoted)
 	}
 	out[last_sig] = '\0';
 	return (out);
-}
-
-t_redir	*ft_redir_add(t_redir *list, t_redir_type type, char *target)
-{
-	t_redir	*new;
-	t_redir	*tmp;
-	int		q;
-	char	*clean;
-
-	new = malloc(sizeof(t_redir));
-	if (!new)
-		return (list);
-	new->type = type;
-	new->fd = -1;
-	new->hd_quoted = 0;
-	new->next = NULL;
-	if (type == REDIR_HEREDOC)
-	{
-		clean = heredoc_clean_target(target, &q);
-		if (!clean)
-			return (free(new), list);
-		new->target = clean;
-		new->hd_quoted = q;
-	}
-	else
-	{
-		new->target = ft_strdup(target);
-		if (!new->target)
-			return (free(new), list);
-	}
-	if (!list)
-		return (new);
-	tmp = list;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
-	return (list);
 }
 
 t_parsing	*ft_parse_add_node(t_parsing **n, t_parsing **p, t_parsing **a)

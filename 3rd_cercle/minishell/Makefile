@@ -34,7 +34,7 @@ EXEC				= srcs/execution/exec_utils.c srcs/execution/exec.c
 
 SIGNALS				= srcs/signals/signals.c
 
-PARSER 				= srcs/parser/parse.c srcs/parser/parse_utils.c
+PARSER 				= srcs/parser/parse.c srcs/parser/parse_utils.c srcs/parser/redir.c
 
 TOKEN 				= srcs/token/token_operator_utils.c srcs/token/token_utils.c\
 					srcs/token/token_word_utils.c srcs/token/token.c
