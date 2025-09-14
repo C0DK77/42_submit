@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/14 17:17:25 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/14 17:48:58 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,10 +163,15 @@ void							ft_free_all(int argc, ...);
 t_parsing						*ft_parse_line(t_token *t);
 void							ft_parse_type(t_parsing *n, t_token *t);
 // parse_heredoc
-char							*heredoc_clean_target(const char *s,
+int								handle_quote(int *in_q, char *qch, int *quoted,
+									char c);
+size_t							clean_core_loop(const char *p, char *out,
 									int *quoted);
 size_t							clean_core(const char *s, char *out,
 									int *quoted);
+char							*heredoc_clean_target(const char *s,
+									int *quoted);
+
 // parse_redir
 void							ft_redirection_type(t_parsing *n, int t,
 									char *f);
