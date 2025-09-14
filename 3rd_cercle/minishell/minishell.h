@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/13 20:09:22 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/14 17:17:25 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,20 +162,24 @@ void							ft_free_all(int argc, ...);
 
 t_parsing						*ft_parse_line(t_token *t);
 void							ft_parse_type(t_parsing *n, t_token *t);
-// parse_utils.c
+// parse_heredoc
 char							*heredoc_clean_target(const char *s,
 									int *quoted);
-int								*ft_parse_add_append(int *s, int a);
-char							**ft_parse_add_value(char **s, char *v);
-t_parsing						*ft_parse_add_node(t_parsing **n, t_parsing **p,
-									t_parsing **a);
-// redir.c
-t_redir							*ft_redir_add(t_redir *list, t_redir_type type,
-									char *target);
+size_t							clean_core(const char *s, char *out,
+									int *quoted);
+// parse_redir
 void							ft_redirection_type(t_parsing *n, int t,
 									char *f);
 int								ft_handle_redirection(t_parsing *n,
 									t_token **t);
+t_redir							*redir_new(t_redir_type type, char *target);
+t_redir							*ft_redir_add(t_redir *list, t_redir_type type,
+									char *target);
+// parse_utils
+int								*ft_parse_add_append(int *s, int a);
+char							**ft_parse_add_value(char **s, char *v);
+t_parsing						*ft_parse_add_node(t_parsing **n, t_parsing **p,
+									t_parsing **a);
 
 /* ------------------- EXECUTION ------------------- */
 

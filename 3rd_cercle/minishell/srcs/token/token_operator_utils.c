@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_operator_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/09/11 22:13:55 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/14 17:09:51 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,38 +38,37 @@ char	*ft_token_operator(t_token **l, char *s)
 	return (s);
 }
 
-char    *ft_token_op_doll(t_envp *l, char **w, char *s)
+char	*ft_token_op_doll(t_envp *l, char **w, char *s)
 {
-    char    *t;
-    char    *j;
-    char    *v;
-    t_envp  *n;
+	char	*t;
+	char	*j;
+	char	*v;
+	t_envp	*n;
 
-    if (*s == '?')
-        return (ft_token_operator_dollar_interrogation(w, s));
-    
-    if (!ft_isalpha(*s) && *s != '_')
-    {
-        t = ft_strjoin(*w, "$");
-        free(*w);
-        *w = t;
-        return (s);
-    }
-    
-    j = s;
-    s = ft_token_operator_dollar_word(s);
-    v = ft_strndup(j, s - j);
-    if (!v)
-        return (s);
-    n = ft_env_search_node(l, v);
-    if (n && n->value)
-        t = ft_strjoin(*w, n->value);
-    else
-        t = ft_strdup(*w);
-    ft_free_all(2, *w, v);
-    *w = t;
-    return (s);
+	if (*s == '?')
+		return (ft_token_operator_dollar_interrogation(w, s));
+	if (!ft_isalpha(*s) && *s != '_')
+	{
+		t = ft_strjoin(*w, "$");
+		free(*w);
+		*w = t;
+		return (s);
+	}
+	j = s;
+	s = ft_token_operator_dollar_word(s);
+	v = ft_strndup(j, s - j);
+	if (!v)
+		return (s);
+	n = ft_env_search_node(l, v);
+	if (n && n->value)
+		t = ft_strjoin(*w, n->value);
+	else
+		t = ft_strdup(*w);
+	ft_free_all(2, *w, v);
+	*w = t;
+	return (s);
 }
+
 char	*ft_token_operator_dollar_interrogation(char **w, char *s)
 {
 	char	*t;

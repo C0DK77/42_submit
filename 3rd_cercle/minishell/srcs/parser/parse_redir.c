@@ -1,53 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redir.c                                            :+:      :+:    :+:   */
+/*   parse_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 20:02:04 by ecid              #+#    #+#             */
-/*   Updated: 2025/09/13 20:06:02 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/14 16:59:03 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_redir	*ft_redir_add(t_redir *list, t_redir_type type, char *target)
-{
-	t_redir	*new;
-	t_redir	*tmp;
-	int		q;
-	char	*clean;
-
-	new = malloc(sizeof(t_redir));
-	if (!new)
-		return (list);
-	new->type = type;
-	new->fd = -1;
-	new->hd_quoted = 0;
-	new->next = NULL;
-	if (type == REDIR_HEREDOC)
-	{
-		clean = heredoc_clean_target(target, &q);
-		if (!clean)
-			return (free(new), list);
-		new->target = clean;
-		new->hd_quoted = q;
-	}
-	else
-	{
-		new->target = ft_strdup(target);
-		if (!new->target)
-			return (free(new), list);
-	}
-	if (!list)
-		return (new);
-	tmp = list;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
-	return (list);
-}
 
 int	ft_handle_redirection(t_parsing *n, t_token **t)
 {
@@ -80,4 +43,52 @@ void	ft_redirection_type(t_parsing *n, int t, char *f)
 		n->redirs = ft_redir_add(n->redirs, REDIR_APPEND, f);
 	else if (t == HERE)
 		n->redirs = ft_redir_add(n->redirs, REDIR_HEREDOC, f);
+}
+
+// expand
+t_redir	*redir_new(t_redir_type type, char *target)
+{
+	t_redir	*new;
+	char	*clean;
+	int		q;
+
+	new = malloc(sizeof(*new));
+	if (!new)
+		return (NULL);
+	new->type = type;
+	new->fd = -1;
+	new->hd_quoted = 0;
+	new->next = NULL;
+	if (type == REDIR_HEREDOC)
+	{
+		clean = heredoc_clean_target(target, &q);
+		if (!clean)
+			return (free(new), NULL);
+		new->target = clean;
+		new->hd_quoted = q;
+	}
+	else
+	{
+		new->target = ft_strdup(target);
+		if (!new->target)
+			return (free(new), NULL);
+	}
+	return (new);
+}
+
+t_redir	*ft_redir_add(t_redir *list, t_redir_type type, char *target)
+{
+	t_redir	*new;
+	t_redir	*tmp;
+
+	new = redir_new(type, target);
+	if (!new)
+		return (list);
+	if (!list)
+		return (new);
+	tmp = list;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+	return (list);
 }
