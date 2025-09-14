@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 17:45:17 by ecid              #+#    #+#             */
-/*   Updated: 2025/09/13 19:08:15 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/14 16:16:53 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	ft_sigint_handler(int sig)
 	}
 }
 
-void	ft_handler_exec(int sig) 
+void	ft_handler_exec(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -42,7 +42,6 @@ void	ft_handler_exec(int sig)
 		g_exit_status = 131;
 	}
 }
-
 
 void	setup_signals(void)
 {

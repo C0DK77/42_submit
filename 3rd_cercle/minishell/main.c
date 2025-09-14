@@ -6,13 +6,11 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/12 20:27:48 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/13 21:34:45 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
 
 volatile sig_atomic_t	g_exit_status = 0;
 
@@ -79,7 +77,6 @@ void	init_min_env(t_envp *c_envp)
 
 	if (!getcwd(b, sizeof(b)))
 		return ;
-	// return (ft_pwd_error(0, 0));
 	ft_pwd_export_env_set(&c_envp, "_", "/bin/env", 0);
 	ft_pwd_export_env_set(&c_envp, "OLDPWD", NULL, 0);
 	ft_pwd_export_env_set(&c_envp, "SHLVL", "1", 0);

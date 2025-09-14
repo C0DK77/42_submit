@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_vars_init.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:32:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/10 20:54:20 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/13 21:35:27 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ t_var	*ft_env_vars_init_table(void)
 	tb = malloc(sizeof(t_var) * 7);
 	if (!tb)
 		return (NULL);
-	// tb[0].var = ft_strdup("PATH");
 	tb[0].var = ft_strdup("PWD");
 	tb[1].var = ft_strdup("SHLVL");
 	tb[2].var = ft_strdup("HOME");
@@ -76,8 +75,6 @@ int	ft_env_vars_create(t_envp **l, t_envp *t, char *v)
 		t->value = ft_strdup("xterm");
 	else if (ft_strcmp(v, "HOME") == 0)
 		t->value = ft_strdup("/");
-	// else if (ft_strcmp(v, "PATH") == 0)
-	// 	t->value = ft_strdup("/usr/local/bin:/usr/bin:/bin");
 	else if (ft_strcmp(v, "OLDPWD") == 0)
 		t->value = ft_strdup("");
 	else if (ft_strcmp(v, "SHLVL") == 0)
