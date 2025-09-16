@@ -3,33 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/30 20:37:22 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/16 18:25:44 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// char	*ft_token_isquote(t_envp *l, char **w, char *s)
-// {
-// 	char	quote;
-// 	char	*start;
-
-// 	quote = *s;
-// 	s++;
-// 	start = s;
-// 	while (*s && *s != quote)
-// 		s++;
-// 	if (quote == '"')
-// 		ft_token_word_dbquote(l, w, start, s);
-// 	else
-// 		ft_token_word_sgquote(w, s, start);
-// 	if (*s)
-// 		s++;
-// 	return (s);
-// }
 
 static int	ft_check_syntax_error(t_token *n, t_token *prev)
 {
@@ -75,3 +56,22 @@ int	ft_token_check(t_token *n)
 	}
 	return (1);
 }
+
+// char	*ft_token_isquote(t_envp *l, char **w, char *s)
+// {
+// 	char	quote;
+// 	char	*start;
+
+// 	quote = *s;
+// 	s++;
+// 	start = s;
+// 	while (*s && *s != quote)
+// 		s++;
+// 	if (quote == '"')
+// 		ft_token_word_dbquote(l, w, start, s);
+// 	else
+// 		ft_token_word_sgquote(w, s, start);
+// 	if (*s)
+// 		s++;
+// 	return (s);
+// }

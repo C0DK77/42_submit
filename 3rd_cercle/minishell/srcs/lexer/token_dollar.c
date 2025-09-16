@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_operator_utils.c                             :+:      :+:    :+:   */
+/*   token_dollar.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/09/14 17:09:51 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/16 18:53:00 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*ft_token_operator(t_token **l, char *s)
 	return (s);
 }
 
-char	*ft_token_op_doll(t_envp *l, char **w, char *s)
+char	*ft_token_op_dollar(t_envp *l, char **w, char *s)
 {
 	char	*t;
 	char	*j;

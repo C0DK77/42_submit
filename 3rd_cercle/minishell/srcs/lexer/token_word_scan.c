@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_word_utils.c                                 :+:      :+:    :+:   */
+/*   token_word_scan.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/14 17:08:57 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/16 19:10:52 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,6 @@ char	*ft_token_word_hd(char **ps)
 	return (out);
 }
 
-char	*ft_strjoin_and_free(char *s1, char *s2)
-{
-	char	*new_str;
-
-	if (!s1 || !s2)
-		return (NULL);
-	new_str = ft_strjoin(s1, s2);
-	free(s1);
-	free(s2);
-	return (new_str);
-}
-
 char	*ft_token_word(t_token **n, char *s, t_envp *l)
 {
 	char	*w;
@@ -75,7 +63,7 @@ char	*ft_token_word(t_token **n, char *s, t_envp *l)
 				if (quote == '"' && *s == '$' && *(s + 1))
 				{
 					if (ft_isalpha(*(s + 1)) || *(s + 1) == '_')
-						s = ft_token_op_doll(l, &w, s + 1);
+						s = ft_token_op_dollar(l, &w, s + 1);
 					else if (*(s + 1) == '?')
 						s = ft_token_operator_dollar_interrogation(&w, s + 1);
 					else
@@ -109,7 +97,7 @@ char	*ft_token_word(t_token **n, char *s, t_envp *l)
 		else if (*s == '$' && *(s + 1))
 		{
 			if (ft_isalpha(*(s + 1)) || *(s + 1) == '_')
-				s = ft_token_op_doll(l, &w, s + 1);
+				s = ft_token_op_dollar(l, &w, s + 1);
 			else if (*(s + 1) == '?')
 				s = ft_token_operator_dollar_interrogation(&w, s + 1);
 			else

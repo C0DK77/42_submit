@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/14 17:48:58 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/16 19:06:13 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,24 +241,27 @@ int								ft_export_check_value(t_envp **l, char *n,
 // env
 int								ft_env(t_envp *l);
 
-/*------------------- TOKENIZER -------------------*/
+/*------------------- LEXER -------------------*/
 
 t_token							*ft_token(char *s, t_envp *l);
 char							*ft_token_word_hd(char **ps);
 t_token							*ft_token_init(t_token_type t, char *v);
 void							ft_token_add(t_token **l, t_token *n);
 void							ft_token_free(t_token *l);
-char							*ft_strjoin_and_free(char *s1, char *s2);
 t_operator						*ft_token_operator_init_table(void);
 char							*ft_token_operator(t_token **l, char *s);
-char							*ft_token_op_doll(t_envp *l, char **w, char *s);
+char							*ft_token_word(t_token **n, char *s, t_envp *l);
+// token_dollar
+char							*ft_token_op_dollar(t_envp *l, char **w, char *s);
 char							*ft_token_operator_dollar_interrogation(char **w,
 									char *s);
 char							*ft_token_operator_dollar_word(char *s);
 char							*ft_token_operator_dollar_no_word(char **w,
 									char *s);
+//token_check
 int								ft_token_check(t_token *n);
-char							*ft_token_word(t_token **n, char *s, t_envp *l);
+//utils
+char							*ft_strjoin_and_free(char *s1, char *s2);
 
 /* ------------------- SIGNALS ------------------- */
 
