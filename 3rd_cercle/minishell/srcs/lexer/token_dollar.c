@@ -6,37 +6,11 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:10:24 by codk              #+#    #+#             */
-/*   Updated: 2025/09/16 18:53:00 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/16 19:47:27 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*ft_token_operator(t_token **l, char *s)
-{
-	t_token		*n;
-	t_operator	*tb;
-	int			i;
-
-	i = 0;
-	n = NULL;
-	tb = ft_token_operator_init_table();
-	while (tb[i].s)
-	{
-		if (ft_strncmp(s, tb[i].s, ft_strlen(tb[i].s)) == 0)
-		{
-			n = ft_token_init(tb[i].type, tb[i].s);
-			s += ft_strlen(tb[i].s);
-			break ;
-		}
-		i++;
-	}
-	if (n)
-		ft_token_add(l, n);
-	else
-		s++;
-	return (s);
-}
 
 char	*ft_token_op_dollar(t_envp *l, char **w, char *s)
 {
@@ -99,5 +73,31 @@ char	*ft_token_operator_dollar_no_word(char **w, char *s)
 	t = ft_strjoin(*w, "$");
 	free(*w);
 	*w = t;
+	return (s);
+}
+// operator_table
+char	*ft_token_operator(t_token **l, char *s)
+{
+	t_token		*n;
+	t_operator	*tb;
+	int			i;
+
+	i = 0;
+	n = NULL;
+	tb = ft_token_operator_init_table();
+	while (tb[i].s)
+	{
+		if (ft_strncmp(s, tb[i].s, ft_strlen(tb[i].s)) == 0)
+		{
+			n = ft_token_init(tb[i].type, tb[i].s);
+			s += ft_strlen(tb[i].s);
+			break ;
+		}
+		i++;
+	}
+	if (n)
+		ft_token_add(l, n);
+	else
+		s++;
 	return (s);
 }

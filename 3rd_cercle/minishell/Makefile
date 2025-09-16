@@ -36,8 +36,8 @@ SIGNALS				= srcs/signals/signals.c
 
 PARSER 				= srcs/parser/parse_core.c srcs/parser/parse_utils.c srcs/parser/parse_heredoc.c srcs/parser/parse_redir.c
 
-LEXER 				= srcs/lexer/token_dollar.c srcs/lexer/token_check.c\
-					srcs/lexer/token_word_scan.c srcs/lexer/token.c srcs/lexer/utils.c
+LEXER 				= srcs/lexer/token_check.c srcs/lexer/token_dollar.c srcs/lexer/token_list.c\
+					srcs/lexer/token_word_scan.c srcs/lexer/tokenize.c srcs/lexer/utils.c
 						
 OBJ_DIR 			= 	obj
 
