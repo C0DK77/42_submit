@@ -1,9 +1,7 @@
 
-#include <iostream>
+#include "Zombie.hpp"
 
-class Zombie 
+Zombie* newZombie(std::string name) 
 {
-private :
-    std::string name;
-
+    return new Zombie(name);
 }

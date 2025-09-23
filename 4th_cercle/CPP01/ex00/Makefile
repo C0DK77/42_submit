@@ -1,7 +1,7 @@
 
 # ==== PROGRAM NAME ==== #
 
-NAME 				= 	megaphone
+NAME 				= 	zombie
 
 # ==== COMPILER AND FLAGS ==== #
 
@@ -11,7 +11,10 @@ CFLAGS 				= 	-Wall -Wextra -Werror 	\
 
 # ==== FILES SRC ==== #
 
-SRC_ROOT   			=  	megaphone.cpp
+SRC_ROOT   			=  	main.cpp 				\
+						Zombie.cpp				\
+						newZombie.cpp			\
+						randomChump.cpp
 
 SRC        			= $(SRC_ROOT)
 
