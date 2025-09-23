@@ -1,16 +1,8 @@
-// $>./megaphone "shhhhh... I think the students are asleep..."
-// SHHHHH... I THINK THE STUDENTS ARE ASLEEP...
-// $>./megaphone Damnit " ! " "Sorry students, I thought this thing was off."
-// DAMNIT ! SORRY STUDENTS, I THOUGHT THIS THING WAS OFF.
-// $>./megaphone
-// * LOUD AND UNBEARABLE FEEDBACK NOISE *
 
 #include <iostream>
 #include <string>
 
-using namespace	std;
-
-int ft_strlen(string& s)
+int ft_strlen(std::string& s)
 {
 	int i = 0;
 	while (s[i] != '\0')
@@ -31,19 +23,21 @@ bool ft_islower(char c)
 int	main(int argc, char **argv)
 {
 	if (argc == 1) {
-		cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *" << endl;
+		std::cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *" << std::endl;
 		return 0;
 	}
 
-	for (int i = 1; i < argc; i++) {
-		string s = argv[i];
-		for (int j = 0; j < ft_strlen(s); j++) {
+	for (int i = 1; i < argc; i++) 
+	{
+		std::string s = argv[i];
+		for (int j = 0; j < ft_strlen(s); j++) 
+		{
 			if (ft_islower(s[j]))
-				cout << (char)(s[j] - 32);
+				std::cout << (char)(s[j] - 32);
 			else
-				cout << s[j];
+				std::cout << s[j];
 		}
 	}
-	cout << endl;
+	std::cout << std::endl;
 	return 0;
 }
