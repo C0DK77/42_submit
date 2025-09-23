@@ -12,9 +12,9 @@ CFLAGS 				= 	-Wall -Wextra -Werror 	\
 # ==== FILES SRC ==== #
 
 SRC_ROOT   			=  	main.cpp				\
-						phonebook.cpp			\
-						contact.cpp				\
-						utils.cpp
+						book/phonebook.cpp		\
+						contact/contact.cpp		\
+						utils/utils.cpp
 
 SRC        			= $(SRC_ROOT)
 

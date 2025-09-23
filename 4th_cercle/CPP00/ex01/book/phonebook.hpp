@@ -2,7 +2,7 @@
 #ifndef PHONEBOOK_HPP
 #define PHONEBOOK_HPP
 
-#include "contact.hpp"
+#include "../contact/contact.hpp"
 
 class PhoneBook {
 private:

@@ -1,6 +1,6 @@
 
 #include "contact.hpp"
-#include "utils.hpp" 
+#include "../utils/utils.hpp" 
 #include <iostream>
 #include <sstream>
 
