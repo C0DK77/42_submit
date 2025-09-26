@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 17:36:14 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/26 18:19:30 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	setbuf(stdout, NULL);
-	c_envp = ft_env_list_init(envp);
-	if (!c_envp)
-		return (1);
+	printf("🛠️  [main] Début du programme\n");
+	if (!envp || !*envp)
+		c_envp = NULL;
+	else
+		c_envp = ft_env_list_init(envp);
 	if (!ft_env_vars_check(&c_envp))
-		return (0);
+		return (1);
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
@@ -51,9 +53,13 @@ int	ft_program(t_envp *c_envp)
 	if (!line)
 		return (1);
 	tokens = ft_token(line, c_envp);
-	if (!tokens || !ft_token_check(tokens))
+	if (!tokens)
+		return (free(line), 1);
+	if (!ft_token_check(tokens))
 		return (ft_token_free(tokens), free(line), 1);
 	parse = ft_parse_line(tokens);
+	if (!parse)
+		return (ft_token_free(tokens), free(line), 1);
 	ft_exec(parse, c_envp);
 	return (ft_token_free(tokens), free(line), 1);
 }

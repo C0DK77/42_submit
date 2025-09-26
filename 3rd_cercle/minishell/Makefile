@@ -34,7 +34,6 @@ SRC 				= 	program/environment/env_prompt_and_list_init.c	\
 						program/functions/functions.c					\
 						program/functions/functions_utils.c				\
 						program/functions/cd.c							\
-						program/functions/history.c						\
 						main.c
 						
 OBJ_DIR 			= 	obj

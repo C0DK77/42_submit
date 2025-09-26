@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 17:22:07 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/26 18:24:04 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,19 +60,19 @@ int	ft_token_check_bis(t_token *n, t_token *prev, int i)
 {
 	if (!prev && i == 1)
 		return (g_exit_status = 2,
-			ft_putstr_fd("minishell: syntax error near unexpected token `", 2),
+			ft_putstr_fd("minishell1: syntax error near unexpected token `", 2),
 			ft_putstr_fd(n->value, 2), ft_putstr_fd("'\n", 2), 0);
 	if (!n->next && i == 2)
 		return (g_exit_status = 2,
-			ft_putstr_fd("minishell: syntax error near unexpected token ", 2),
+			ft_putstr_fd("minishell2: syntax error near unexpected token ", 2),
 			ft_putstr_fd("`newline'\n", 2), 1);
 	if (n->next->type != WRD && i == 2)
 		return (g_exit_status = 2,
-			ft_putstr_fd("minishell: syntax error near unexpected token `", 2),
+			ft_putstr_fd("minishell2: syntax error near unexpected token `", 2),
 			ft_putstr_fd(n->value, 2), ft_putstr_fd("'\n", 2), 0);
 	if (prev && i == 3)
 		return (g_exit_status = 2,
-			ft_putstr_fd("minishell: syntax error near unexpected token `", 2),
+			ft_putstr_fd("minishell3: syntax error near unexpected token `", 2),
 			ft_putstr_fd(n->value, 2), ft_putstr_fd("'\n", 2), 0);
 	return (1);
 }

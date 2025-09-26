@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env_vars_init.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:32:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/18 22:31:40 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/26 18:02:50 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
+#include <linux/limits.h>
 
 t_var	*ft_env_vars_init_table(void)
 {
