@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 10:40:00 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/26 17:36:14 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-int			g_exit_status = 0;
-t_history	*g_history = NULL;
+volatile sig_atomic_t	g_exit_status = 0;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -28,7 +27,7 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	if (!ft_env_vars_check(&c_envp))
 		return (0);
-	signal(SIGINT, ft_sigint_handler);
+	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 		if (!ft_program(c_envp))
@@ -48,7 +47,9 @@ int	ft_program(t_envp *c_envp)
 		return (printf("exit\n"), 0);
 	if (*line)
 		add_history(line);
-	line = ft_program_check_has_unclosed_quote(line);
+	line = ft_program_check_unclosed_quote(line);
+	if (!line)
+		return (1);
 	tokens = ft_token(line, c_envp);
 	if (!tokens || !ft_token_check(tokens))
 		return (ft_token_free(tokens), free(line), 1);
@@ -57,7 +58,7 @@ int	ft_program(t_envp *c_envp)
 	return (ft_token_free(tokens), free(line), 1);
 }
 
-char	*ft_program_check_has_unclosed_quote(char *line)
+char	*ft_program_check_unclosed_quote(char *line)
 {
 	char	*n;
 	char	*t;
@@ -66,7 +67,13 @@ char	*ft_program_check_has_unclosed_quote(char *line)
 	{
 		n = readline("> ");
 		if (!n)
-			break ;
+		{
+			ft_putstr_fd("minishell: syntax error: unexpected end of file\n",
+				2);
+			g_exit_status = 2;
+			free(line);
+			return (NULL);
+		}
 		t = ft_strjoin(line, "\n");
 		free(line);
 		line = ft_strjoin(t, n);

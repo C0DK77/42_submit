@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_prompt_and_list_init.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 14:31:50 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/25 20:32:35 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/26 14:51:37 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*ft_env_prompt(void)
 	p[ft_strlen(c) + 1] = '>';
 	p[ft_strlen(c) + 2] = ' ';
 	p[ft_strlen(c) + 3] = '\0';
-	return (p);
+	return (free(c), p);
 }
 
 t_envp	*ft_env_list_init(char **l)

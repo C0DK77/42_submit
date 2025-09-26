@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:53:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 15:41:08 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/26 17:32:27 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-t_operator	*ft_token_operator_init_table(void)
+t_operator	*ft_token_ope_init_table(void)
 {
 	static t_operator	tb[9];
 
@@ -50,7 +50,7 @@ t_token	*ft_token(char *s, t_envp *l)
 		if (!(*s))
 			break ;
 		else if (ft_isoperator(*s))
-			s = ft_token_operator(&t, s);
+			s = ft_token_ope(&t, s);
 		else
 			s = ft_token_word(&t, s, l);
 	}

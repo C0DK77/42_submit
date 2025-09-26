@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 18:24:59 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 18:57:16 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/26 16:05:20 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,5 @@ int	*ft_parse_add_append(int *s, int a)
 	}
 	n[i] = a;
 	n[i + 1] = -1;
-	free(s);
-	return (n);
+	return (free(s), n);
 }

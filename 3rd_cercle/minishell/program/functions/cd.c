@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 19:22:46 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 19:45:42 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/26 15:31:12 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ char	*ft_cd_conditions(char **s, t_envp *l, char *target, int i)
 {
 	if (i == 1 && !ft_cd_search_var(l, "HOME"))
 		return (NULL);
+	if (i > 2)
+		return (ft_cd_error(0, NULL));
 	else
 	{
 		if (ft_strcmp(s[1], "-") == 0 && !ft_cd_search_var(l, "OLDPWD"))
@@ -81,7 +83,7 @@ char	*ft_cd_error(int i, char *c)
 	if (i == 0)
 	{
 		g_exit_status = 1;
-		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), NULL);
+		return (ft_putstr_fd("minishell: cd: trop d'arguments\n", 2), NULL);
 	}
 	if (i == 1)
 	{

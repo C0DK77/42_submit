@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 19:20:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 19:50:09 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/26 15:06:13 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
+#include <linux/limits.h>
 
 int	ft_pwd(char **s, t_envp *l)
 {

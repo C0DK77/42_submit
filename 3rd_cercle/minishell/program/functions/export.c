@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 01:44:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 19:48:15 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/26 15:02:17 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,5 @@ int	ft_export_check_valid_var(char *s, int *i)
 int	ft_export_error(char *t)
 {
 	return (ft_putall_fd(2, 3, "minishell: export: `", t,
-			"': not a valid identifier\n"), 0);
+			"': identifiant non valable\n"), 0);
 }

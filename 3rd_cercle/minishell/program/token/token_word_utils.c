@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_word_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/25 20:49:55 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/26 17:33:21 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*ft_token_word(t_token **n, char *s, t_envp *l)
 		if (ft_isquote(*s))
 			s = ft_token_isquote(l, &w, s);
 		else if (*s == '$')
-			s = ft_token_operator_dollar(l, &w, s + 1);
+			s = ft_token_ope_dollar(l, &w, s + 1);
 		else
 			s = ft_token_word_noquote(&w, s);
 	}
@@ -42,7 +42,7 @@ char	*ft_token_word_dbquote(t_envp *l, char **w, char *s, char *end)
 	while (s < end)
 	{
 		if (*s == '$')
-			s = ft_token_operator_dollar(l, w, s + 1);
+			s = ft_token_ope_dollar(l, w, s + 1);
 		i = s;
 		while (s < end && *s != '$')
 			s++;

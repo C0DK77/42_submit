@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 22:49:06 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/19 03:16:33 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/26 15:32:51 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	ft_echo_option(char *arg)
 {
 	int	i;
 
-	if (!arg || arg[0] != '-' || arg[1] != 'n')
+	if (!arg || arg[0] != '-')
 		return (0);
 	i = 1;
 	while (arg[i] == 'n')

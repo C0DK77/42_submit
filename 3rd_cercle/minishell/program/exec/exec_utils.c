@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/25 20:11:53 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/26 17:05:17 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,29 @@ int	ft_exec_redirections_init(t_parsing *s)
 
 	i = 0;
 	app = 0;
+	if (ft_exec_heredoc(s, i))
+		return (1);
+	while (s->outfiles && s->outfiles[i])
+	{
+		if (s->append && s->append[i])
+			app = 1;
+		if (app)
+			fd = open(s->outfiles[i], O_CREAT | O_WRONLY | O_APPEND, 0644);
+		else
+			fd = open(s->outfiles[i], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		if (fd < 0)
+			return (perror(s->outfiles[i]), 1);
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+		i++;
+	}
+	return (0);
+}
+
+int	ft_exec_heredoc(t_parsing *s, int i)
+{
+	int	fd;
+
 	if (s->heredoc)
 	{
 		while (s->infiles && s->infiles[i + 1])
@@ -44,21 +67,6 @@ int	ft_exec_redirections_init(t_parsing *s)
 			close(fd);
 			i++;
 		}
-	}
-	i = 0;
-	while (s->outfiles && s->outfiles[i])
-	{
-		if (s->append && s->append[i])
-			app = 1;
-		if (app)
-			fd = open(s->outfiles[i], O_CREAT | O_WRONLY | O_APPEND, 0644);
-		else
-			fd = open(s->outfiles[i], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (fd < 0)
-			return (perror(s->outfiles[i]), 1);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-		i++;
 	}
 	return (0);
 }
@@ -120,13 +128,4 @@ char	*ft_exec_find_cmd(char *s, t_envp *l)
 		i++;
 	}
 	return (ft_free_tab(dirs), NULL);
-}
-
-void	ft_sigint_handler(int sig)
-{
-	(void)sig;
-	rl_replace_line("", 0);
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_redisplay();
 }

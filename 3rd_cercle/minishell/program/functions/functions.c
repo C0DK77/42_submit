@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:54:44 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/25 20:36:06 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/26 15:06:41 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,5 @@ int	ft_exec_builtin_bis(char **s, t_envp **l)
 		g_exit_status = 0;
 		return (0);
 	}
-	else if (ft_strcmp(s[0], "history") == 0)
-		return (ft_history_print(g_history), 1);
 	return (1);
 }
