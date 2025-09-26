@@ -6,14 +6,14 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 20:19:34 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/26 21:02:44 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /* permission*/
-static void	print_file_error(const char *path)
+void	print_file_error(const char *path)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd((char *)path, 2);
@@ -22,97 +22,13 @@ static void	print_file_error(const char *path)
 	ft_putstr_fd("\n", 2);
 }
 
-int	ft_exec_redirections_init(t_parsing *s, t_envp *env)
+void	close_if_open(int *fd)
 {
-	t_redir	*r;
-	int		fd_in;
-	int		fd_out;
-	int		last_heredoc_fd;
-	int		flags;
-	int		tmp_fd;
-
-	r = s->redirs;
-	fd_in = -1;
-	fd_out = -1;
-	last_heredoc_fd = -1;
-	while (r)
+	if (*fd != -1)
 	{
-		if (r->type == REDIR_HEREDOC)
-		{
-			tmp_fd = ft_exec_create_heredoc(r->target, r->hd_quoted, env);
-			if (tmp_fd < 0)
-			{
-				if (tmp_fd == -2)
-				{
-					if (last_heredoc_fd != -1)
-						close(last_heredoc_fd);
-					return (-2);
-				}
-				if (last_heredoc_fd != -1)
-					close(last_heredoc_fd);
-				return (1);
-			}
-			if (last_heredoc_fd != -1)
-				close(last_heredoc_fd);
-			last_heredoc_fd = tmp_fd;
-		}
-		else if (r->type == REDIR_IN)
-		{
-			tmp_fd = open(r->target, O_RDONLY);
-			if (tmp_fd < 0)
-			{
-				print_file_error(r->target);
-				return (1);
-			}
-			if (fd_in != -1)
-				close(fd_in);
-			fd_in = tmp_fd;
-		}
-		else if (r->type == REDIR_OUT || r->type == REDIR_APPEND)
-		{
-			flags = O_CREAT | O_WRONLY | (r->type == REDIR_APPEND ? O_APPEND : O_TRUNC);
-			tmp_fd = open(r->target, flags, 0644);
-			if (tmp_fd < 0)
-			{
-				print_file_error(r->target);
-				return (1);
-			}
-			if (fd_out != -1)
-				close(fd_out);
-			fd_out = tmp_fd;
-		}
-		r = r->next;
+		close(*fd);
+		*fd = -1;
 	}
-	if (last_heredoc_fd != -1)
-	{
-		if (dup2(last_heredoc_fd, STDIN_FILENO) == -1)
-		{
-			close(last_heredoc_fd);
-			return (1);
-		}
-		close(last_heredoc_fd);
-		if (fd_in != -1)
-			close(fd_in);
-	}
-	else if (fd_in != -1)
-	{
-		if (dup2(fd_in, STDIN_FILENO) == -1)
-		{
-			close(fd_in);
-			return (1);
-		}
-		close(fd_in);
-	}
-	if (fd_out != -1)
-	{
-		if (dup2(fd_out, STDOUT_FILENO) == -1)
-		{
-			close(fd_out);
-			return (1);
-		}
-		close(fd_out);
-	}
-	return (0);
 }
 
 int	ft_exec_is_directory(char *p)
