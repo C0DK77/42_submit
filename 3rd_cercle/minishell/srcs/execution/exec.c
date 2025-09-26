@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 19:48:06 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/26 21:05:34 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,45 +115,45 @@ void	ft_exec(t_parsing *p, t_envp **l)
 	close(s_stdout);
 }
 
-char	**ft_exec_env_array(t_envp *l)
-{
-	int		i;
-	int		count;
-	char	**env;
-	char	*entry;
-	t_envp	*t;
+// char	**ft_exec_env_array(t_envp *l)
+// {
+// 	int		i;
+// 	int		count;
+// 	char	**env;
+// 	char	*entry;
+// 	t_envp	*t;
 
-	t = l;
-	count = 0;
-	while (t)
-	{
-		if (t->export)
-			count++;
-		t = t->next;
-	}
-	env = malloc(sizeof(char *) * (count + 1));
-	if (!env)
-		return (NULL);
-	t = l;
-	i = 0;
-	while (t)
-	{
-		if (t->export)
-		{
-			entry = ft_strjoin(t->var, "=");
-			if (!entry)
-				return (NULL);
-			if (t->value)
-				env[i] = ft_strjoin(entry, t->value);
-			else
-				env[i] = ft_strjoin(entry, "");
-			free(entry);
-			if (!env[i])
-				return (NULL);
-			i++;
-		}
-		t = t->next;
-	}
-	env[i] = NULL;
-	return (env);
-}
+// 	t = l;
+// 	count = 0;
+// 	while (t)
+// 	{
+// 		if (t->export)
+// 			count++;
+// 		t = t->next;
+// 	}
+// 	env = malloc(sizeof(char *) * (count + 1));
+// 	if (!env)
+// 		return (NULL);
+// 	t = l;
+// 	i = 0;
+// 	while (t)
+// 	{
+// 		if (t->export)
+// 		{
+// 			entry = ft_strjoin(t->var, "=");
+// 			if (!entry)
+// 				return (NULL);
+// 			if (t->value)
+// 				env[i] = ft_strjoin(entry, t->value);
+// 			else
+// 				env[i] = ft_strjoin(entry, "");
+// 			free(entry);
+// 			if (!env[i])
+// 				return (NULL);
+// 			i++;
+// 		}
+// 		t = t->next;
+// 	}
+// 	env[i] = NULL;
+// 	return (env);
+// }
