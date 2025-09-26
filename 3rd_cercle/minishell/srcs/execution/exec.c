@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/13 21:52:02 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/26 19:43:03 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,51 +115,51 @@ void	ft_exec(t_parsing *p, t_envp **l)
 	close(s_stdout);
 }
 
-void	ft_exec_cmd(char **s, t_envp *l)
-{
-	char	*p;
-	char	**env;
+// void	ft_exec_cmd(char **s, t_envp *l)
+// {
+// 	char	*p;
+// 	char	**env;
 
-	if (!s || !s[0] || s[0][0] == '\0')
-	{
-		ft_putstr_fd("minishell: command not found\n", 2);
-		exit(127);
-	}
-	if (ft_strchr(s[0], '/'))
-		p = ft_strdup(s[0]);
-	else
-		p = ft_exec_find_cmd(s[0], l);
-	if (!p)
-	{
-		ft_putall_fd(2, 3, "minishell: ", s[0], ": command not found\n");
-		exit(127);
-	}
-	if (access(p, F_OK) != 0)
-	{
-		ft_putall_fd(2, 3, "minishell: ", s[0],
-			": No such file or directory\n");
-		free(p);
-		exit(127);
-	}
-	if (ft_exec_is_directory(p))
-	{
-		ft_putall_fd(2, 3, "minishell: ", s[0], ": is a directory\n");
-		free(p);
-		exit(126);
-	}
-	if (access(p, X_OK) != 0)
-	{
-		ft_putall_fd(2, 3, "minishell: ", s[0], ": Permission denied\n");
-		free(p);
-		exit(126);
-	}
-	env = ft_exec_env_array(l);
-	execve(p, s, env);
-	perror("minishell");
-	ft_free_tab(env);
-	free(p);
-	exit(126);
-}
+// 	if (!s || !s[0] || s[0][0] == '\0')
+// 	{
+// 		ft_putstr_fd("minishell: command not found\n", 2);
+// 		exit(127);
+// 	}
+// 	if (ft_strchr(s[0], '/'))
+// 		p = ft_strdup(s[0]);
+// 	else
+// 		p = ft_exec_find_cmd(s[0], l);
+// 	if (!p)
+// 	{
+// 		ft_putall_fd(2, 3, "minishell: ", s[0], ": command not found\n");
+// 		exit(127);
+// 	}
+// 	if (access(p, F_OK) != 0)
+// 	{
+// 		ft_putall_fd(2, 3, "minishell: ", s[0],
+// 			": No such file or directory\n");
+// 		free(p);
+// 		exit(127);
+// 	}
+// 	if (ft_exec_is_directory(p))
+// 	{
+// 		ft_putall_fd(2, 3, "minishell: ", s[0], ": is a directory\n");
+// 		free(p);
+// 		exit(126);
+// 	}
+// 	if (access(p, X_OK) != 0)
+// 	{
+// 		ft_putall_fd(2, 3, "minishell: ", s[0], ": Permission denied\n");
+// 		free(p);
+// 		exit(126);
+// 	}
+// 	env = ft_exec_env_array(l);
+// 	execve(p, s, env);
+// 	perror("minishell");
+// 	ft_free_tab(env);
+// 	free(p);
+// 	exit(126);
+// }
 char	**ft_exec_env_array(t_envp *l)
 {
 	int		i;

@@ -170,7 +170,7 @@ int	ft_exec_create_heredoc(char *delim, int quoted, t_envp *env)
 	int		hd[2];
 	pid_t	pid;
 	int		st;
-		char *l;
+	char	*l;
 
 	if (pipe(hd) == -1)
 		return (perror("heredoc pipe"), -1);

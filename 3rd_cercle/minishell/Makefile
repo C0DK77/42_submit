@@ -30,7 +30,8 @@ ENVIRONNEMENT		= srcs/environnement/env_utils.c \
 					srcs/environnement/env_prompt_and_list_init.c\
 					srcs/environnement/env_vars_init.c
 
-EXEC				= srcs/execution/exec_utils.c srcs/execution/exec.c
+EXEC				= srcs/execution/exec_utils.c srcs/execution/exec.c \
+					srcs/execution/ft_exec_cmd.c
 
 SIGNALS				= srcs/signals/signals.c
 
