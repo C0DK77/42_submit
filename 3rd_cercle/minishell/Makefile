@@ -28,7 +28,7 @@ BUILTINS 			= srcs/builtins/ft_exit.c srcs/builtins/ft_env.c \
 
 ENVIRONNEMENT		= srcs/environnement/env_utils.c \
 					srcs/environnement/env_prompt_and_list_init.c\
-					srcs/environnement/env_vars_init.c
+					srcs/environnement/env_vars_init.c srcs/environnement/env_init.c
 
 EXEC				= srcs/execution/exec_utils.c srcs/execution/exec.c \
 					srcs/execution/ft_exec_cmd.c srcs/execution/ft_exec_create_here.c \
@@ -41,10 +41,12 @@ PARSER 				= srcs/parser/parse_core.c srcs/parser/parse_utils.c srcs/parser/pars
 
 LEXER 				= srcs/lexer/token_check.c srcs/lexer/token_dollar.c srcs/lexer/token_list.c\
 					srcs/lexer/token_word_scan.c srcs/lexer/tokenize.c srcs/lexer/utils.c
+				
+LOOP_SRC				= srcs/shell/shell_loop.c
 						
 OBJ_DIR 			= 	obj
 
-SRC					= main.c $(BUILTINS) $(ENVIRONNEMENT) $(EXEC) $(PARSER) $(LEXER) $(SIGNALS)
+SRC					= main.c $(BUILTINS) $(ENVIRONNEMENT) $(EXEC) $(PARSER) $(LEXER) $(SIGNALS) $(LOOP_SRC)
 
 OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
 

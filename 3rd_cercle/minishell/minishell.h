@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/27 15:54:15 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/27 16:30:51 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ typedef struct s_parsing
 
 /*------------------- MAIN -------------------*/
 
-int								ft_program(t_envp **c_envp);
+int								ft_shell_loop(t_envp **c_envp);
 void							init_min_env(t_envp *c_envp);
 
 /*------------------- ENVIRONMENT -------------------*/
