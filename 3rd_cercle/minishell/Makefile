@@ -9,10 +9,10 @@ CC 					= 	cc
 CFLAGS 				= 	-Wall -Wextra -Werror -g3 -I. \
 						-I$(LIBFT_DIR)
 
-READLINE_PREFIX := $(shell brew --prefix readline 2>/dev/null)
-ifeq ($(READLINE_PREFIX),)
-  READLINE_PREFIX := /opt/homebrew/opt/readline
-endif
+# READLINE_PREFIX := $(shell brew --prefix readline 2>/dev/null)
+# ifeq ($(READLINE_PREFIX),)
+#   READLINE_PREFIX := /opt/homebrew/opt/readline
+# endif
 
 CPPFLAGS 			+= -I$(READLINE_PREFIX)/include
 LDFLAGS  			+= -L$(READLINE_PREFIX)/lib -Wl,-rpath,$(READLINE_PREFIX)/lib
@@ -36,7 +36,8 @@ EXEC				= srcs/execution/exec_utils.c srcs/execution/exec.c \
 
 SIGNALS				= srcs/signals/signals.c
 
-PARSER 				= srcs/parser/parse_core.c srcs/parser/parse_utils.c srcs/parser/parse_heredoc.c srcs/parser/parse_redir.c
+PARSER 				= srcs/parser/parse_core.c srcs/parser/parse_utils.c srcs/parser/parse_heredoc.c \
+						srcs/parser/parse_redir.c
 
 LEXER 				= srcs/lexer/token_check.c srcs/lexer/token_dollar.c srcs/lexer/token_list.c\
 					srcs/lexer/token_word_scan.c srcs/lexer/tokenize.c srcs/lexer/utils.c
@@ -61,7 +62,7 @@ $(NAME) 			: 	$(OBJ)
 
 $(OBJ_DIR)/%.o		: 	%.c
 					  	@mkdir -p $(dir $@)
-						@echo "DEBUG: OBJ_DIR is '$(OBJ_DIR)'"
+# 						@echo "DEBUG: OBJ_DIR is '$(OBJ_DIR)'"
 			  		  	@echo "Compilation de $< → $@"
 			  		  	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 

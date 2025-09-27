@@ -48,7 +48,7 @@ $(NAME)			: 	$(OBJ)
 					@$(AR) $(NAME) $(OBJ)
 
 $(OBJ_DIR)/%.o	: 	%.c
-					@echo "Compilation de $<"
+# 					@echo "Compilation de $<"
 					@$(CC) $(CFLAGS) -c $< -o $@
 
 clean			:
