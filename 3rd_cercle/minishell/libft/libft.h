@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:38:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 21:11:49 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/27 15:45:51 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <string.h>
 # include <unistd.h>
 # include <stdarg.h>
-
 
 //  STRUCTURE
 

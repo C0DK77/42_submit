@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/16 19:10:52 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/27 15:56:30 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	*ft_token_word(t_token **n, char *s, t_envp *l)
 					if (ft_isalpha(*(s + 1)) || *(s + 1) == '_')
 						s = ft_token_op_dollar(l, &w, s + 1);
 					else if (*(s + 1) == '?')
-						s = ft_token_operator_dollar_interrogation(&w, s + 1);
+						s = ft_token_operator_dol_interrogation(&w, s + 1);
 					else
 					{
 						temp = ft_strndup(s, 1);
@@ -99,7 +99,7 @@ char	*ft_token_word(t_token **n, char *s, t_envp *l)
 			if (ft_isalpha(*(s + 1)) || *(s + 1) == '_')
 				s = ft_token_op_dollar(l, &w, s + 1);
 			else if (*(s + 1) == '?')
-				s = ft_token_operator_dollar_interrogation(&w, s + 1);
+				s = ft_token_operator_dol_interrogation(&w, s + 1);
 			else
 			{
 				temp = ft_strndup(s, 1);

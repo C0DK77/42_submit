@@ -6,12 +6,11 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:34:17 by ecid              #+#    #+#             */
-/*   Updated: 2025/09/16 19:34:50 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/27 15:47:22 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 t_token	*ft_token_init(t_token_type t, char *v)
 {

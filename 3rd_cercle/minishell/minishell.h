@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 21:01:01 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/27 15:54:15 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,10 @@ typedef struct s_operator
 // REDIRECTION
 typedef enum e_redir_type
 {
-	REDIR_IN,     // <
-	REDIR_OUT,    // >
-	REDIR_APPEND, // >>
-	REDIR_HEREDOC // <<
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_APPEND,
+	REDIR_HEREDOC
 }								t_redir_type;
 
 typedef struct s_redir
@@ -258,10 +258,10 @@ void							ft_token_free(t_token *l);
 // token_dollar
 char							*ft_token_op_dollar(t_envp *l, char **w,
 									char *s);
-char							*ft_token_operator_dollar_interrogation(char **w,
+char							*ft_token_operator_dol_interrogation(char **w,
 									char *s);
 char							*ft_token_operator_dollar_word(char *s);
-char							*ft_token_operator_dollar_no_word(char **w,
+char							*ft_token_operator_dol_no_word(char **w,
 									char *s);
 // token_check
 int								ft_token_check(t_token *n);

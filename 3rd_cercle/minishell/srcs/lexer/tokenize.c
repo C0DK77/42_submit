@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:53:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/16 19:41:45 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/27 15:47:01 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ t_token	*ft_token(char *s, t_envp *l)
 	}
 	return (t);
 }
-
 
 t_operator	*ft_token_operator_init_table(void)
 {
