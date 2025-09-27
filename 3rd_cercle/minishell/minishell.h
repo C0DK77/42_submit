@@ -6,7 +6,7 @@
 /*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/27 16:30:51 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/27 17:41:58 by ecid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,7 @@ int								ft_exec_is_directory(char *p);
 /*------------------- BUILTINS -------------------*/
 
 int								ft_exec_builtin(char **s, t_envp **l);
+int								ft_exec_builtin_bis(char **s, t_envp **l);
 int								ft_echo(char **s);
 int								ft_exit(char **s);
 
