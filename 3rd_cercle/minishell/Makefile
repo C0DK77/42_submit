@@ -3,6 +3,15 @@
 
 NAME 				= 	minishell
 
+# ==== DETECT HOMEBREW READLINE ==== #
+# Pour Apple Silicon, Homebrew est /opt/homebrew. On récupère le prefix via brew.
+READLINE_PREFIX := $(shell brew --prefix readline 2>/dev/null)
+
+# Si readline n'est pas installé, on échoue avec un message clair.
+ifeq ($(READLINE_PREFIX),)
+$(error GNU readline introuvable. Installe: `brew install readline`)
+endif
+
 # ==== FLAGS AND COMPILER ==== #
 
 CC 					= 	cc

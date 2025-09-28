@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_prompt_and_list_init.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/13 17:21:21 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/28 20:45:07 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,28 @@ t_envp	*ft_env_var_copy(char *s)
 	n = malloc(sizeof(t_envp));
 	if (!n)
 		return (NULL);
-	a = ft_strchr(s, '=');
-	if (!a)
-		return (free(n), NULL);
-	n->var = ft_strndup(s, a - s);
-	if (!n->var)
-		return (ft_free_all(2, n->var, n->value), NULL);
-	n->value = ft_strdup(a + 1);
-	if (!n->value)
-		return (free(n), NULL);
+	n->var = NULL;
+	n->value = NULL;
 	n->next = NULL;
 	n->export = 1;
+	a = ft_strchr(s, '=');
+	if (!a)
+	{
+		free(n);
+		return (NULL);
+	}
+	n->var = ft_strndup(s, a - s);
+	if (!n->var)
+	{
+		free(n);
+		return (NULL);
+	}
+	n->value = ft_strdup(a + 1);
+	if (!n->value)
+	{
+		free(n->var);
+		free(n);
+		return (NULL);
+	}
 	return (n);
 }

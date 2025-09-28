@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/13 16:08:19 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/28 20:40:32 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	ft_env_free(t_envp *l)
 	while (l)
 	{
 		t = l->next;
-		ft_free_all(2, l->var, l->value, l);
+		ft_free_all(3, l->var, l->value, l);
 		l = t;
 	}
 }
