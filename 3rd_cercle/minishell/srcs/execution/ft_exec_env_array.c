@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exec_env_array.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:51:45 by ecid              #+#    #+#             */
-/*   Updated: 2025/09/26 21:19:20 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/28 22:18:24 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* helpers (dans le même .c en static, ou dans utils si besoin) */
 static int	env_export_count(t_envp *l)
 {
 	int	c;
