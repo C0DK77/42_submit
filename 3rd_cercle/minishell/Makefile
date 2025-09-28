@@ -9,10 +9,6 @@ CC 					= 	cc
 CFLAGS 				= 	-Wall -Wextra -Werror -g3 -I. \
 						-I$(LIBFT_DIR)
 
-# READLINE_PREFIX := $(shell brew --prefix readline 2>/dev/null)
-# ifeq ($(READLINE_PREFIX),)
-#   READLINE_PREFIX := /opt/homebrew/opt/readline
-# endif
 
 CPPFLAGS 			+= -I$(READLINE_PREFIX)/include
 LDFLAGS  			+= -L$(READLINE_PREFIX)/lib -Wl,-rpath,$(READLINE_PREFIX)/lib
