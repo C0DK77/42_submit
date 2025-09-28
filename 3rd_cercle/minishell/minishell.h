@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecid <ecid@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/27 17:41:58 by ecid             ###   ########.fr       */
+/*   Updated: 2025/09/29 00:40:53 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ typedef enum s_sep
 typedef struct s_parsing
 {
 	char						**line;
-	t_redir						*redirs;
+	t_redir				   		*redirs;
 	t_sep						sep;
 	struct s_parsing			*next;
 	struct s_parsing			*prev;
