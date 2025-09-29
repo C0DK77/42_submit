@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 08:43:37 by codk              #+#    #+#             */
-/*   Updated: 2025/09/29 10:10:27 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 23:06:09 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_parse_heredoc(t_envp *env, t_parsing *parse, char *s)
 {
 	int		fd[2];
 	char	*l;
-	char	*expanded;
+	char	*to_write;
 
 	if (pipe(fd) == -1)
 		return ;
@@ -37,11 +37,14 @@ void	ft_parse_heredoc(t_envp *env, t_parsing *parse, char *s)
 			free(l);
 			break ;
 		}
-		expanded = ft_expand_variables(l, env);
-		write(fd[1], expanded, ft_strlen(expanded));
+		if (parse->heredoc_expand)
+			to_write = ft_expand_variables(l, env);
+		else
+			to_write = ft_strdup(l);
+		write(fd[1], to_write, ft_strlen(to_write));
 		write(fd[1], "\n", 1);
 		free(l);
-		free(expanded);
+		free(to_write);
 	}
 	close(fd[1]);
 	parse->heredoc_fd = fd[0];
@@ -49,29 +52,29 @@ void	ft_parse_heredoc(t_envp *env, t_parsing *parse, char *s)
 
 char	*ft_expand_variables(char *s, t_envp *env)
 {
-	char *start;
-	start = s;
-	char *curr;
-	curr = s;
-	char *var_start = curr;
-	char *var_name;
-	char *v;
+	char	*res;
+	char	*start;
+	char	*curr;
+	char	*var_start;
+	char	*var_name;
+	char	*val;
 
-	char *res;
 	res = ft_strdup("");
+	start = s;
+	curr = s;
 	while (*curr)
 	{
 		if (*curr == '$' && ft_isalpha(*(curr + 1)))
 		{
-			if (start != curr)
-				res = ft_strjoin_free(res, ft_substr(start, 0, curr - start));
+			res = ft_strjoin_free(res, ft_substr(start, 0, curr - start));
 			curr++;
+			var_start = curr;
 			while (ft_isalnum(*curr) || *curr == '_')
 				curr++;
 			var_name = ft_substr(var_start, 0, curr - var_start);
-			v = ft_env_search_value(env, var_name);
-			if (v)
-				res = ft_strjoin_free(res, ft_strdup(v));
+			val = ft_env_search_value(env, var_name);
+			if (val)
+				res = ft_strjoin_free(res, ft_strdup(val));
 			free(var_name);
 			start = curr;
 		}
@@ -81,4 +84,21 @@ char	*ft_expand_variables(char *s, t_envp *env)
 	if (*start)
 		res = ft_strjoin_free(res, ft_strdup(start));
 	return (res);
+}
+
+int	is_quoted(char *s)
+{
+	size_t	len;
+
+	len = ft_strlen(s);
+	return ((s[0] == '\'' && s[len - 1] == '\'') || (s[0] == '"' && s[len
+			- 1] == '"'));
+}
+
+char	*remove_quotes(char *s)
+{
+	size_t len = ft_strlen(s);
+	if ((s[0] == '\'' || s[0] == '"') && s[len - 1] == s[0])
+		return (ft_substr(s, 1, len - 2));
+	return (ft_strdup(s));
 }

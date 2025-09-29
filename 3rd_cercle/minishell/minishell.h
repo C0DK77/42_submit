@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 10:22:47 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 18:46:56 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ typedef struct s_parsing
 	int							*append;
 	int							heredoc;
 	int							heredoc_fd;
+	int							heredoc_expand;
 	t_sep						sep;
 	struct s_parsing			*next;
 	struct s_parsing			*prev;
@@ -183,12 +184,12 @@ char							*ft_token_word(t_envp *env, t_token **token,
 
 //	PARSE / PARSE
 
-t_parsing						*ft_parse_line(t_token *t, t_envp *e);
-void							ft_parse_type(t_parsing *n, t_token *t);
-void							ft_redirection_type(t_parsing *n, int t,
-									char *f, t_envp *e);
-int								ft_handle_redirection(t_parsing *n, t_token **t,
-									t_envp *e);
+t_parsing						*ft_parse_line(t_envp *env, t_token *token);
+void							ft_parse_type(t_token *token, t_parsing *parse);
+void							ft_redirection_type(t_envp *env,
+									t_parsing *parse, char *s, int i);
+int								ft_handle_redirection(t_envp *env,
+									t_token **token, t_parsing *parse);
 
 //	PARSE / PARSE_UTILS
 
@@ -280,5 +281,7 @@ int								ft_export_value(t_envp **l, char *v, char *n,
 char							*ft_expand_variables(char *line, t_envp *e);
 void							ft_parse_heredoc(t_envp *env, t_parsing *parse,
 									char *s);
+int								is_quoted(char *s);
+char							*remove_quotes(char *s);
 
 #endif

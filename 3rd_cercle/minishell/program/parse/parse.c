@@ -6,54 +6,61 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 10:23:25 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 18:46:17 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-int	ft_handle_redirection(t_parsing *n, t_token **t, t_envp *e)
+int	ft_handle_redirection(t_envp *env, t_token **token, t_parsing *parse)
 {
-	t_token	*l;
+	t_token	*t;
+	char	*delimiter;
 
-	l = *t;
-	if (!l->next)
+	t = *token;
+	if (!t->next)
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `lline'\n",
 			2);
 		return (1);
 	}
-	if (l->next->type != WRD)
+	if (t->next->type != WRD)
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-		return (ft_putstr_fd(l->next->value, 2), ft_putstr_fd("'\n", 2), 1);
+		return (ft_putstr_fd(t->next->value, 2), ft_putstr_fd("'\n", 2), 1);
 	}
-	ft_redirection_type(n, l->type, l->next->value, e);
-	*t = l->next;
+	if (t->type == HERE)
+	{
+		if (is_quoted(t->next->value))
+			parse->heredoc_expand = 0;
+		else
+			parse->heredoc_expand = 1;
+		delimiter = remove_quotes(t->next->value);
+		parse->infiles = ft_parse_add_value(parse->infiles, delimiter);
+		parse->heredoc = 1;
+		ft_parse_heredoc(env, parse, delimiter);
+		free(delimiter);
+	}
+	else
+		ft_redirection_type(env, parse, t->next->value, t->type);
+	*token = t->next;
 	return (0);
 }
 
-void	ft_redirection_type(t_parsing *n, int t, char *f, t_envp *env)
+void	ft_redirection_type(t_envp *env, t_parsing *parse, char *s, int i)
 {
-	if (t == R_IN)
+	(void)env;
+	if (i == R_IN)
+		parse->infiles = ft_parse_add_value(parse->infiles, s);
+	else if (i == R_OUT || i == R_APPEND)
 	{
-		n->infiles = ft_parse_add_value(n->infiles, f);
-	}
-	else if (t == R_OUT || t == R_APPEND)
-	{
-		n->outfiles = ft_parse_add_value(n->outfiles, f);
-		n->append = ft_parse_add_append(n->append, (t == R_APPEND));
-	}
-	else if (t == HERE)
-	{
-		n->infiles = ft_parse_add_value(n->infiles, f);
-		n->heredoc = 1;
-		ft_parse_heredoc(env, n, f);
+		parse->outfiles = ft_parse_add_value(parse->outfiles, s);
+		parse->append = ft_parse_add_append(parse->append, (i == R_APPEND));
 	}
 }
 
-t_parsing	*ft_parse_line(t_token *t, t_envp *e)
+t_parsing	*ft_parse_line(t_envp *env, t_token *token)
 {
 	t_parsing	*a;
 	t_parsing	*n;
@@ -62,36 +69,37 @@ t_parsing	*ft_parse_line(t_token *t, t_envp *e)
 	a = NULL;
 	n = NULL;
 	p = NULL;
-	while (t)
+	while (token)
 	{
 		if (!n && !ft_parse_add_node(&n, &p, &a))
 			return (NULL);
-		if (t->type == WRD && t->value)
-			n->line = ft_parse_add_value(n->line, t->value);
-		else if ((t->type == R_IN || t->type == R_OUT || t->type == R_APPEND
-				|| t->type == HERE) && ft_handle_redirection(n, &t, e))
+		if (token->type == WRD && token->value)
+			n->line = ft_parse_add_value(n->line, token->value);
+		else if ((token->type == R_IN || token->type == R_OUT
+				|| token->type == R_APPEND || token->type == HERE)
+			&& ft_handle_redirection(env, &token, n))
 			return (NULL);
-		ft_parse_type(n, t);
-		if (t->type == PIPE || t->type == AND_IF || t->type == OR_IF
-			|| t->type == AND || t->type == SEMIC)
+		ft_parse_type(token, n);
+		if (token->type == PIPE || token->type == AND_IF || token->type == OR_IF
+			|| token->type == AND || token->type == SEMIC)
 			n = NULL;
-		t = t->next;
+		token = token->next;
 	}
 	return (a);
 }
 
-void	ft_parse_type(t_parsing *n, t_token *t)
+void	ft_parse_type(t_token *token, t_parsing *parse)
 {
-	if (!n || !t)
+	if (!parse || !token)
 		return ;
-	if (t->type == PIPE)
-		n->sep = SEP_PIPE;
-	else if (t->type == AND_IF)
-		n->sep = SEP_AND_IF;
-	else if (t->type == OR_IF)
-		n->sep = SEP_OR_IF;
-	else if (t->type == AND)
-		n->sep = SEP_BACKGROUND;
-	else if (t->type == SEMIC)
-		n->sep = SEP_SEQ;
+	if (token->type == PIPE)
+		parse->sep = SEP_PIPE;
+	else if (token->type == AND_IF)
+		parse->sep = SEP_AND_IF;
+	else if (token->type == OR_IF)
+		parse->sep = SEP_OR_IF;
+	else if (token->type == AND)
+		parse->sep = SEP_BACKGROUND;
+	else if (token->type == SEMIC)
+		parse->sep = SEP_SEQ;
 }

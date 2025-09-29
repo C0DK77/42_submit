@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin_free.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 12:58:44 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/09 13:00:13 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/29 18:26:43 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,6 @@ char	*ft_strjoin_free(char *s1, char *s2)
 
 	res = ft_strjoin(s1, s2);
 	free(s1);
+	free(s2);
 	return (res);
 }

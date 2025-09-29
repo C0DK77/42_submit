@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 10:18:34 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 18:05:58 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	ft_program(t_envp *env)
 		return (free(s), 1);
 	if (!ft_token_check(tokens))
 		return (ft_token_free(tokens), free(s), 1);
-	parse = ft_parse_line(tokens, env);
+	parse = ft_parse_line(env, tokens);
 	if (!parse)
 		return (ft_token_free(tokens), free(s), 1);
 	ft_exec(parse, env);
