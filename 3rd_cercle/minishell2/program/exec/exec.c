@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 00:26:28 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/29 21:31:50 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ static void	child_exec(t_parsing *p, t_envp **l, int prev_fd, int fd[2])
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
 	}
-	if (ft_exec_redirections_init(p, *l) != 0)
-		exit(1);
 	reset_signals();
 	signal(SIGINT, ft_handler_exec);
 	signal(SIGQUIT, ft_handler_exec);

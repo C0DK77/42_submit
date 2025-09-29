@@ -3,41 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   token_operator_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 17:31:39 by codk              #+#    #+#             */
-/*   Updated: 2025/09/26 17:31:48 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 21:17:25 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
-char	*ft_token_ope(t_token **l, char *s)
-{
-	t_token		*n;
-	t_operator	*tb;
-	int			i;
-
-	i = 0;
-	n = NULL;
-	tb = ft_token_ope_init_table();
-	while (tb[i].s)
-	{
-		if (ft_strncmp(s, tb[i].s, ft_strlen(tb[i].s)) == 0)
-		{
-			n = ft_token_init(tb[i].type, tb[i].s);
-			s += ft_strlen(tb[i].s);
-			break ;
-		}
-		i++;
-	}
-	if (n)
-		ft_token_add(l, n);
-	return (s);
-}
-
-char	*ft_token_ope_dollar(t_envp *l, char **w, char *s)
+char	*ft_token_op_dollar(t_envp *l, char **w, char *s)
 {
 	char	*t;
 	char	*j;
@@ -45,12 +20,16 @@ char	*ft_token_ope_dollar(t_envp *l, char **w, char *s)
 	t_envp	*n;
 
 	if (*s == '?')
-		return (ft_token_ope_dollar_interrogation(w, s));
+		return (ft_token_operator_dol_interrogation(w, s));
 	if (!ft_isalpha(*s) && *s != '_')
-		return (ft_token_ope_dollar_no_word(w, s + 1));
+	{
+		t = ft_strjoin(*w, "$");
+		free(*w);
+		*w = t;
+		return (s);
+	}
 	j = s;
-	if (ft_isalpha(*s) || *s == '_')
-		s = ft_token_ope_dollar_word(s);
+	s = ft_token_operator_dollar_word(s);
 	v = ft_strndup(j, s - j);
 	if (!v)
 		return (s);
@@ -64,7 +43,7 @@ char	*ft_token_ope_dollar(t_envp *l, char **w, char *s)
 	return (s);
 }
 
-char	*ft_token_ope_dollar_interrogation(char **w, char *s)
+char	*ft_token_operator_dol_interrogation(char **w, char *s)
 {
 	char	*t;
 	char	*r;
@@ -78,14 +57,14 @@ char	*ft_token_ope_dollar_interrogation(char **w, char *s)
 	return (s + 1);
 }
 
-char	*ft_token_ope_dollar_word(char *s)
+char	*ft_token_operator_dollar_word(char *s)
 {
 	while (*s && (ft_isalnum(*s) || *s == '_'))
 		s++;
 	return (s);
 }
 
-char	*ft_token_ope_dollar_no_word(char **w, char *s)
+char	*ft_token_operator_dol_no_word(char **w, char *s)
 {
 	char	*t;
 
@@ -94,5 +73,32 @@ char	*ft_token_ope_dollar_no_word(char **w, char *s)
 	t = ft_strjoin(*w, "$");
 	free(*w);
 	*w = t;
+	return (s);
+}
+
+// operator_table
+char	*ft_token_operator(t_token **l, char *s)
+{
+	t_token		*n;
+	t_operator	*tb;
+	int			i;
+
+	i = 0;
+	n = NULL;
+	tb = ft_token_operator_init_table();
+	while (tb[i].s)
+	{
+		if (ft_strncmp(s, tb[i].s, ft_strlen(tb[i].s)) == 0)
+		{
+			n = ft_token_init(tb[i].type, tb[i].s);
+			s += ft_strlen(tb[i].s);
+			break ;
+		}
+		i++;
+	}
+	if (n)
+		ft_token_add(l, n);
+	else
+		s++;
 	return (s);
 }

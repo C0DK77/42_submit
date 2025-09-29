@@ -15,6 +15,8 @@ CFLAGS 				= 	-Wall -Wextra -Werror							\
 SRC 				= 	program/environment/env_prompt_and_list_init.c	\
 						program/environment/env_vars_init.c 			\
 						program/environment/env_utils.c 				\
+						program/token/token_check.c 					\
+						program/token/token_list.c	 					\
 						program/token/token_utils.c 					\
 						program/token/token_operator_utils.c 			\
 						program/token/token_word_utils.c 				\

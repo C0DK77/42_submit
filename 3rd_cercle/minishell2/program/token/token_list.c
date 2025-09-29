@@ -1,29 +1,64 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_utils.c                                      :+:      :+:    :+:   */
+/*   token_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 21:23:59 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/29 21:39:52 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-#include "minishell.h"
-
-char	*ft_strjoin_and_free(char *s1, char *s2)
+t_token	*ft_token_init(t_token_type t, char *v)
 {
-	char	*new_str;
+	t_token	*n;
 
-	if (!s1 || !s2)
+	n = malloc(sizeof(t_token));
+	if (!n)
 		return (NULL);
-	new_str = ft_strjoin(s1, s2);
-	free(s1);
-	free(s2);
-	return (new_str);
+	n->type = t;
+	n->value = NULL;
+	if (v)
+	{
+		n->value = ft_strdup(v);
+		if (!n->value)
+		{
+			free(n);
+			return (NULL);
+		}
+	}
+	n->next = NULL;
+	return (n);
 }
 
+void	ft_token_add(t_token **l, t_token *n)
+{
+	t_token	*t;
+
+	if (!*l)
+		*l = n;
+	else
+	{
+		t = *l;
+		while (t->next)
+			t = t->next;
+		t->next = n;
+	}
+}
+
+void	ft_token_free(t_token *l)
+{
+	t_token	*t;
+
+	while (l)
+	{
+		t = l->next;
+		if (l->value)
+			free(l->value);
+		free(l);
+		l = t;
+	}
+}

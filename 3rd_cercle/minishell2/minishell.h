@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 00:45:38 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/29 21:40:50 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,40 +158,35 @@ int								ft_env_vars_create(t_envp **l, t_envp *t,
 									char *v);
 int								ft_var_increase_shlvl(t_envp *l);
 
-//	TOKEN / TOKEN_UTILS
-
-char							*ft_token_isquote(t_envp *l, char **w, char *s);
+//	TOKEN / TOKEN_CHECK
 int								ft_token_check(t_token *n);
-int								ft_token_check_bis(t_token *n, t_token *prev,
-									int i);
 
-//	TOKEN / TOKEN_OPERATOR_UTILS
-
-char							*ft_token_ope_dollar(t_envp *l, char **w,
-									char *s);
-char							*ft_token_ope(t_token **l, char *s);
-char							*ft_token_ope_dollar_interrogation(char **w,
-									char *s);
-char							*ft_token_ope_dollar_word(char *s);
-char							*ft_token_ope_dollar_no_word(char **w, char *s);
-
-//	TOKEN / TOKEN
-
-t_operator						*ft_token_ope_init_table(void);
-t_token							*ft_token(char *s, t_envp *l);
+//	TOKEN / TOKEN_LIST
 t_token							*ft_token_init(t_token_type t, char *v);
 void							ft_token_add(t_token **l, t_token *n);
 void							ft_token_free(t_token *l);
 
+//	TOKEN / TOKEN_OPERATOR_UTILS
+char							*ft_token_op_dollar(t_envp *l, char **w,
+									char *s);
+char							*ft_token_operator_dol_interrogation(char **w,
+									char *s);
+char							*ft_token_operator_dollar_word(char *s);
+char							*ft_token_operator_dol_no_word(char **w,
+									char *s);
+char							*ft_token_operator(t_token **l, char *s);
+
+//	TOKEN / TOKEN_UTILS
+char							*ft_strjoin_and_free(char *s1, char *s2);
+
 //	TOKEN / TOKEN_WORD_UTILS
 
-char							*ft_token_word_dbquote(t_envp *l, char **w,
-									char *s, char *end);
-char							*ft_token_word_noquote(char **w, char *s);
-char							*ft_token_word_sgquote(char **w, char *s,
-									char *i);
-int								ft_token_word_len(char *s);
+char							*ft_token_word_hd(char **ps);
 char							*ft_token_word(t_token **n, char *s, t_envp *l);
+
+//	TOKEN / TOKEN
+t_operator						*ft_token_operator_init_table(void);
+t_token							*ft_token(char *s, t_envp *l);
 
 //	PARSE / PARSE
 
