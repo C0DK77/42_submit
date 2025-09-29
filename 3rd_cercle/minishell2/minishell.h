@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 21:40:50 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/29 22:31:05 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,19 +129,19 @@ typedef struct s_parsing
 	struct s_parsing			*next;
 	struct s_parsing			*prev;
 }								t_parsing;
-//	MAIN
 
-int								ft_program(t_envp *c_envp);
-char							*ft_program_check_unclosed_quote(char *line);
+//	MAIN
+int								ft_program(t_envp **c_envp);
+
+//	ENVIRONMENT / ENV_INIT
+void							init_min_env(t_envp *c_envp);
 
 //	ENVIRONMENT / ENV_PROMPT_AND_LIST_INIT
-
 char							*ft_env_prompt(void);
 t_envp							*ft_env_list_init(char **l);
 t_envp							*ft_env_var_copy(char *s);
 
 //	ENVIRONMENT / ENV_UTILS
-
 char							*ft_env_search_value(t_envp *l, char *v);
 t_envp							*ft_env_search_node(t_envp *l, char *v);
 void							ft_env_free(t_envp *l);

@@ -6,13 +6,61 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 00:46:10 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/29 22:32:18 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 volatile sig_atomic_t	g_exit_status = 0;
+
+static char	*shell_readline(void)
+{
+	char	*line;
+
+	line = readline(ft_env_prompt());
+	if (!line)
+		printf("exit\n");
+	else if (*line)
+		add_history(line);
+	return (line);
+}
+
+static t_parsing	*parse_from_line(char *line, t_envp *env)
+{
+	t_token		*tokens;
+	t_parsing	*ast;
+
+	tokens = ft_token(line, env);
+	if (!tokens || !ft_token_check(tokens))
+	{
+		ft_token_free(tokens);
+		return (NULL);
+	}
+	ast = ft_parse_line(tokens);
+	ft_token_free(tokens);
+	return (ast);
+}
+
+int	ft_program(t_envp **c_envp)
+{
+	char		*line;
+	t_parsing	*parse;
+
+	line = shell_readline();
+	if (!line)
+		return (0);
+	parse = parse_from_line(line, *c_envp);
+	free(line);
+	if (!parse)
+		return (1);
+	signal(SIGINT, ft_handler_exec);
+	signal(SIGQUIT, ft_handler_exec);
+	ft_exec(parse, c_envp);
+	setup_signals();
+	return (1);
+}
+
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -22,67 +70,18 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	setbuf(stdout, NULL);
 	printf("🛠️  [main] Début du programme\n");
-	if (!envp || !*envp)
-		c_envp = NULL;
-	else
-		c_envp = ft_env_list_init(envp);
+	c_envp = ft_env_list_init(envp);
+	if (!c_envp)
+		init_min_env(c_envp);
 	if (!ft_env_vars_check(&c_envp))
-		return (1);
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+		return (0);//on retourne pas pareil la!!   
+	setup_signals();
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
 	while (1)
-		if (!ft_program(c_envp))
+		if (!ft_program(&c_envp))
 			break ;
 	ft_env_free(c_envp);
 	return (0);
 }
 
-int	ft_program(t_envp *c_envp)
-{
-	char		*line;
-	t_token		*tokens;
-	t_parsing	*parse;
-
-	line = readline(ft_env_prompt());
-	if (!line)
-		return (printf("exit\n"), 0);
-	if (*line)
-		add_history(line);
-	line = ft_program_check_unclosed_quote(line);
-	if (!line)
-		return (1);
-	tokens = ft_token(line, c_envp);
-	if (!tokens)
-		return (free(line), 1);
-	if (!ft_token_check(tokens))
-		return (ft_token_free(tokens), free(line), 1);
-	parse = ft_parse_line(tokens);
-	if (!parse)
-		return (ft_token_free(tokens), free(line), 1);
-	ft_exec(parse, &c_envp);
-	return (ft_token_free(tokens), free(line), 1);
-}
-
-char	*ft_program_check_unclosed_quote(char *line)
-{
-	char	*n;
-	char	*t;
-
-	while (ft_has_unclosed_quote(line))
-	{
-		n = readline("> ");
-		if (!n)
-		{
-			ft_putstr_fd("minishell: syntax error: unexpected end of file\n",
-				2);
-			g_exit_status = 2;
-			free(line);
-			return (NULL);
-		}
-		t = ft_strjoin(line, "\n");
-		free(line);
-		line = ft_strjoin(t, n);
-		ft_free_all(2, t, n);
-	}
-	return (line);
-}
