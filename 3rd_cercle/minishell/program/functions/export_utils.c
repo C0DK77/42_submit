@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:10:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 15:57:57 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 05:59:56 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_export_check_value(t_envp **l, char *n, char *a, int i)
 	char	*v;
 
 	if (a == NULL)
-		return (ft_pwd_export_env_set(l, n, NULL, 1), free(n), 1);
+		return (ft_pwd_export_env_set(l, n, "", 1), free(n), 1);
 	v = ft_strdup(a);
 	if (!v)
 		return (free(n), 0);

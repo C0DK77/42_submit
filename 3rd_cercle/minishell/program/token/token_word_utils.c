@@ -6,14 +6,14 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 17:33:21 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 10:19:41 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-char	*ft_token_word(t_token **n, char *s, t_envp *l)
+char	*ft_token_word(t_envp *env, t_token **token, char *s)
 {
 	char	*w;
 
@@ -21,19 +21,19 @@ char	*ft_token_word(t_token **n, char *s, t_envp *l)
 	while (*s && !ft_isspace(*s) && !ft_isoperator(*s))
 	{
 		if (ft_isquote(*s))
-			s = ft_token_isquote(l, &w, s);
+			s = ft_token_isquote(env, &w, s);
 		else if (*s == '$')
-			s = ft_token_ope_dollar(l, &w, s + 1);
+			s = ft_token_ope_dollar(env, &w, s + 1);
 		else
 			s = ft_token_word_noquote(&w, s);
 	}
 	if (w && *w != '\0')
-		ft_token_add(n, ft_token_init(WRD, w));
+		ft_token_add(token, ft_token_init(WRD, w));
 	free(w);
 	return (s);
 }
 
-char	*ft_token_word_dbquote(t_envp *l, char **w, char *s, char *end)
+char	*ft_token_word_dbquote(t_envp *env, char **w, char *s, char *end)
 {
 	char	*i;
 	char	*a;
@@ -42,7 +42,7 @@ char	*ft_token_word_dbquote(t_envp *l, char **w, char *s, char *end)
 	while (s < end)
 	{
 		if (*s == '$')
-			s = ft_token_ope_dollar(l, w, s + 1);
+			s = ft_token_ope_dollar(env, w, s + 1);
 		i = s;
 		while (s < end && *s != '$')
 			s++;

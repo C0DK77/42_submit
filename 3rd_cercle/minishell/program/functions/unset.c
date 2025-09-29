@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 01:43:17 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 15:52:59 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 07:06:37 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ int	ft_unset(char **s, t_envp **l)
 			return (ft_unset_error(0, *s));
 		if (!ft_unset_check_identifier(*s))
 		{
+			ft_putall_fd(2, 3, "minishell: unset: `", *s,
+				"': not a valid identifier\n");
+			g_exit_status = 1;
 			s++;
 			continue ;
 		}

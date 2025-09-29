@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 17:41:00 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 10:22:47 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ typedef struct s_parsing
 	char						**outfiles;
 	int							*append;
 	int							heredoc;
+	int							heredoc_fd;
 	t_sep						sep;
 	struct s_parsing			*next;
 	struct s_parsing			*prev;
@@ -145,48 +146,49 @@ int								ft_var_increase_shlvl(t_envp *l);
 
 //	TOKEN / TOKEN_UTILS
 
-char							*ft_token_isquote(t_envp *l, char **w, char *s);
-int								ft_token_check(t_token *n);
-int								ft_token_check_bis(t_token *n, t_token *prev,
+char							*ft_token_isquote(t_envp *env, char **w,
+									char *s);
+int								ft_token_check(t_token *token);
+int								ft_token_check_bis(t_token *token, t_token *p,
 									int i);
 
 //	TOKEN / TOKEN_OPERATOR_UTILS
 
-char							*ft_token_ope_dollar(t_envp *l, char **w,
+char							*ft_token_ope_dollar(t_envp *env, char **w,
 									char *s);
-char							*ft_token_ope(t_token **l, char *s);
+char							*ft_token_ope(t_token **env, char *s);
 char							*ft_token_ope_dollar_interrogation(char **w,
 									char *s);
 char							*ft_token_ope_dollar_word(char *s);
-char							*ft_token_ope_dollar_no_word(char **w,
-									char *s);
+char							*ft_token_ope_dollar_no_word(char **w, char *s);
 
 //	TOKEN / TOKEN
 
 t_operator						*ft_token_ope_init_table(void);
-t_token							*ft_token(char *s, t_envp *l);
-t_token							*ft_token_init(t_token_type t, char *v);
-void							ft_token_add(t_token **l, t_token *n);
-void							ft_token_free(t_token *l);
+t_token							*ft_token(t_envp *env, char *s);
+t_token							*ft_token_init(t_token_type type, char *v);
+void							ft_token_add(t_token **token, t_token *n);
+void							ft_token_free(t_token *token);
 
 //	TOKEN / TOKEN_WORD_UTILS
 
-char							*ft_token_word_dbquote(t_envp *l, char **w,
+char							*ft_token_word_dbquote(t_envp *env, char **w,
 									char *s, char *end);
 char							*ft_token_word_noquote(char **w, char *s);
 char							*ft_token_word_sgquote(char **w, char *s,
 									char *i);
 int								ft_token_word_len(char *s);
-char							*ft_token_word(t_token **n, char *s, t_envp *l);
+char							*ft_token_word(t_envp *env, t_token **token,
+									char *s);
 
 //	PARSE / PARSE
 
-t_parsing						*ft_parse_line(t_token *t);
+t_parsing						*ft_parse_line(t_token *t, t_envp *e);
 void							ft_parse_type(t_parsing *n, t_token *t);
 void							ft_redirection_type(t_parsing *n, int t,
-									char *f);
-int								ft_handle_redirection(t_parsing *n,
-									t_token **t);
+									char *f, t_envp *e);
+int								ft_handle_redirection(t_parsing *n, t_token **t,
+									t_envp *e);
 
 //	PARSE / PARSE_UTILS
 
@@ -214,11 +216,6 @@ char							**ft_exec_env_array(t_envp *l);
 int								ft_exec_builtin(char **s, t_envp **l);
 int								ft_exec_builtin_bis(char **s, t_envp **l);
 
-//	FUNCTIONS / FUNCTIONS_UTILS
-
-void							ft_pwd_export_env_set(t_envp **l, char *s,
-									char *value, int i);
-
 //	FUNCTIONS / PWD
 
 int								ft_pwd(char **s, t_envp *l);
@@ -229,7 +226,13 @@ int								ft_pwd_error(int i, int c);
 
 //	FUNCTIONS / PWD_UTILS
 
-void							update_pwd_vars(t_envp *l, char *s);
+void							ft_pwd_update_vars(t_envp *l, char *s);
+void							ft_pwd_export_env_set(t_envp **l, char *s,
+									char *v, int i);
+void							ft_env_update_existing(t_envp *e, char *v,
+									int i);
+t_envp							*ft_env_new_pair(char *name, char *val, int i);
+void							ft_env_append(t_envp **l, t_envp *n);
 
 //	FUNCTIONS / ECHO
 
@@ -247,8 +250,7 @@ int								ft_env(t_envp *l);
 //	FUNCTIONS / CD
 
 int								ft_cd(char **s, t_envp *l);
-char							*ft_cd_conditions(char **s, t_envp *l,
-									char *target, int i);
+char							*ft_cd_conditions(char **s, t_envp *l, int i);
 int								ft_cd_search_var(t_envp *l, char *v);
 char							*ft_cd_error(int i, char *c);
 
@@ -261,7 +263,7 @@ int								ft_unset_error(int i, char *s);
 
 //	FUNCTIONS / EXPORT
 
-int								ft_export(char **s, t_envp **envp);
+int								ft_export(char **s, t_envp **e);
 int								ft_export_no_arguments(t_envp **l);
 int								ft_export_arguments(char **s, t_envp **l,
 									char *a);
@@ -274,5 +276,9 @@ int								ft_export_check_value(t_envp **l, char *n,
 									char *a, int i);
 int								ft_export_value(t_envp **l, char *v, char *n,
 									int *i);
+
+char							*ft_expand_variables(char *line, t_envp *e);
+void							ft_parse_heredoc(t_envp *env, t_parsing *parse,
+									char *s);
 
 #endif

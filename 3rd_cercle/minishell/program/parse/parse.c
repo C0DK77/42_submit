@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/22 19:36:07 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/29 10:23:25 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-int	ft_handle_redirection(t_parsing *n, t_token **t)
+int	ft_handle_redirection(t_parsing *n, t_token **t, t_envp *e)
 {
 	t_token	*l;
 
@@ -29,12 +29,12 @@ int	ft_handle_redirection(t_parsing *n, t_token **t)
 		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 		return (ft_putstr_fd(l->next->value, 2), ft_putstr_fd("'\n", 2), 1);
 	}
-	ft_redirection_type(n, l->type, l->next->value);
+	ft_redirection_type(n, l->type, l->next->value, e);
 	*t = l->next;
 	return (0);
 }
 
-void	ft_redirection_type(t_parsing *n, int t, char *f)
+void	ft_redirection_type(t_parsing *n, int t, char *f, t_envp *env)
 {
 	if (t == R_IN)
 	{
@@ -49,10 +49,11 @@ void	ft_redirection_type(t_parsing *n, int t, char *f)
 	{
 		n->infiles = ft_parse_add_value(n->infiles, f);
 		n->heredoc = 1;
+		ft_parse_heredoc(env, n, f);
 	}
 }
 
-t_parsing	*ft_parse_line(t_token *t)
+t_parsing	*ft_parse_line(t_token *t, t_envp *e)
 {
 	t_parsing	*a;
 	t_parsing	*n;
@@ -68,7 +69,7 @@ t_parsing	*ft_parse_line(t_token *t)
 		if (t->type == WRD && t->value)
 			n->line = ft_parse_add_value(n->line, t->value);
 		else if ((t->type == R_IN || t->type == R_OUT || t->type == R_APPEND
-				|| t->type == HERE) && ft_handle_redirection(n, &t))
+				|| t->type == HERE) && ft_handle_redirection(n, &t, e))
 			return (NULL);
 		ft_parse_type(n, t);
 		if (t->type == PIPE || t->type == AND_IF || t->type == OR_IF

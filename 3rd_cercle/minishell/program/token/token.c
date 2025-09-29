@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:53:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 17:32:27 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 10:20:35 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ t_operator	*ft_token_ope_init_table(void)
 	return (tb);
 }
 
-t_token	*ft_token(char *s, t_envp *l)
+t_token	*ft_token(t_envp *env, char *s)
 {
-	t_token	*t;
+	t_token	*token;
 
-	t = NULL;
+	token = NULL;
 	while (*s)
 	{
 		while (ft_isspace(*s))
@@ -50,51 +50,51 @@ t_token	*ft_token(char *s, t_envp *l)
 		if (!(*s))
 			break ;
 		else if (ft_isoperator(*s))
-			s = ft_token_ope(&t, s);
+			s = ft_token_ope(&token, s);
 		else
-			s = ft_token_word(&t, s, l);
+			s = ft_token_word(env, &token, s);
 	}
-	return (t);
+	return (token);
 }
 
-t_token	*ft_token_init(t_token_type t, char *v)
+t_token	*ft_token_init(t_token_type type, char *v)
 {
-	t_token	*n;
+	t_token	*token;
 
-	n = malloc(sizeof(t_token));
-	if (!n)
+	token = malloc(sizeof(t_token));
+	if (!token)
 		return (NULL);
-	n->type = t;
-	n->value = ft_strdup(v);
-	n->next = NULL;
-	return (n);
+	token->type = type;
+	token->value = ft_strdup(v);
+	token->next = NULL;
+	return (token);
 }
 
-void	ft_token_add(t_token **l, t_token *n)
+void	ft_token_add(t_token **token, t_token *n)
 {
 	t_token	*t;
 
-	if (!*l)
-		*l = n;
+	if (!*token)
+		*token = n;
 	else
 	{
-		t = *l;
+		t = *token;
 		while (t->next)
 			t = t->next;
 		t->next = n;
 	}
 }
 
-void	ft_token_free(t_token *l)
+void	ft_token_free(t_token *token)
 {
 	t_token	*t;
 
-	while (l)
+	while (token)
 	{
-		t = l->next;
-		if (l->value)
-			free(l->value);
-		free(l);
-		l = t;
+		t = token->next;
+		if (token->value)
+			free(token->value);
+		free(token);
+		token = t;
 	}
 }

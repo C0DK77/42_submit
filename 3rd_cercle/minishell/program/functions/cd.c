@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 19:22:46 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 15:31:12 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 07:00:16 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,43 +24,35 @@ int	ft_cd(char **s, t_envp *l)
 	i = 0;
 	while (s[i])
 		i++;
-	if (!ft_cd_conditions(s, l, target, i))
+	target = ft_cd_conditions(s, l, i);
+	if (!target)
 		return (1);
-	else
-		target = ft_cd_conditions(s, l, target, i);
 	if (chdir(target) != 0)
-	{
-		ft_cd_error(1, NULL);
-		return (1);
-	}
-	update_pwd_vars(l, pwd_before);
+		return (ft_cd_error(1, NULL), 1);
+	ft_pwd_update_vars(l, pwd_before);
 	g_exit_status = 0;
 	return (0);
 }
 
-char	*ft_cd_conditions(char **s, t_envp *l, char *target, int i)
+char	*ft_cd_conditions(char **s, t_envp *l, int i)
 {
-	if (i == 1 && !ft_cd_search_var(l, "HOME"))
-		return (NULL);
 	if (i > 2)
 		return (ft_cd_error(0, NULL));
-	else
-	{
-		if (ft_strcmp(s[1], "-") == 0 && !ft_cd_search_var(l, "OLDPWD"))
-			return (NULL);
-		else if (i == 2 && ft_strcmp(s[1], "--") == 0 && !ft_cd_search_var(l,
-				"HOME"))
-			return (NULL);
-		else if (i == 3 && ft_strcmp(s[1], "--") == 0)
-			target = s[2];
-		else if (ft_strcmp(s[1], "--") == 0)
-			return (ft_cd_error(1, NULL));
-		else if (s[1][0] == '-' && s[1][1] != '\0')
-			return (ft_cd_error(2, s[1]));
-		else
-			target = s[1];
-	}
-	return (target);
+	if (i == 1 && !ft_cd_search_var(l, "HOME"))
+		return (NULL);
+	if (i == 1)
+		return (ft_env_search_value(l, "HOME"));
+	if (ft_strcmp(s[1], "-") == 0 && !ft_cd_search_var(l, "OLDPWD"))
+		return (NULL);
+	if (ft_strcmp(s[1], "-") == 0)
+		return (ft_env_search_value(l, "OLDPWD"));
+	if (ft_strcmp(s[1], "--") == 0 && !ft_cd_search_var(l, "HOME"))
+		return (NULL);
+	if (ft_strcmp(s[1], "--") == 0)
+		return (ft_env_search_value(l, "HOME"));
+	if (s[1][0] == '-' && s[1][1] != '\0')
+		return (ft_cd_error(2, s[1]));
+	return (s[1]);
 }
 
 int	ft_cd_search_var(t_envp *l, char *v)
@@ -71,9 +63,9 @@ int	ft_cd_search_var(t_envp *l, char *v)
 	if (!t)
 	{
 		g_exit_status = 1;
-		return (ft_putall_fd(2, 3, "minishell: cd: ", v, "not set\n"), 0);
+		return (ft_putall_fd(2, 3, "minishell: cd: ", v, " not set\n"), 0);
 	}
-	if (ft_strcmp(t, "OLDPWD"))
+	if (ft_strcmp(v, "OLDPWD") == 0)
 		printf("%s\n", t);
 	return (1);
 }

@@ -6,31 +6,31 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 18:24:59 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 16:05:20 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 09:55:06 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-t_parsing	*ft_parse_add_node(t_parsing **n, t_parsing **p, t_parsing **a)
+t_parsing	*ft_parse_add_node(t_parsing **parse, t_parsing **p, t_parsing **a)
 {
-	t_parsing	*l;
+	t_parsing	*t;
 
-	l = calloc(1, sizeof(t_parsing));
-	if (!l)
+	t = calloc(1, sizeof(t_parsing));
+	if (!t)
 		return (NULL);
-	l->sep = SEP_NONE;
+	t->sep = SEP_NONE;
 	if (!*a)
-		*a = l;
+		*a = t;
 	if (*p)
 	{
-		(*p)->next = l;
-		l->prev = *p;
+		(*p)->next = t;
+		t->prev = *p;
 	}
-	*p = l;
-	*n = l;
-	return (l);
+	*p = t;
+	*parse = t;
+	return (t);
 }
 
 char	**ft_parse_add_value(char **s, char *v)

@@ -3,34 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:03:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/23 10:58:45 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/29 10:14:59 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-char	*ft_env_search_value(t_envp *l, char *v)
+char	*ft_env_search_value(t_envp *env, char *v)
 {
-	while (l)
+	while (env)
 	{
-		if (ft_strcmp(l->var, v) == 0)
-			return (l->value);
-		l = l->next;
+		if (ft_strcmp(env->var, v) == 0)
+			return (env->value);
+		env = env->next;
 	}
 	return (NULL);
 }
 
-t_envp	*ft_env_search_node(t_envp *l, char *v)
+t_envp	*ft_env_search_node(t_envp *env, char *v)
 {
-	while (l)
+	while (env)
 	{
-		if (ft_strcmp(l->var, v) == 0)
-			return (l);
-		l = l->next;
+		if (ft_strcmp(env->var, v) == 0)
+			return (env);
+		env = env->next;
 	}
 	return (NULL);
 }
@@ -53,23 +53,23 @@ void	ft_free_all(int argc, ...)
 	va_end(argv);
 }
 
-void	ft_env_free(t_envp *l)
+void	ft_env_free(t_envp *env)
 {
 	t_envp	*t;
 
-	while (l)
+	while (env)
 	{
-		t = l->next;
-		ft_free_all(2, l->var, l->value, l);
-		l = t;
+		t = env->next;
+		ft_free_all(2, env->var, env->value, env);
+		env = t;
 	}
 }
 
-int	ft_env_add_value(t_envp **l, char *s, char *v, int i)
+int	ft_env_add_value(t_envp **env, char *s, char *v, int i)
 {
 	t_envp	*t;
 
-	t = *l;
+	t = *env;
 	while (t)
 	{
 		if (ft_strcmp(t->var, s) == 0)

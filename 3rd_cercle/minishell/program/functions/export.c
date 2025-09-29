@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 01:44:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 15:02:17 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 07:17:56 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	ft_export(char **s, t_envp **l)
 {
 	if (!s || !*s)
 		return (ft_export_no_arguments(l));
+	s++;
 	while (*s)
 	{
 		if (!ft_export_arguments(s, l, NULL))
@@ -66,7 +67,7 @@ int	ft_export_arguments(char **s, t_envp **l, char *a)
 		a = t + j + 1;
 	else
 		a = NULL;
-	n = ft_strndup(t, i);
+	n = ft_strndup(t, j);
 	if (!n || !ft_export_check_value(l, n, a, i))
 		return (0);
 	return (1);

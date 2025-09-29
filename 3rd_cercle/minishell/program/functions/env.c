@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 22:48:05 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/18 22:48:09 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/09/29 05:40:48 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_env(t_envp *l)
 {
 	while (l)
 	{
-		if (l->export && l->value)
+		if (l->value)
 			printf("%s=%s\n", l->var, l->value);
 		l = l->next;
 	}

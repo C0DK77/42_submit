@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 17:47:10 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 08:38:05 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ void	ft_exec(t_parsing *p, t_envp *l)
 				close(fd[0]);
 				dup2(fd[1], STDOUT_FILENO);
 				close(fd[1]);
+			}
+			if (p->heredoc && p->heredoc_fd >= 0)
+			{
+				dup2(p->heredoc_fd, STDIN_FILENO);
+				close(p->heredoc_fd);
 			}
 			if (ft_exec_redirections_init(p) != 0)
 				exit(1);

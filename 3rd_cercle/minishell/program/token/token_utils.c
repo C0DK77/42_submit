@@ -6,14 +6,14 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 18:24:04 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/29 10:06:35 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-char	*ft_token_isquote(t_envp *l, char **w, char *s)
+char	*ft_token_isquote(t_envp *env, char **w, char *s)
 {
 	char	quote;
 	char	*start;
@@ -24,7 +24,7 @@ char	*ft_token_isquote(t_envp *l, char **w, char *s)
 	while (*s && *s != quote)
 		s++;
 	if (quote == '"')
-		ft_token_word_dbquote(l, w, start, s);
+		ft_token_word_dbquote(env, w, start, s);
 	else
 		ft_token_word_sgquote(w, s, start);
 	if (*s)
@@ -32,47 +32,47 @@ char	*ft_token_isquote(t_envp *l, char **w, char *s)
 	return (s);
 }
 
-int	ft_token_check(t_token *n)
+int	ft_token_check(t_token *token)
 {
-	t_token			*prev;
-	t_token_type	t;
+	t_token			*p;
+	t_token_type	type;
 
-	prev = NULL;
-	while (n)
+	p = NULL;
+	while (token)
 	{
-		t = n->type;
-		if (!ft_token_check_bis(n, prev, 1) && (t == PIPE || t == AND_IF
-				|| t == OR_IF || t == SEMIC || t == AND))
+		type = token->type;
+		if ((type == PIPE || type == AND_IF || type == OR_IF || type == SEMIC
+				|| type == AND) && !ft_token_check_bis(token, p, 1))
 			return (0);
-		if ((t == R_IN || t == R_OUT || t == R_APPEND || t == HERE)
-			&& !ft_token_check_bis(n, prev, 2))
+		if ((type == R_IN || type == R_OUT || type == R_APPEND || type == HERE)
+			&& !ft_token_check_bis(token, p, 2))
 			return (0);
-		if (!ft_token_check_bis(n, prev, 1) && (prev->type >= PIPE
-				&& prev->type <= BACKGRD) && (t >= PIPE && t <= BACKGRD))
+		if (p && (p->type >= PIPE && p->type <= BACKGRD) && (type >= PIPE
+				&& type <= BACKGRD) && !ft_token_check_bis(token, p, 3))
 			return (0);
-		prev = n;
-		n = n->next;
+		p = token;
+		token = token->next;
 	}
 	return (1);
 }
 
-int	ft_token_check_bis(t_token *n, t_token *prev, int i)
+int	ft_token_check_bis(t_token *token, t_token *p, int i)
 {
-	if (!prev && i == 1)
+	if (!p && i == 1)
 		return (g_exit_status = 2,
 			ft_putstr_fd("minishell1: syntax error near unexpected token `", 2),
-			ft_putstr_fd(n->value, 2), ft_putstr_fd("'\n", 2), 0);
-	if (!n->next && i == 2)
+			ft_putstr_fd(token->value, 2), ft_putstr_fd("'\n", 2), 0);
+	if (!token->next && i == 2)
 		return (g_exit_status = 2,
 			ft_putstr_fd("minishell2: syntax error near unexpected token ", 2),
 			ft_putstr_fd("`newline'\n", 2), 1);
-	if (n->next->type != WRD && i == 2)
+	if (token->next->type != WRD && i == 2)
 		return (g_exit_status = 2,
 			ft_putstr_fd("minishell2: syntax error near unexpected token `", 2),
-			ft_putstr_fd(n->value, 2), ft_putstr_fd("'\n", 2), 0);
-	if (prev && i == 3)
+			ft_putstr_fd(token->value, 2), ft_putstr_fd("'\n", 2), 0);
+	if (p && i == 3)
 		return (g_exit_status = 2,
 			ft_putstr_fd("minishell3: syntax error near unexpected token `", 2),
-			ft_putstr_fd(n->value, 2), ft_putstr_fd("'\n", 2), 0);
+			ft_putstr_fd(token->value, 2), ft_putstr_fd("'\n", 2), 0);
 	return (1);
 }
