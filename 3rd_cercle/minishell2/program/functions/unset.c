@@ -36,4 +36,3 @@ int	ft_unset(char **s, t_envp **l)
 	g_exit_status = (ret != 0);
 	return (g_exit_status);
 }
-

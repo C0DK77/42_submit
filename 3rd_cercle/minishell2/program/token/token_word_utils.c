@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 21:14:07 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/29 22:45:46 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*ft_token_word(t_token **n, char *s, t_envp *l)
 			}
 			if (!*s)
 			{
-				ft_putstr_fd("minishell: unexpected EOF while looking for matching `",
+				ft_putstr_fd("minishell: unexpected EOF while looking for matching`",
 					2);
 				ft_putchar_fd(quote, 2);
 				ft_putstr_fd("'\n", 2);

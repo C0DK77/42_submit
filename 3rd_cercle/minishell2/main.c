@@ -61,7 +61,6 @@ int	ft_program(t_envp **c_envp)
 	return (1);
 }
 
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_envp	*c_envp;
@@ -74,7 +73,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!c_envp)
 		init_min_env(c_envp);
 	if (!ft_env_vars_check(&c_envp))
-		return (0);//on retourne pas pareil la!!   
+		return (0); // on retourne pas pareil la!!
 	setup_signals();
 	signal(SIGTSTP, SIG_IGN);
 	signal(SIGPIPE, SIG_IGN);
@@ -84,4 +83,3 @@ int	main(int argc, char **argv, char **envp)
 	ft_env_free(c_envp);
 	return (0);
 }
-

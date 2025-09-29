@@ -31,4 +31,3 @@ int	ft_env(t_envp *l)
 	g_exit_status = 0;
 	return (0);
 }
-

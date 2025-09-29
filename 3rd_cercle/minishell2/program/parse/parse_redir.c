@@ -6,7 +6,7 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 20:02:04 by ecid              #+#    #+#             */
-/*   Updated: 2025/09/29 00:30:56 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/29 22:53:58 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,31 @@ void	ft_redirection_type(t_parsing *n, int t, char *f)
 }
 
 // expand
+static int	redir_fill_target(t_redir *new, t_redir_type type, char *target)
+{
+	char	*clean;
+	int		q;
+
+	if (type == REDIR_HEREDOC)
+	{
+		clean = heredoc_clean_target(target, &q);
+		if (!clean)
+			return (-1);
+		new->target = clean;
+		new->hd_quoted = q;
+	}
+	else
+	{
+		new->target = ft_strdup(target);
+		if (!new->target)
+			return (-1);
+	}
+	return (0);
+}
+
 t_redir	*redir_new(t_redir_type type, char *target)
 {
 	t_redir	*new;
-	char	*clean;
-	int		q;
 
 	new = malloc(sizeof(*new));
 	if (!new)
@@ -59,20 +79,8 @@ t_redir	*redir_new(t_redir_type type, char *target)
 	new->fd = -1;
 	new->hd_quoted = 0;
 	new->next = NULL;
-	if (type == REDIR_HEREDOC)
-	{
-		clean = heredoc_clean_target(target, &q);
-		if (!clean)
-			return (free(new), NULL);
-		new->target = clean;
-		new->hd_quoted = q;
-	}
-	else
-	{
-		new->target = ft_strdup(target);
-		if (!new->target)
-			return (free(new), NULL);
-	}
+	if (redir_fill_target(new, type, target) < 0)
+		return (free(new), NULL);
 	return (new);
 }
 

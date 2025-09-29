@@ -6,12 +6,9 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:10:30 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 21:23:59 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/29 22:44:45 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "minishell.h"
-
 
 #include "minishell.h"
 
@@ -26,4 +23,3 @@ char	*ft_strjoin_and_free(char *s1, char *s2)
 	free(s2);
 	return (new_str);
 }
-

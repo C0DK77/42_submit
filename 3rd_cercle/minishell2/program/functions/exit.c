@@ -44,4 +44,3 @@ int	ft_exit(char **s)
 	c = ft_atoll(s[1]);
 	exit((unsigned char)c);
 }
-

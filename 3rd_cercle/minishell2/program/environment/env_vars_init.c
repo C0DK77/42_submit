@@ -6,12 +6,11 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:32:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/28 22:46:47 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/29 22:43:35 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 t_var	*ft_env_vars_init_table(void)
 {
