@@ -6,18 +6,52 @@
 /*   By: elisacid <elisacid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:53:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 21:03:27 by elisacid         ###   ########.fr       */
+/*   Updated: 2025/09/29 23:09:31 by elisacid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	ft_token_handl_wd(t_token **t, char **ps, t_envp *l, int *after_her)
+{
+	char	*raw;
+	char	*next;
+
+	if (*after_her)
+	{
+		raw = ft_token_word_hd(ps);
+		if (!raw)
+		{
+			ft_token_free(*t);
+			return (0);
+		}
+		ft_token_add(t, ft_token_init(WRD, raw));
+		free(raw);
+		*after_her = 0;
+		return (1);
+	}
+	next = ft_token_word(t, *ps, l);
+	if (!next)
+	{
+		if (*t)
+			ft_token_free(*t);
+		return (0);
+	}
+	*ps = next;
+	return (1);
+}
+
+static char	*ft_token_handle_operator(t_token **t, char *s, int *after_here)
+{
+	if (s[0] == '<' && s[1] == '<')
+		*after_here = 1;
+	return (ft_token_operator(t, s));
+}
+
 t_token	*ft_token(char *s, t_envp *l)
 {
 	t_token	*t;
 	int		after_here;
-	char	*raw;
-	char	*next;
 
 	t = NULL;
 	after_here = 0;
@@ -25,40 +59,12 @@ t_token	*ft_token(char *s, t_envp *l)
 	{
 		while (ft_isspace((unsigned char)*s))
 			s++;
-		if (!(*s))
+		if (!*s)
 			break ;
-		else if (ft_isoperator((unsigned char)*s))
-		{
-			if (s[0] == '<' && s[1] == '<')
-				after_here = 1;
-			s = ft_token_operator(&t, s);
-		}
-		else
-		{
-			if (after_here)
-			{
-				raw = ft_token_word_hd(&s);
-				if (!raw)
-				{
-					ft_token_free(t);
-					return (NULL);
-				}
-				ft_token_add(&t, ft_token_init(WRD, raw));
-				free(raw);
-				after_here = 0;
-			}
-			else
-			{
-				next = ft_token_word(&t, s, l);
-				if (!next)
-				{
-					if (t)
-						ft_token_free(t);
-					return (NULL);
-				}
-				s = next;
-			}
-		}
+		if (ft_isoperator((unsigned char)*s))
+			s = ft_token_handle_operator(&t, s, &after_here);
+		else if (!ft_token_handl_wd(&t, &s, l, &after_here))
+			return (NULL);
 	}
 	return (t);
 }
