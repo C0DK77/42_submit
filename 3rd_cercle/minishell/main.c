@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 18:05:58 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 14:31:18 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ int	main(int argc, char **argv, char **envp)
 		env = ft_env_list_init(envp);
 	if (!ft_env_vars_check(&env))
 		return (1);
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	setup_signals();
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
 	while (1)
 		if (!ft_program(env))
 			break ;
@@ -40,7 +41,7 @@ int	main(int argc, char **argv, char **envp)
 int	ft_program(t_envp *env)
 {
 	char		*s;
-	t_token		*tokens;
+	t_token		*token;
 	t_parsing	*parse;
 
 	s = readline(ft_env_prompt());
@@ -51,16 +52,18 @@ int	ft_program(t_envp *env)
 	s = ft_program_check_unclosed_quote(s);
 	if (!s)
 		return (1);
-	tokens = ft_token(env, s);
-	if (!tokens)
+	token = ft_token(env, s);
+	if (!token)
 		return (free(s), 1);
-	if (!ft_token_check(tokens))
-		return (ft_token_free(tokens), free(s), 1);
-	parse = ft_parse_line(env, tokens);
+	if (!ft_token_check(token))
+		return (ft_token_free(token), free(s), 1);
+	parse = ft_parse_line(env, token);
 	if (!parse)
-		return (ft_token_free(tokens), free(s), 1);
+		return (ft_token_free(token), free(s), 1);
+	signal(SIGINT, ft_handler_exec);
+	signal(SIGQUIT, ft_handler_exec);
 	ft_exec(parse, env);
-	return (ft_token_free(tokens), free(s), 1);
+	return (ft_token_free(token), free(s), 1);
 }
 
 char	*ft_program_check_unclosed_quote(char *s)

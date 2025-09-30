@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 18:46:56 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 14:33:01 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,5 +283,12 @@ void							ft_parse_heredoc(t_envp *env, t_parsing *parse,
 									char *s);
 int								is_quoted(char *s);
 char							*remove_quotes(char *s);
+
+//	SIGNALS / SIGNALS
+
+void							ft_sigint_handler(int sig);
+void							ft_handler_exec(int sig);
+void							setup_signals(void);
+void							reset_signals(void);
 
 #endif

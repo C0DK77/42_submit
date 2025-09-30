@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/29 18:46:17 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 14:45:06 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_parsing	*ft_parse_line(t_envp *env, t_token *token)
 		ft_parse_type(token, n);
 		if (token->type == PIPE || token->type == AND_IF || token->type == OR_IF
 			|| token->type == AND || token->type == SEMIC)
-			n = NULL;
+			n = NULL; 
 		token = token->next;
 	}
 	return (a);
