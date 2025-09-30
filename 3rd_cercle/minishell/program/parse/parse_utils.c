@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 18:24:59 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/30 15:37:24 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 15:49:04 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,6 @@ t_parsing	*ft_parse_add_node(t_parsing **parse, t_parsing **p, t_parsing **a)
 	t->line = NULL;
 	t->next = NULL;
 	t->prev = NULL;
-	t->infiles = NULL;
-	t->outfiles = NULL;
-	t->append = NULL;
-	t->heredoc = NULL;
 	if (!*a)
 		*a = t;
 	if (*p)
