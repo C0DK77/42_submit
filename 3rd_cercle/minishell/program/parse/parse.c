@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:26 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/30 15:43:23 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 17:30:21 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_handle_redirection(t_envp *env, t_token **token, t_parsing *parse)
 	}
 	if (t->type == HERE)
 	{
-		if (is_quoted(t->next->value))
+		if (t->next->quoted)
 			parse->heredoc_expand = 0;
 		else
 			parse->heredoc_expand = 1;

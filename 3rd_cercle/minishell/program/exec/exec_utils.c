@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:34:18 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/26 17:05:17 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 16:45:32 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,8 @@ int	ft_exec_heredoc(t_parsing *s, int i)
 
 	if (s->heredoc)
 	{
-		while (s->infiles && s->infiles[i + 1])
-			i++;
-		if (ft_exec_create_heredoc(s->infiles[i]) != 0)
-			return (1);
-		fd = open(HEREDOC_FILE, O_RDONLY);
-		if (fd < 0)
-			return (perror("heredoc open for reading"), 1);
-		dup2(fd, STDIN_FILENO);
-		close(fd);
+		dup2(s->heredoc_fd, STDIN_FILENO);
+		close(s->heredoc_fd);
 	}
 	else
 	{

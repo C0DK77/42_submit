@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 17:31:39 by codk              #+#    #+#             */
-/*   Updated: 2025/09/29 18:07:22 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 17:27:13 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_token_ope(t_token **token, char *s)
 	{
 		if (ft_strncmp(s, operator[i].s, ft_strlen(operator[i].s)) == 0)
 		{
-			t = ft_token_init(operator[i].type, operator[i].s);
+			t = ft_token_init(operator[i].type, operator[i].s, 0);
 			s += ft_strlen(operator[i].s);
 			break ;
 		}

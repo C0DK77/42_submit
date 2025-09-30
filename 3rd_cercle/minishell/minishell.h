@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/30 14:33:01 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 17:26:38 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef struct s_token
 {
 	t_token_type				type;
 	char						*value;
+	int							quoted;
 	struct s_token				*next;
 	struct s_token				*prev;
 }								t_token;
@@ -167,7 +168,7 @@ char							*ft_token_ope_dollar_no_word(char **w, char *s);
 
 t_operator						*ft_token_ope_init_table(void);
 t_token							*ft_token(t_envp *env, char *s);
-t_token							*ft_token_init(t_token_type type, char *v);
+t_token							*ft_token_init(t_token_type type, char *v, int i);
 void							ft_token_add(t_token **token, t_token *n);
 void							ft_token_free(t_token *token);
 
