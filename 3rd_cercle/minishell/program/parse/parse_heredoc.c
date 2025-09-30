@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 08:43:37 by codk              #+#    #+#             */
-/*   Updated: 2025/09/30 17:29:52 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 17:56:27 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_parse_heredoc(t_envp *env, t_parsing *parse, char *s)
 {
 	int		fd[2];
 	char	*l;
-	char	*to_write;
+	char	*a;
 
 	if (pipe(fd) == -1)
 		return ;
@@ -26,10 +26,9 @@ void	ft_parse_heredoc(t_envp *env, t_parsing *parse, char *s)
 		l = readline("> ");
 		if (!l)
 		{
-			ft_putstr_fd("minishell: warning: heredoc delimited by EOF (wanted `",
-				2);
-			ft_putstr_fd(s, 2);
-			ft_putstr_fd("')\n", 2);
+			ft_putall_fd(2, 3,
+				"minishell: warning: heredoc delimited by EOF (wanted `", s,
+				"')\n");
 			break ;
 		}
 		if (ft_strcmp(l, s) == 0)
@@ -38,13 +37,11 @@ void	ft_parse_heredoc(t_envp *env, t_parsing *parse, char *s)
 			break ;
 		}
 		if (parse->heredoc_expand)
-			to_write = ft_expand_variables(l, env);
+			a = ft_expand_variables(l, env);
 		else
-			to_write = ft_strdup(l);
-		write(fd[1], to_write, ft_strlen(to_write));
-		write(fd[1], "\n", 1);
-		free(l);
-		free(to_write);
+			a = ft_strdup(l);
+		ft_putall_fd(fd[1], 2, a, "\n");
+		ft_free_all(2, l, a);
 	}
 	close(fd[1]);
 	parse->heredoc_fd = fd[0];
@@ -84,15 +81,6 @@ char	*ft_expand_variables(char *s, t_envp *env)
 	if (*start)
 		res = ft_strjoin_free(res, ft_strdup(start));
 	return (res);
-}
-
-int	is_quoted(char *s)
-{
-	size_t	len;
-
-	len = ft_strlen(s);
-	return ((s[0] == '\'' && s[len - 1] == '\'') || (s[0] == '"' && s[len
-			- 1] == '"'));
 }
 
 char	*remove_quotes(char *s)
