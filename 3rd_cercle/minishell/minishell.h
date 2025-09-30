@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:16 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/30 17:26:38 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 18:38:03 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,8 @@ char							*ft_token_ope_dollar_no_word(char **w, char *s);
 
 t_operator						*ft_token_ope_init_table(void);
 t_token							*ft_token(t_envp *env, char *s);
-t_token							*ft_token_init(t_token_type type, char *v, int i);
+t_token							*ft_token_init(t_token_type type, char *v,
+									int i);
 void							ft_token_add(t_token **token, t_token *n);
 void							ft_token_free(t_token *token);
 
@@ -291,5 +292,8 @@ void							ft_sigint_handler(int sig);
 void							ft_handler_exec(int sig);
 void							setup_signals(void);
 void							reset_signals(void);
+
+void							print_tokens(t_token *t);
+void							print_parsing(t_parsing *p);
 
 #endif

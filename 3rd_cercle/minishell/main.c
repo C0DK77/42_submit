@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:05:29 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/30 14:31:18 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 19:04:58 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,13 @@ int	ft_program(t_envp *env)
 	if (!s)
 		return (1);
 	token = ft_token(env, s);
+	print_tokens(token);
 	if (!token)
 		return (free(s), 1);
 	if (!ft_token_check(token))
 		return (ft_token_free(token), free(s), 1);
 	parse = ft_parse_line(env, token);
+	print_parsing(parse);
 	if (!parse)
 		return (ft_token_free(token), free(s), 1);
 	signal(SIGINT, ft_handler_exec);
@@ -88,4 +90,67 @@ char	*ft_program_check_unclosed_quote(char *s)
 		ft_free_all(2, t, n);
 	}
 	return (s);
+}
+
+void	print_tokens(t_token *t)
+{
+	printf("TOKENS");
+	while (t)
+	{
+		printf(" - type: %-7d | value: \"%s\"\n", t->type,
+			t->value ? t->value : "(null)");
+		t = t->next;
+	}
+}
+
+void	print_parsing(t_parsing *p)
+{
+	int	i;
+
+	printf("====== PARSING STRUCTURE ======\n");
+	while (p)
+	{
+		printf("--- New Command Block ---\n");
+		if (p->line)
+		{
+			printf("Command: ");
+			for (i = 0; p->line[i]; i++)
+				printf("\"%s\" ", p->line[i]);
+			printf("\n");
+		}
+		else
+			printf("Command: (null)\n");
+		if (p->infiles)
+		{
+			printf("Infiles: ");
+			for (i = 0; p->infiles[i]; i++)
+				printf("\"%s\" ", p->infiles[i]);
+			printf("\n");
+		}
+		else
+			printf("Infiles: (null)\n");
+		if (p->outfiles)
+		{
+			printf("Outfiles: ");
+			for (i = 0; p->outfiles[i]; i++)
+				printf("\"%s\" ", p->outfiles[i]);
+			printf("\n");
+		}
+		else
+			printf("Outfiles: (null)\n");
+		if (p->append)
+		{
+			printf("Append: ");
+			for (i = 0; p->outfiles && p->outfiles[i]; i++)
+				printf("%d ", p->append[i]);
+			printf("\n");
+		}
+		else
+			printf("Append: (null)\n");
+		printf("Heredoc: %d | Heredoc FD: %d | Heredoc Expand: %d\n",
+			p->heredoc, p->heredoc_fd, p->heredoc_expand);
+		printf("Separator type: %d\n", p->sep);
+		p = p->next;
+	}
+	printf("================================\n");
 }

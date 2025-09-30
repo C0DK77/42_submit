@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:57:51 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/30 17:24:58 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 18:02:29 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ char	*ft_token_word(t_envp *env, t_token **token, char *s)
 	}
 	if (w && *w != '\0')
 		ft_token_add(token, ft_token_init(WRD, w, i));
-	free(w);
-	return (s);
+	return (free(w), s);
 }
 
 char	*ft_token_word_dbquote(t_envp *env, char **w, char *s, char *end)
