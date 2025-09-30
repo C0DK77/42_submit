@@ -6,7 +6,7 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:53:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/30 14:42:18 by codk             ###   ########.fr       */
+/*   Updated: 2025/09/30 15:29:09 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,13 @@ t_token	*ft_token_init(t_token_type type, char *v)
 	if (!token)
 		return (NULL);
 	token->type = type;
-	token->value = ft_strdup(v);
+	n->value = NULL;
+	if (v)
+	{
+		n->value = ft_strdup(v);
+		if (!n->value)
+			return (free(n), NULL);
+	}
 	token->next = NULL;
 	return (token);
 }

@@ -34,6 +34,7 @@ SRC 				= 	program/environment/env_prompt_and_list_init.c	\
 						program/functions/functions.c					\
 						program/functions/cd.c							\
 						program/parse/parse_heredoc.c					\
+						program/signals/signals.c						\
 						main.c
 						
 OBJ_DIR 			= 	obj
