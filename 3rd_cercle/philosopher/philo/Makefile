@@ -7,8 +7,7 @@ NAME 				= 	philosopher
 
 CC 					= 	cc 
 CFLAGS 				= 	-Wall -Wextra -Werror 	\
-						-I. 					\
-						-I$(LIBFT_DIR) 
+						-I. 					
 
 # ==== FILES SRC ==== #
 
@@ -32,25 +31,20 @@ LIBFT_A 			= 	$(LIBFT_DIR)/libft.a
 
 # ==== RULES ==== #
 
-all 				: 	$(LIBFT_A) $(NAME)
+all 				: 	$(NAME)
 
 $(NAME) 			: 	$(OBJ)
-			  		  	@$(CC) $(CFLAGS) -o $@ $^ $(LIBFT_A)
+			  		  	@$(CC) $(CFLAGS) -o $@ $^ 
 
 $(OBJ_DIR)/%.o		: 	%.c
 					  	@mkdir -p $(dir $@)
 			  		  	@echo "Compilation de $< → $@"
 			  		  	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(LIBFT_A) 			:
-					  	@make -s -C $(LIBFT_DIR)
-
 clean :
-					  	@make -s -C $(LIBFT_DIR) clean
 					  	@rm -rf $(OBJ_DIR)
 	
 fclean 				: 	clean 
-					  	@make -s -C $(LIBFT_DIR) fclean
 					  	@rm -f $(NAME)
 	
 re 					: 	fclean all

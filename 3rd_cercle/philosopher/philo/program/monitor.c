@@ -6,11 +6,10 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 18:12:15 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/09/09 09:10:39 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/03 19:11:59 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "philosopher.h"
 
 void	*monitor(void *arg)
@@ -79,5 +78,33 @@ void	monitor_meal(t_data *d)
 		pthread_mutex_lock(&d->mutex_finish);
 		d->finished = 1;
 		pthread_mutex_unlock(&d->mutex_finish);
+	}
+}
+
+void	ft_fork_order_p(t_philo *p, pthread_mutex_t **f, pthread_mutex_t **s)
+{
+	if (p->l_fork < p->r_fork)
+	{
+		*f = p->l_fork;
+		*s = p->r_fork;
+	}
+	else
+	{
+		*f = p->r_fork;
+		*s = p->l_fork;
+	}
+}
+
+void	ft_fork_order_i(t_philo *p, pthread_mutex_t **f, pthread_mutex_t **s)
+{
+	if (p->l_fork < p->r_fork)
+	{
+		*f = p->l_fork;
+		*s = p->r_fork;
+	}
+	else
+	{
+		*f = p->r_fork;
+		*s = p->l_fork;
 	}
 }

@@ -6,11 +6,10 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 11:18:11 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/02 19:32:01 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/03 19:12:09 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "philosopher.h"
 
 int	main(int ac, char **av)
@@ -38,5 +37,33 @@ int	main(int ac, char **av)
 		i++;
 	}
 	ft_free_data(d);
+	return (0);
+}
+
+int64_t	ft_atoi64(char *s)
+{
+	int64_t	res;
+	int		sign;
+
+	res = 0;
+	sign = 1;
+	while (ft_isspace(*s))
+		s++;
+	if (*s == '-')
+		sign = -1;
+	while (*s == '-' || *s == '+')
+		s++;
+	while (ft_isdigit(*s))
+	{
+		res = (res * 10) + (*s - '0');
+		s++;
+	}
+	return (res * sign);
+}
+
+int	ft_isdigit(int c)
+{
+	if (47 < c && c < 58)
+		return (1);
 	return (0);
 }

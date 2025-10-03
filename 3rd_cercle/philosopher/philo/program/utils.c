@@ -6,11 +6,10 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 10:24:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/09 09:56:06 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/03 19:10:04 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "philosopher.h"
 
 uint64_t	ft_time(void)
@@ -76,4 +75,25 @@ void	mutex_unlock_all(int argv, ...)
 		i++;
 	}
 	va_end(args);
+}
+
+int	ft_atoi(const char *s)
+{
+	long	res;
+	int		sign;
+
+	res = 0;
+	sign = 1;
+	while (ft_isspace(*s))
+		s++;
+	if (*s == '-')
+		sign = -1;
+	while (*s == '-' || *s == '+')
+		s++;
+	while (ft_isdigit(*s))
+	{
+		res = res * 10 + (*s - '0');
+		s++;
+	}
+	return (sign * res);
 }

@@ -6,11 +6,10 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:48:26 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/09/02 20:23:15 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/03 19:13:00 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "philosopher.h"
 
 int	ft_check_av(int ac, char **av)
@@ -22,8 +21,8 @@ int	ft_check_av(int ac, char **av)
 		return (0);
 	if (ft_atoi64(av[1]) < 1 || ft_atoi64(av[1]) > 200)
 	{
-		ft_putstr("Number of philosophers must be\n");
-		ft_putstr("  1 <= Philosophers <= 200\n");
+		printf("Number of philosophers must be\n");
+		printf("  1 <= Philosophers <= 200\n");
 		return (0);
 	}
 	while (i < ac)

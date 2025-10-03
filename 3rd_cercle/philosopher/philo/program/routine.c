@@ -6,11 +6,10 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 13:16:40 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/09 09:55:57 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/03 19:10:06 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "philosopher.h"
 
 void	*routine(void *arg)
@@ -54,26 +53,15 @@ void	*routine_for_1(t_data *d, t_philo *p)
 	return (NULL);
 }
 
-void	ft_fork_order(t_philo *p, pthread_mutex_t **f, pthread_mutex_t **s)
-{
-	if (p->l_fork < p->r_fork)
-	{
-		*f = p->l_fork;
-		*s = p->r_fork;
-	}
-	else
-	{
-		*f = p->r_fork;
-		*s = p->l_fork;
-	}
-}
-
 int	routine_for_all(t_data *d, t_philo *p)
 {
 	pthread_mutex_t	*f;
 	pthread_mutex_t	*s;
 
-	ft_fork_order(p, &f, &s);
+	if (d->nb % 2 == 0)
+		ft_fork_order_p(p, &f, &s);
+	else
+		ft_fork_order_i(p, &f, &s);
 	pthread_mutex_lock(f);
 	pthread_mutex_lock(&d->mutex_finish);
 	if (d->finished)
@@ -113,4 +101,11 @@ int	routine_for_all_b(t_data *d, t_philo *p)
 	ft_print_action(p, "is sleeping");
 	ft_check(d->time_to_sleep, d);
 	return (1);
+}
+
+int	ft_isspace(char c)
+{
+	if (c == ' ' || (7 <= c && c <= 13))
+		return (1);
+	return (0);
 }
