@@ -6,104 +6,90 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:48:26 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/10/03 19:13:00 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/04 04:18:34 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-int	ft_check_av(int ac, char **av)
+t_data	*ft_init_var_data(int ac, char **av, int i)
 {
-	int	i;
+	t_data	*d;
 
-	i = 1;
-	if (!(ac == 5 || ac == 6))
-		return (0);
-	if (ft_atoi64(av[1]) < 1 || ft_atoi64(av[1]) > 200)
-	{
-		printf("Number of philosophers must be\n");
-		printf("  1 <= Philosophers <= 200\n");
-		return (0);
-	}
-	while (i < ac)
-	{
-		if (ft_atoi64(av[i]) < 0)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-void	ft_init_var_data(int ac, char **av, t_data *d)
-{
+	d = malloc(sizeof(t_data) * 1);
+	if (!d)
+		return (NULL);
 	d->nb = ft_atoi(av[1]);
 	d->time_to_die = ft_atoi64(av[2]);
 	d->time_to_eat = ft_atoi64(av[3]);
 	d->time_to_sleep = ft_atoi64(av[4]);
+	d->nb_meal = -1;
 	if (ac == 6)
 		d->nb_meal = ft_atoi(av[5]);
-	else
-		d->nb_meal = -1;
+	d->philo = ft_init_var_philo(d);
+	if (!d->philo)
+		return (NULL);
+	d->forks = ft_init_forks(d);
+	if (!d->forks)
+		return (NULL);
+	if (pthread_mutex_init(&d->mutex_finish, 0) != 0)
+		return (NULL);
+	if (pthread_mutex_init(&d->print, 0) != 0)
+		return (NULL);
 	d->finished = 0;
-	d->start_time = ft_time();
-	pthread_mutex_init(&d->print, NULL);
-	pthread_mutex_init(&d->mutex_finish, NULL);
+	return (d);
 }
 
-int	ft_init_var_philo(t_data *d)
+t_philo	**ft_init_var_philo(t_data *d)
 {
-	int	i;
+	int		i;
+	t_philo	**p;
 
 	i = 0;
-	d->philo = malloc(sizeof(t_philo) * d->nb);
-	d->forks = malloc(sizeof(pthread_mutex_t) * d->nb);
-	if (!d->philo || !d->forks)
+	p = malloc(sizeof(t_philo) * d->nb);
+	if (!p)
 		return (0);
 	while (i < d->nb)
 	{
-		pthread_mutex_init(&d->forks[i], NULL);
-		pthread_mutex_init(&d->philo[i].mutex_meal, NULL);
-		d->philo[i].id = i + 1;
-		d->philo[i].meals_eaten = 0;
-		d->philo[i].data = d;
-		d->philo[i].l_fork = &d->forks[i];
-		d->philo[i].r_fork = &d->forks[(i + 1) % d->nb];
-		d->philo[i].last_meal = ft_time();
-		i++;
-	}
-	return (1);
-}
-
-int	ft_init_thread(t_data *d)
-{
-	int	i;
-
-	i = 0;
-	while (i < d->nb)
-	{
-		if (pthread_create(&d->philo[i].thread, NULL, routine,
-				&d->philo[i]) != 0)
+		p[i] = malloc(sizeof(t_philo) * 1);
+		if (!p[i])
 			return (0);
-		usleep(100);
+		if (pthread_mutex_init(&p[i]->mutex_meal, 0) != 0)
+			return (0);
+		p[i]->data = d;
+		p[i]->id = i + 1;
+		p[i]->times = 0;
+		ft_forks(p[i]);
 		i++;
 	}
-	return (1);
+	return (p);
 }
 
-void	ft_free_data(t_data *d)
+void	ft_forks(t_philo *p)
 {
-	int	i;
+	p->forks[0] = p->id;
+	p->forks[1] = (p->id + 1) % p->data->nb;
+	if (p->id % 2)
+	{
+		p->forks[0] = (p->id + 1) % p->data->nb;
+		p->forks[1] = p->id;
+	}
+}
 
+pthread_mutex_t	*ft_init_forks(t_data *d)
+{
+	pthread_mutex_t	*forks;
+	int				i;
+
+	forks = malloc(sizeof(pthread_mutex_t) * d->nb);
+	if (!forks)
+		return (error_null(STR_ERR_MALLOC, NULL, 0));
 	i = 0;
 	while (i < d->nb)
 	{
-		pthread_mutex_destroy(&d->forks[i]);
-		pthread_mutex_destroy(&d->philo[i].mutex_meal);
+		if (pthread_mutex_init(&forks[i], 0) != 0)
+			return (error_null(STR_ERR_MUTEX, NULL, 0));
 		i++;
 	}
-	pthread_mutex_destroy(&d->print);
-	pthread_mutex_destroy(&d->mutex_finish);
-	free(d->philo);
-	free(d->forks);
-	free(d);
+	return (forks);
 }

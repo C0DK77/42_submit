@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 10:24:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/10/03 19:10:04 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/04 04:10:13 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,9 @@
 uint64_t	ft_time(void)
 {
 	struct timeval	tv;
-	uint64_t		ms;
 
 	gettimeofday(&tv, NULL);
-	ms = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-	return (ms);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
 void	ft_print_action(t_philo *p, char *s)
@@ -77,23 +75,29 @@ void	mutex_unlock_all(int argv, ...)
 	va_end(args);
 }
 
-int	ft_atoi(const char *s)
+void	ft_status(t_philo *philo, bool reaper_report, t_status status)
 {
-	long	res;
-	int		sign;
-
-	res = 0;
-	sign = 1;
-	while (ft_isspace(*s))
-		s++;
-	if (*s == '-')
-		sign = -1;
-	while (*s == '-' || *s == '+')
-		s++;
-	while (ft_isdigit(*s))
+	pthread_mutex_lock(&philo->table->write_lock);
+	if (has_simulation_stopped(philo->table) == true && reaper_report == false)
 	{
-		res = res * 10 + (*s - '0');
-		s++;
+		pthread_mutex_unlock(&philo->table->write_lock);
+		return ;
 	}
-	return (sign * res);
+	if (DEBUG_FORMATTING == true)
+	{
+		write_status_debug(philo, status);
+		pthread_mutex_unlock(&philo->table->write_lock);
+		return ;
+	}
+	if (status == DIED)
+		print_status(philo, "died");
+	else if (status == EATING)
+		print_status(philo, "is eating");
+	else if (status == SLEEPING)
+		print_status(philo, "is sleeping");
+	else if (status == THINKING)
+		print_status(philo, "is thinking");
+	else if (status == GOT_FORK_1 || status == GOT_FORK_2)
+		print_status(philo, "has taken a fork");
+	pthread_mutex_unlock(&philo->table->write_lock);
 }

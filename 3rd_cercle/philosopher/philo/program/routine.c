@@ -6,106 +6,99 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 13:16:40 by corentindes       #+#    #+#             */
-/*   Updated: 2025/10/03 19:10:06 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/04 04:46:44 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-void	*routine(void *arg)
+void	*ft_routine(void *arg)
 {
 	t_philo	*p;
-	t_data	*d;
 
 	p = (t_philo *)arg;
-	d = p->data;
-	if (d->nb == 1)
-		return (routine_for_1(d, p));
-	while (1)
+	if (p->data->nb_meal == 0)
+		return (NULL);
+	pthread_mutex_lock(&p->mutex_meal);
+	p->last_meal = p->data->start_time;
+	pthread_mutex_unlock(&p->mutex_meal);
+	while (ft_time() < p->data->start_time)
+		continue ;
+	if (p->data->time_to_die == 0)
+		return (NULL);
+	if (p->data->nb == 1)
+		return (ft_routine_for_1(p));
+	else if (p->id % 2)
+		ft_routine_think(p, true);
+	while (ft_monitor_dead(p->data) == false)
 	{
-		pthread_mutex_lock(&d->mutex_finish);
-		if (d->finished)
-		{
-			pthread_mutex_unlock(&d->mutex_finish);
-			break ;
-		}
-		pthread_mutex_unlock(&d->mutex_finish);
-		if (!routine_for_all(d, p))
-			break ;
+		ft_routine_for_all(p);
+		ft_routine_think(p, false);
+		return (NULL);
 	}
+}
+
+void	*ft_routine_for_1(t_philo *p)
+{
+	pthread_mutex_lock(&p->data->forks[p->forks[0]]);
+	write_status(p, false, GOT_FORK_1);
+	philo_sleep(p->data, p->data->time_to_die);
+	write_status(p, false, DIED);
+	pthread_mutex_unlock(&p->data->forks[p->forks[0]]);
 	return (NULL);
 }
 
-void	*routine_for_1(t_data *d, t_philo *p)
+void	ft_routine_think(t_philo *p, bool silent)
 {
-	ft_print_action(p, "has taken one fork");
-	ft_check(d->time_to_die, d);
-	pthread_mutex_lock(&d->print);
-	pthread_mutex_lock(&d->mutex_finish);
-	if (!d->finished)
-	{
-		printf(TIME "%lu \033[0m", ft_time() - d->start_time);
-		printf(DIED "%d died\033[0m\n", p->id);
-		d->finished = 1;
-	}
-	pthread_mutex_unlock(&d->mutex_finish);
-	pthread_mutex_unlock(&d->print);
-	return (NULL);
+	time_t	time_to_think;
+
+	pthread_mutex_lock(&p->mutex_meal);
+	time_to_think = (p->data->time_to_die - (ft_time() - p->last_meal)
+			- p->data->time_to_eat) / 2;
+	pthread_mutex_unlock(&p->mutex_meal);
+	if (time_to_think < 0)
+		time_to_think = 0;
+	if (time_to_think == 0 && silent == true)
+		time_to_think = 1;
+	if (time_to_think > 600)
+		time_to_think = 200;
+	if (silent == false)
+		write_status(p, false, THINKING);
+	ft_routine_sleep(p->data, time_to_think);
 }
 
-int	routine_for_all(t_data *d, t_philo *p)
+void	ft_routine_sleep(t_data *d, time_t sleep_time)
 {
-	pthread_mutex_t	*f;
-	pthread_mutex_t	*s;
+	time_t	wake_up;
 
-	if (d->nb % 2 == 0)
-		ft_fork_order_p(p, &f, &s);
-	else
-		ft_fork_order_i(p, &f, &s);
-	pthread_mutex_lock(f);
-	pthread_mutex_lock(&d->mutex_finish);
-	if (d->finished)
-		return (mutex_unlock_all(2, &d->mutex_finish, f), 0);
-	pthread_mutex_unlock(&d->mutex_finish);
-	ft_print_action(p, "has taken a fork");
-	pthread_mutex_lock(s);
-	pthread_mutex_lock(&d->mutex_finish);
-	if (d->finished)
-		return (mutex_unlock_all(3, &d->mutex_finish, s, f), 0);
-	pthread_mutex_unlock(&d->mutex_finish);
-	ft_print_action(p, "has taken a fork");
-	ft_print_action(p, "is eating");
-	ft_check(d->time_to_eat, d);
+	wake_up = get_time_in_ms() + sleep_time;
+	while (get_time_in_ms() < wake_up)
+	{
+		if (has_simulation_stopped(d))
+			break ;
+		usleep(100);
+	}
+}
+
+void	ft_routine_for_all(t_philo *p)
+{
+	pthread_mutex_lock(&p->data->forks[p->forks[0]]);
+	write_status(p, false, GOT_FORK_1);
+	pthread_mutex_lock(&p->data->forks[p->forks[1]]);
+	write_status(p, false, GOT_FORK_2);
+	write_status(p, false, EATING);
 	pthread_mutex_lock(&p->mutex_meal);
 	p->last_meal = ft_time();
-	p->meals_eaten++;
-	mutex_unlock_all(3, &p->mutex_meal, s, f);
-	return (routine_for_all_b(d, p));
-}
-
-int	routine_for_all_b(t_data *d, t_philo *p)
-{
-	int	is_finished;
-
-	pthread_mutex_lock(&d->mutex_finish);
-	is_finished = d->finished;
-	pthread_mutex_unlock(&d->mutex_finish);
-	if (is_finished)
-		return (0);
-	ft_print_action(p, "is thinking");
-	pthread_mutex_lock(&d->mutex_finish);
-	is_finished = d->finished;
-	pthread_mutex_unlock(&d->mutex_finish);
-	if (is_finished)
-		return (0);
-	ft_print_action(p, "is sleeping");
-	ft_check(d->time_to_sleep, d);
-	return (1);
-}
-
-int	ft_isspace(char c)
-{
-	if (c == ' ' || (7 <= c && c <= 13))
-		return (1);
-	return (0);
+	pthread_mutex_unlock(&p->mutex_meal);
+	p_sleep(p->data, p->data->time_to_eat);
+	if (has_simulation_stopped(p->data) == false)
+	{
+		pthread_mutex_lock(&p->mutex_meal);
+		p->times_ate += 1;
+		pthread_mutex_unlock(&p->mutex_meal);
+	}
+	write_status(p, false, SLEEPING);
+	pthread_mutex_unlock(&p->data->forks[p->forks[1]]);
+	pthread_mutex_unlock(&p->data->forks[p->forks[0]]);
+	p_sleep(p->data, p->data->time_to_sleep);
 }
