@@ -3,56 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   local_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:41 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:33:42 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/07 16:27:58 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	detect_operator_type(t_character *c, t_character *n, t_type *type,
-		size_t *len)
+void	detect_operator_type(t_character *c, t_character *n, t_type *t,
+		size_t *l)
 {
-	*type = UNKNOWN;
-	*len = 1;
+	*t = UNKNOWN;
+	*l = 1;
 	if (c->c == '|')
-		*type = PIPE;
+		*t = PIPE;
 	else if (c->c == '<')
 	{
 		if (n && same_word(c, n) && n->c == '<')
 		{
-			*type = HEREDOC;
-			*len = 2;
+			*t = HEREDOC;
+			*l = 2;
 		}
 		else
-			*type = REDIR_IN;
+			*t = REDIR_IN;
 	}
 	else if (c->c == '>')
 	{
 		if (n && same_word(c, n) && n->c == '>')
 		{
-			*type = APPEND;
-			*len = 2;
+			*t = APPEND;
+			*l = 2;
 		}
 		else
-			*type = REDIR_OUT;
+			*t = REDIR_OUT;
 	}
 }
 
-int	is_expandable_dollar(t_character *dollar_char)
+int	is_expandable_dollar(t_character *c)
 {
 	t_character	*next;
 
-	if (!dollar_char || dollar_char->c != '$')
+	if (!c || c->c != '$')
 		return (0);
-	if (dollar_char->context == S_QUOTE)
+	if (c->context == S_QUOTE)
 		return (0);
-	next = dollar_char->next;
-	if (!next || !same_word(dollar_char, next))
+	next = c->next;
+	if (!next || !same_word(c, next))
 		return (0);
-	if (dollar_char->context != next->context)
+	if (c->context != next->context)
 		return (0);
 	if (next->c == '?' || valid_variable_char(next->c))
 		return (1);

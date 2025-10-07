@@ -3,41 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:14 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:33:16 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/07 16:25:49 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_character	*init_node(char ch, t_ctx context, t_character *tail)
+t_character	*init_node(char c, t_ctx ctx, t_character *tail)
 {
-	t_character	*node;
+	t_character	*n;
 
-	node = malloc(sizeof(t_character));
-	if (!node)
+	n = malloc(sizeof(t_character));
+	if (!n)
 		return (NULL);
-	node->c = ch;
-	node->word_id = 0;
-	if (context == S_QUOTE)
-		node->type = LITERAL;
-	else if (context == D_QUOTE)
+	n->c = c;
+	n->word_id = 0;
+	if (ctx == S_QUOTE)
+		n->type = LITERAL;
+	else if (ctx == D_QUOTE)
 	{
-		if (ch == '$')
-			node->type = DOLLAR;
+		if (c == '$')
+			n->type = DOLLAR;
 		else
-			node->type = LITERAL;
+			n->type = LITERAL;
 	}
 	else
-		node->type = get_character_type(ch);
-	node->context = context;
-	node->next = NULL;
-	node->prev = tail;
+		n->type = get_character_type(c);
+	n->context = ctx;
+	n->next = NULL;
+	n->prev = tail;
 	if (tail)
-		tail->next = node;
-	return (node);
+		tail->next = n;
+	return (n);
 }
 
 int	check_empty_string(t_ctx ctx, char next_c, char next_next_c)
@@ -51,13 +51,10 @@ int	check_empty_string(t_ctx ctx, char next_c, char next_next_c)
 	return (0);
 }
 
-int	check_oprhan_quote(t_character *head, t_ctx current_context)
+int	check_oprhan_quote(t_character *head, t_ctx ctx)
 {
-	if (current_context != NONE)
-	{
-		print_error("Find an orphan quote");
-		free_character_list(head);
-		return (1);
-	}
+	if (ctx != NONE)
+		return (print_error("Find an orphan quote"), free_character_list(head),
+			1);
 	return (0);
 }

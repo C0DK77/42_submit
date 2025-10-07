@@ -3,33 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   char.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:08 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 11:28:55 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/07 16:23:29 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	append_char(t_character **head, t_character **tail, char ch,
-		t_ctx ctx)
+t_character	*ft_lexer_init_list(char *l)
 {
-	t_character	*new;
+	t_ctx			ctx;
+	t_build_state	st;
+	int				i;
 
-	new = init_node(ch, ctx, *tail);
-	if (!new)
+	if (!l)
+		return (NULL);
+	ctx = NONE;
+	st.head = NULL;
+	st.tail = NULL;
+	st.word = 0;
+	i = 0;
+	while (l[i])
 	{
-		free_character_list(*head);
-		return (0);
+		if (process_quote(l, &i, &ctx, &st))
+			continue ;
+		if (process_space(l, &i, ctx, &st))
+			continue ;
+		if (!process_token(l, &i, ctx, &st))
+			return (NULL);
 	}
-	if (!*head)
-		*head = new;
-	*tail = new;
-	return (1);
+	if (check_oprhan_quote(st.head, ctx))
+		return (NULL);
+	return (st.head);
 }
 
-static int	process_quote(char *line, int *i, t_ctx *ctx, t_build_state *st)
+int	process_quote(char *line, int *i, t_ctx *ctx, t_build_state *st)
 {
 	if (handle_quote_context(line[*i], ctx))
 	{
@@ -51,7 +61,20 @@ static int	process_quote(char *line, int *i, t_ctx *ctx, t_build_state *st)
 	return (0);
 }
 
-static int	process_space(char *line, int *i, t_ctx ctx, t_build_state *st)
+int	append_char(t_character **head, t_character **tail, char ch, t_ctx ctx)
+{
+	t_character	*new;
+
+	new = init_node(ch, ctx, *tail);
+	if (!new)
+		return (free_character_list(*head), 0);
+	if (!*head)
+		*head = new;
+	*tail = new;
+	return (1);
+}
+
+int	process_space(char *line, int *i, t_ctx ctx, t_build_state *st)
 {
 	if (ctx == NONE && ft_isspace(line[*i]))
 	{
@@ -88,31 +111,4 @@ static int	process_token(char *line, int *i, t_ctx ctx, t_build_state *st)
 	}
 	(*i)++;
 	return (1);
-}
-
-t_character	*build_char_list(char *line)
-{
-	t_ctx			ctx;
-	t_build_state	st;
-	int				i;
-
-	if (!line)
-		return (NULL);
-	ctx = NONE;
-	st.head = NULL;
-	st.tail = NULL;
-	st.word = 0;
-	i = 0;
-	while (line[i])
-	{
-		if (process_quote(line, &i, &ctx, &st))
-			continue ;
-		if (process_space(line, &i, ctx, &st))
-			continue ;
-		if (!process_token(line, &i, ctx, &st))
-			return (NULL);
-	}
-	if (check_oprhan_quote(st.head, ctx))
-		return (NULL);
-	return (st.head);
 }
