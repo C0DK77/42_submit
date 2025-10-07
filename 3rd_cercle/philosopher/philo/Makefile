@@ -1,33 +1,29 @@
 
 # ==== PROGRAM NAME ==== #
 
-NAME 				= 	philosopher
+NAME 				= 	philo
 
 # ==== COMPILER AND FLAGS ==== #
 
 CC 					= 	cc 
-CFLAGS 				= 	-Wall -Wextra -Werror 	\
-						-I. 					
+CFLAGS 				= 	-I. 					\
+						-g -Wall -Wextra -Werror					
 
 # ==== FILES SRC ==== #
 
 SRC_ROOT   			=  	main.c	
 									
-SRC_UTIL   			= 	./program/utils.c 		\
-						./program/init.c 		\
+SRC_UTIL   			=	./program/init.c 		\
 						./program/routine.c		\
+ 						./program/utils_1.c 	\
+						./program/utils_2.c 	\
+						./program/program.c 	\
 						./program/monitor.c
 
 SRC        			= $(SRC_ROOT) $(SRC_UTIL)
 
-UTILS_DIR 			= 	utils
 OBJ_DIR				= 	obj
 OBJ					= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
-
-# ==== LIBFT / PRINTF ==== #
-
-LIBFT_DIR			= 	./libft
-LIBFT_A 			= 	$(LIBFT_DIR)/libft.a 
 
 # ==== RULES ==== #
 

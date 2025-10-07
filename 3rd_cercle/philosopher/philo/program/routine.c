@@ -6,17 +6,17 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 13:16:40 by corentindes       #+#    #+#             */
-/*   Updated: 2025/10/04 04:46:44 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/07 04:22:13 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-void	*ft_routine(void *arg)
+void	*ft_routine(void *data)
 {
 	t_philo	*p;
 
-	p = (t_philo *)arg;
+	p = (t_philo *)data;
 	if (p->data->nb_meal == 0)
 		return (NULL);
 	pthread_mutex_lock(&p->mutex_meal);
@@ -29,26 +29,26 @@ void	*ft_routine(void *arg)
 	if (p->data->nb == 1)
 		return (ft_routine_for_1(p));
 	else if (p->id % 2)
-		ft_routine_think(p, true);
-	while (ft_monitor_dead(p->data) == false)
+		ft_routine_think(p, 1);
+	while (ft_monitor_check_stop_flag(p->data) == 0)
 	{
 		ft_routine_for_all(p);
-		ft_routine_think(p, false);
-		return (NULL);
+		ft_routine_think(p, 0);
 	}
+	return (NULL);
 }
 
 void	*ft_routine_for_1(t_philo *p)
 {
 	pthread_mutex_lock(&p->data->forks[p->forks[0]]);
-	write_status(p, false, GOT_FORK_1);
-	philo_sleep(p->data, p->data->time_to_die);
-	write_status(p, false, DIED);
+	ft_print_action(p, "has taken a fork", 0);
+	ft_routine_sleep(p->data, p->data->time_to_die);
+	ft_print_action(p, "died", 0);
 	pthread_mutex_unlock(&p->data->forks[p->forks[0]]);
 	return (NULL);
 }
 
-void	ft_routine_think(t_philo *p, bool silent)
+void	ft_routine_think(t_philo *p, int i)
 {
 	time_t	time_to_think;
 
@@ -58,23 +58,23 @@ void	ft_routine_think(t_philo *p, bool silent)
 	pthread_mutex_unlock(&p->mutex_meal);
 	if (time_to_think < 0)
 		time_to_think = 0;
-	if (time_to_think == 0 && silent == true)
+	if (time_to_think == 0 && i == 1)
 		time_to_think = 1;
 	if (time_to_think > 600)
 		time_to_think = 200;
-	if (silent == false)
-		write_status(p, false, THINKING);
+	if (i == 0)
+		ft_print_action(p, "is thinking", 0);
 	ft_routine_sleep(p->data, time_to_think);
 }
 
-void	ft_routine_sleep(t_data *d, time_t sleep_time)
+void	ft_routine_sleep(t_data *d, uint64_t i)
 {
-	time_t	wake_up;
+	uint64_t	t;
 
-	wake_up = get_time_in_ms() + sleep_time;
-	while (get_time_in_ms() < wake_up)
+	t = ft_time() + i;
+	while (ft_time() < t)
 	{
-		if (has_simulation_stopped(d))
+		if (ft_monitor_check_stop_flag(d))
 			break ;
 		usleep(100);
 	}
@@ -83,22 +83,22 @@ void	ft_routine_sleep(t_data *d, time_t sleep_time)
 void	ft_routine_for_all(t_philo *p)
 {
 	pthread_mutex_lock(&p->data->forks[p->forks[0]]);
-	write_status(p, false, GOT_FORK_1);
+	ft_print_action(p, "has taken a fork", 0);
 	pthread_mutex_lock(&p->data->forks[p->forks[1]]);
-	write_status(p, false, GOT_FORK_2);
-	write_status(p, false, EATING);
+	ft_print_action(p, "has taken a fork", 0);
+	ft_print_action(p, "is eating", 0);
 	pthread_mutex_lock(&p->mutex_meal);
 	p->last_meal = ft_time();
 	pthread_mutex_unlock(&p->mutex_meal);
-	p_sleep(p->data, p->data->time_to_eat);
-	if (has_simulation_stopped(p->data) == false)
+	ft_routine_sleep(p->data, p->data->time_to_eat);
+	if (ft_monitor_check_stop_flag(p->data) == 0)
 	{
 		pthread_mutex_lock(&p->mutex_meal);
-		p->times_ate += 1;
+		p->times += 1;
 		pthread_mutex_unlock(&p->mutex_meal);
 	}
-	write_status(p, false, SLEEPING);
+	ft_print_action(p, "is sleeping", 0);
 	pthread_mutex_unlock(&p->data->forks[p->forks[1]]);
 	pthread_mutex_unlock(&p->data->forks[p->forks[0]]);
-	p_sleep(p->data, p->data->time_to_sleep);
+	ft_routine_sleep(p->data, p->data->time_to_sleep);
 }

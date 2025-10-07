@@ -6,13 +6,13 @@
 /*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:48:26 by cdesjars          #+#    #+#             */
-/*   Updated: 2025/10/04 04:18:34 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/07 04:14:53 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-t_data	*ft_init_var_data(int ac, char **av, int i)
+t_data	*ft_init_var_data(int ac, char **av)
 {
 	t_data	*d;
 
@@ -48,16 +48,16 @@ t_philo	**ft_init_var_philo(t_data *d)
 	i = 0;
 	p = malloc(sizeof(t_philo) * d->nb);
 	if (!p)
-		return (0);
+		return (free(d), printf("Error malloc on philo"), NULL);
 	while (i < d->nb)
 	{
 		p[i] = malloc(sizeof(t_philo) * 1);
 		if (!p[i])
-			return (0);
+			return (free(d), printf("Error malloc on philo"), NULL);
 		if (pthread_mutex_init(&p[i]->mutex_meal, 0) != 0)
-			return (0);
+			return (free(d), printf("Error mutex init"), NULL);
 		p[i]->data = d;
-		p[i]->id = i + 1;
+		p[i]->id = i;
 		p[i]->times = 0;
 		ft_forks(p[i]);
 		i++;
@@ -83,12 +83,12 @@ pthread_mutex_t	*ft_init_forks(t_data *d)
 
 	forks = malloc(sizeof(pthread_mutex_t) * d->nb);
 	if (!forks)
-		return (error_null(STR_ERR_MALLOC, NULL, 0));
+		return (free(d), printf("Error malloc on forks"), NULL);
 	i = 0;
 	while (i < d->nb)
 	{
 		if (pthread_mutex_init(&forks[i], 0) != 0)
-			return (error_null(STR_ERR_MUTEX, NULL, 0));
+			return (free(d), printf("Error mutex init"), NULL);
 		i++;
 	}
 	return (forks);
