@@ -3,26 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:40:56 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:40:58 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/16 00:25:20 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static void	print_unset_error(const char *name)
+void	print_unset_error(char *a)
 {
-	write(STDERR_FILENO, "minishell: unset: `",
-		ft_strlen("minishell: unset: `"));
-	if (name)
-		write(STDERR_FILENO, name, ft_strlen(name));
-	write(STDERR_FILENO, "': not a valid identifier\n",
-		ft_strlen("': not a valid identifier\n"));
+	ft_putstr_fd("minishell: unset: `", STDERR_FILENO);
+	if (a)
+		ft_putstr_fd(a, STDERR_FILENO);
+	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 }
 
-static int	process_unset_args(char **args, t_shell *sh)
+int	process_unset_args(char **args, t_shell *s)
 {
 	int	status;
 
@@ -35,13 +33,13 @@ static int	process_unset_args(char **args, t_shell *sh)
 			status = 1;
 		}
 		else
-			remove_env_var(&sh->env, *args);
+			remove_env_var(&s->env, *args);
 		args++;
 	}
 	return (status);
 }
 
-int	builtin_unset(t_command *cmd, t_shell *sh)
+int	builtin_unset(t_command *cmd, t_shell *s)
 {
 	size_t	argc;
 	char	**argv;
@@ -56,7 +54,6 @@ int	builtin_unset(t_command *cmd, t_shell *sh)
 	args = argv;
 	if (args[0] && ft_strncmp(args[0], "unset", 5) == 0)
 		args++;
-	status = process_unset_args(args, sh);
-	free(argv);
-	return (status);
+	status = process_unset_args(args, s);
+	return (free(argv), status);
 }

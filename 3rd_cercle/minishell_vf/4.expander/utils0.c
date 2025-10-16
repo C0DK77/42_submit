@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils0.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:35:13 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:35:14 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/15 20:54:01 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,7 @@ char	**get_all_values(t_shell *shell, t_var_pos *vars, int var_count)
 		{
 			while (--i >= 0)
 				free(values[i]);
-			free(values);
-			return (NULL);
+			return (free(values), NULL);
 		}
 		i++;
 	}

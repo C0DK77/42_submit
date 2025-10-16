@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:55 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:34:56 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/15 20:52:46 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,9 @@ static char	*expand_string(t_shell *shell, char *str)
 		return (ft_strdup(str));
 	values = get_all_values(shell, vars, var_count);
 	if (!values)
-	{
-		free_var_data(vars, NULL, var_count);
-		return (NULL);
-	}
+		return (free_var_data(vars, NULL, var_count), NULL);
 	expanded = build_expanded_string(str, vars, values, var_count);
-	free_var_data(vars, values, var_count);
-	return (expanded);
+	return (free_var_data(vars, values, var_count), expanded);
 }
 
 static void	expand_arg(t_element *element, t_shell *shell)

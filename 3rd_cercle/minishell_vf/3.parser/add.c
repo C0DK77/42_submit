@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   add.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:19 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:34:20 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/15 20:48:39 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,7 @@ int	handle_pipe(t_token **token_list, t_command **current)
 	{
 		new_node = create_new_command();
 		if (!new_node)
-		{
-			print_error("EXIT FAILURE");
-			return (0);
-		}
+			return (print_error("EXIT FAILURE"), 0);
 		(*current)->has_pipe_out = 1;
 		(*current)->next = new_node;
 		new_node->previous = *current;

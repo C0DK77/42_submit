@@ -1,82 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenize.c                                         :+:      :+:    :+:   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:47 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:33:49 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/15 20:47:45 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	handle_null_word(t_token **head, t_token **tail,
-		t_character **char_list, t_character *current)
+t_token	*ft_token_init(t_character *c)
 {
-	t_token	*tok;
+	t_token	*head;
+	t_token	*tail;
 
-	if (!current || !current->next)
-		return (0);
-	if (!current->word_id || !current->next->word_id)
-		return (0);
-	tok = new_token(LITERAL, 0);
-	if (!tok)
-		return (0);
-	append_token(head, tail, tok);
-	*char_list = (*char_list)->next;
-	return (1);
-}
-
-static void	fill_word_token(t_token *tok, t_character *start, size_t len)
-{
-	t_character	*cur;
-	size_t		i;
-
-	cur = start;
-	i = 0;
-	while (cur && same_word(start, cur) && !is_operator_type(cur->type))
+	head = NULL;
+	tail = NULL;
+	while (c)
 	{
-		tok->str[i] = cur->c;
-		i++;
-		cur = cur->next;
+		if (ft_isoperator_type(c->type) && !create_operator_token(&head, &tail,
+				&c))
+			return (free_token_list(head), NULL);
+		else if (!create_word_token(&head, &tail, &c))
+			return (free_token_list(head), NULL);
 	}
-	tok->str[len] = '\0';
+	return (head);
 }
 
-static int	create_word_token(t_token **head, t_token **tail,
-		t_character **char_list)
-{
-	t_character	*start;
-	t_character	*cur;
-	size_t		len;
-	t_type		type;
-	t_token		*tok;
-
-	start = *char_list;
-	len = get_word_length(start);
-	if (len == 0 && handle_null_word(head, tail, char_list, start))
-		return (1);
-	type = LITERAL;
-	if (word_has_special_variable(start))
-		type = SPECIAL_VARIABLE;
-	else if (word_has_expandable_dollar(start))
-		type = DOLLAR;
-	tok = new_token(type, len);
-	if (!tok)
-		return (0);
-	fill_word_token(tok, start, len);
-	append_token(head, tail, tok);
-	cur = start;
-	while (cur && same_word(start, cur) && !is_operator_type(cur->type))
-		cur = cur->next;
-	*char_list = cur;
-	return (1);
-}
-
-static int	create_operator_token(t_token **head, t_token **tail,
-		t_character **pos)
+int	create_operator_token(t_token **head, t_token **tail,
+	t_character **pos)
 {
 	t_character	*c;
 	t_character	*n;
@@ -104,25 +59,65 @@ static int	create_operator_token(t_token **head, t_token **tail,
 	return (1);
 }
 
-t_token	*build_token_list(t_character *char_list)
+static int	handle_null_word(t_token **head, t_token **tail,
+		t_character **char_list, t_character *current)
 {
-	t_token	*head;
-	t_token	*tail;
+	t_token	*tok;
 
-	head = NULL;
-	tail = NULL;
-	while (char_list)
+	if (!current || !current->next)
+		return (0);
+	if (!current->word_id || !current->next->word_id)
+		return (0);
+	tok = new_token(LITERAL, 0);
+	if (!tok)
+		return (0);
+	append_token(head, tail, tok);
+	*char_list = (*char_list)->next;
+	return (1);
+}
+
+static void	fill_word_token(t_token *tok, t_character *start, size_t len)
+{
+	t_character	*cur;
+	size_t		i;
+
+	cur = start;
+	i = 0;
+	while (cur && ft_is_samewrd(start, cur) && !is_operator_type(cur->type))
 	{
-		if (is_operator_type(char_list->type))
-		{
-			if (!create_operator_token(&head, &tail, &char_list))
-				return (free_token_list(head), NULL);
-		}
-		else
-		{
-			if (!create_word_token(&head, &tail, &char_list))
-				return (free_token_list(head), NULL);
-		}
+		tok->str[i] = cur->c;
+		i++;
+		cur = cur->next;
 	}
-	return (head);
+	tok->str[len] = '\0';
+}
+
+static int	create_word_token(t_token **head, t_token **tail,
+		t_character **char_list)
+{
+	t_character	*start;
+	t_character	*cur;
+	size_t		len;
+	t_type		type;
+	t_token		*tok;
+
+	start = *char_list;
+	len = ft_is_samewrd(start);
+	if (len == 0 && handle_null_word(head, tail, char_list, start))
+		return (1);
+	type = LITERAL;
+	if (word_has_special_variable(start))
+		type = SPECIAL_VARIABLE;
+	else if (word_has_expandable_dollar(start))
+		type = DOLLAR;
+	tok = new_token(type, len);
+	if (!tok)
+		return (0);
+	fill_word_token(tok, start, len);
+	append_token(head, tail, tok);
+	cur = start;
+	while (cur && ft_is_samewrd(start, cur) && !is_operator_type(cur->type))
+		cur = cur->next;
+	*char_list = cur;
+	return (1);
 }

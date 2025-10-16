@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:41:55 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:41:56 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/16 00:07:19 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ static void	exit_no_arg(char **argv, t_shell *sh, t_all *all)
 
 static void	exit_numeric_error(char **argv, int idx, t_shell *sh, t_all *all)
 {
-	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-	ft_putstr_fd(argv[idx], STDERR_FILENO);
-	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+	ft_putall_fd(STDERR_FILENO, 3, "minishell: exit: ", argv[idx],
+		": numeric argument required\n");
 	free(argv);
 	free_env(sh);
 	cleanall(all->char_list, all->token_list, all->command_list);
@@ -62,7 +61,7 @@ static char	**collect_args(t_command *cmd, size_t *argc)
 	return (argv);
 }
 
-int	builtin_exit(t_command *cmd, t_shell *sh, t_all *all)
+int	builtin_exit(t_command *cmd, t_shell *s, t_all *a)
 {
 	size_t			argc;
 	char			**argv;
@@ -77,13 +76,13 @@ int	builtin_exit(t_command *cmd, t_shell *sh, t_all *all)
 		idx = 1;
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	if (!argv[idx])
-		exit_no_arg(argv, sh, all);
+		exit_no_arg(argv, s, a);
 	if (!is_numeric_word(argv[idx]))
-		exit_numeric_error(argv, idx, sh, all);
+		exit_numeric_error(argv, idx, s, a);
 	code = to_exit_u8(argv[idx]);
 	free(argv);
-	free_env(sh);
-	cleanall(all->char_list, all->token_list, all->command_list);
+	free_env(s);
+	cleanall(a->char_list, a->token_list, a->command_list);
 	rl_clear_history();
 	exit(code);
 }

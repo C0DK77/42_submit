@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:04 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:34:06 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/15 20:46:27 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	is_operator_type(t_type type)
+int	ft_isoperator_type(t_type type)
 {
 	if (type == PIPE || type == APPEND || type == HEREDOC || type == REDIR_IN
 		|| type == REDIR_OUT)
@@ -27,7 +27,7 @@ int	valid_variable_char(char c)
 	return (0);
 }
 
-int	same_word(t_character *a, t_character *b)
+int	ft_is_samewrd(t_character *a, t_character *b)
 {
 	if (a->word_id != b->word_id)
 		return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:32:46 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 11:17:26 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/16 00:55:04 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,25 @@
 
 int		g_signal_received = 0;
 
-void	signal_handler(int sig)
+void	ft_signal_init(void)
 {
-	g_signal_received = sig;
-	if (sig == SIGINT)
+	signal(SIGINT, ft_signal_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	ft_signal_handler(int i)
+{
+	g_signal_received = i;
+	if (i == SIGINT)
 	{
-		write(1, "\n", 1);
+		ft_putchar("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
 
-int	check_signals(void)
+int	ft_signal_check(void)
 {
 	if (g_signal_received == SIGINT)
 	{
@@ -36,14 +42,8 @@ int	check_signals(void)
 	return (0);
 }
 
-void	reset_signals_for_child(void)
+void	ft_signal_reset(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-}
-
-void	setup_signals(void)
-{
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
 }

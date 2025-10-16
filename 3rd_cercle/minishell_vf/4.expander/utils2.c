@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:35:25 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:35:26 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/15 20:55:33 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ void	*cleanup_variables(char **variable, int index)
 {
 	while (--index >= 0)
 		free(variable[index]);
-	free(variable);
-	return (NULL);
+	return (free(variable), NULL);
 }
 
 int	process_dollar(char *str, int i, char **variable, int *index)
@@ -78,6 +77,5 @@ void	*cleanup_vars_pos(t_var_pos *vars, int index)
 {
 	while (--index >= 0)
 		free(vars[index].name);
-	free(vars);
-	return (NULL);
+	return (free(vars), NULL);
 }

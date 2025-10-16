@@ -3,71 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:02 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:42:03 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/16 00:21:47 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	print_export_line(const char *entry)
+void	print_export_line(char *a)
 {
-	const char	*eq;
-	size_t		ln;
+	char	*eq;
+	size_t	ln;
 
-	eq = ft_strchr(entry, '=');
+	eq = ft_strchr(a, '=');
 	if (!eq)
-	{
-		write(STDOUT_FILENO, "declare -x ", sizeof("declare -x ") - 1);
-		write(STDOUT_FILENO, entry, ft_strlen(entry));
-		write(STDOUT_FILENO, "\n", 1);
-		return ;
-	}
-	ln = (size_t)(eq - entry);
-	write(STDOUT_FILENO, "declare -x ", sizeof("declare -x ") - 1);
-	write(STDOUT_FILENO, entry, ln);
-	write(STDOUT_FILENO, "=\"", sizeof("=\"") - 1);
-	write(STDOUT_FILENO, eq + 1, ft_strlen(eq + 1));
-	write(STDOUT_FILENO, "\"\n", sizeof("\"\n") - 1);
+		return (ft_putall_fd(STDOUT_FILENO, 3, "declare -x ", a, "\n"));
+	ln = (size_t)(eq - a);
+	ft_putstr_fd("declare -x ", STDOUT_FILENO);
+	ft_putstr_fd(a, STDOUT_FILENO);
+	ft_putall_fd(STDOUT_FILENO, 3, "=\"", eq + 1, "\"\n");
 }
 
 void	print_export_error(const char *s)
 {
-	write(STDERR_FILENO, "minishell: export: `", sizeof("minishell: export: `")
-		- 1);
+	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 	if (s)
-		write(STDERR_FILENO, s, ft_strlen(s));
-	write(STDERR_FILENO, "': not a valid identifier\n",
-		sizeof("': not a valid identifier\n") - 1);
+		ft_putstr_fd(s, STDERR_FILENO);
+	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 }
 
-int	handle_export_arg(const char *arg, t_shell *sh)
+int	handle_export_arg(char *a, t_shell *s)
 {
 	const char	*eq;
 	char		*name;
 
-	if (!is_valid_ident_export(arg))
-	{
-		print_export_error(arg);
-		return (0);
-	}
-	eq = ft_strchr(arg, '=');
+	if (!is_valid_ident_export(a))
+		return (print_export_error(a), 0);
+	eq = ft_strchr(a, '=');
 	if (eq)
 	{
-		name = dup_n(arg, (size_t)(eq - arg));
+		name = dup_n(a, (size_t)(eq - a));
 		if (!name)
 			return (0);
-		if (!setenv_in_vec(&sh->env, name, eq + 1))
-		{
-			free(name);
-			return (0);
-		}
-		free(name);
-		return (1);
+		if (!setenv_in_vec(&s->env, name, eq + 1))
+			return (free(name), 0);
+		return (free(name), 1);
 	}
-	if (!setenv_in_vec(&sh->env, arg, ""))
+	if (!setenv_in_vec(&s->env, a, ""))
 		return (0);
 	return (1);
 }
@@ -87,10 +71,8 @@ int	builtin_export(t_command *cmd, t_shell *sh)
 	if (!argv[idx])
 	{
 		status = print_all_exports(sh);
-		free(argv);
-		return (status);
+		return (free(argv), status);
 	}
 	status = process_export_args(argv, idx, sh);
-	free(argv);
-	return (status);
+	return (free(argv), status);
 }

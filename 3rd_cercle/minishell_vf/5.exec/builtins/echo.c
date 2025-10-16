@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:41:43 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:41:44 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/16 00:03:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static int	is_echo_n(const char *s)
+int	is_echo_n(char *s)
 {
 	int	i;
 
@@ -28,43 +28,41 @@ static int	is_echo_n(const char *s)
 	return (i > 1);
 }
 
-static void	print_args(t_element *e)
+void	print_args(t_element *e)
 {
-	int	first;
+	int	i;
 
-	first = 1;
+	i = 1;
 	while (e)
 	{
 		if (e->kind == ARG && e->u_.arg && e->u_.arg->str)
 		{
-			if (!first)
-				write(STDOUT_FILENO, " ", 1);
-			write(STDOUT_FILENO, e->u_.arg->str,
-				ft_strlen(e->u_.arg->str));
-			first = 0;
+			if (!i)
+				ft_putchar_fd(" ", STDOUT_FILENO);
+			ft_putstr_fd(e->u_.arg->str, STDOUT_FILENO);
+			i = 0;
 		}
 		e = e->next;
 	}
 }
 
-int	builtin_echo(t_command *cmd, t_shell *sh)
+int	builtin_echo(t_command *cmd, t_shell *s)
 {
-	int			no_newline;
+	int			i;
 	t_element	*e;
 
-	(void)sh;
-	no_newline = 0;
+	(void)s;
+	i = 0;
 	e = cmd->element;
 	if (e && e->kind == ARG)
 		e = e->next;
-	while (e && e->kind == ARG && e->u_.arg
-		&& is_echo_n(e->u_.arg->str))
+	while (e && e->kind == ARG && e->u_.arg && is_echo_n(e->u_.arg->str))
 	{
-		no_newline = 1;
+		i = 1;
 		e = e->next;
 	}
 	print_args(e);
-	if (!no_newline)
-		write(STDOUT_FILENO, "\n", 1);
+	if (!i)
+		ft_putchar_fd("\n", STDOUT_FILENO);
 	return (0);
 }

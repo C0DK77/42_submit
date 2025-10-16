@@ -6,22 +6,11 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:43:58 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 16:20:36 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/16 15:13:24 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	free_and_return(t_character *c, t_token *t, t_command *cmd, int i)
-{
-	if (cmd)
-		cleanup(cmd);
-	if (t)
-		free_token_list(t);
-	if (c)
-		free_character_list(c);
-	return (i);
-}
 
 int	main(int ac, char **av, char **env)
 {
@@ -32,9 +21,7 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	if (!ft_set_env(env, &s))
 		return (1);
-	ft_program(&s);
-	free_env(&s);
-	return (s.last_exit);
+	return (ft_program(&s), ft_free_env(&s), s.last_exit);
 }
 
 void	ft_program(t_shell *s)
@@ -42,16 +29,16 @@ void	ft_program(t_shell *s)
 	char	*l;
 	int		i;
 
-	setup_signals();
+	ft_signal_init();
 	while (1)
 	{
 		l = readline("minishell$ ");
 		if (!l)
 		{
-			write(1, "exit\n", 5);
+			ft_putstr("exit\n");
 			break ;
 		}
-		if (check_signals())
+		if (ft_signal_check())
 			s->last_exit = 130;
 		if (*l == '\0')
 		{
@@ -70,23 +57,47 @@ int	ft_program_bis(char *l, t_shell *s)
 	t_character	*c;
 	t_token		*t;
 	t_command	*cmd;
-	t_all		*all;
+	t_all		*a;
 	int			i;
 
-	all = get_all(1);
-	c = ft_lexer_init_list(l);
+	a = get_all(1);
+	c = ft_lexer_init(l);
 	if (!c)
 		return (1);
-	all->char_list = c;
-	t = build_token_list(all->char_list);
+	a->char_list = c;
+	t = ft_token_init(a->char_list);
 	if (!t)
-		return (free_and_return(c, NULL, NULL, 1));
-	all->token_list = t;
-	cmd = init_struct_globale(all->token_list);
+		return (ft_free_program(c, NULL, NULL, 1));
+	a->token_list = t;
+	cmd = init_struct_globale(a->token_list);
 	if (!cmd)
-		return (free_and_return(c, t, NULL, 1));
-	all->command_list = cmd;
+		return (ft_free_program(c, t, NULL, 1));
+	a->command_list = cmd;
 	expander(&cmd, s);
-	i = run_pipeline(all, cmd, s);
-	return (free_and_return(c, t, cmd, i));
+	i = run_pipeline(a, cmd, s);
+	return (ft_free_program(c, t, cmd, i));
+}
+
+int	ft_free_program(t_character *c, t_token *t, t_command *cmd, int i)
+{
+	if (cmd)
+		cleanup(cmd);
+	if (t)
+		free_token_list(t);
+	if (c)
+		free_character_list(c);
+	return (i);
+}
+
+void	ft_free_env(t_shell *s)
+{
+	size_t i;
+
+	if (!s || !s->env)
+		return ;
+	i = 0;
+	while (s->env[i] != NULL)
+		free(s->env[i++]);
+	free(s->env);
+	s->env = NULL;
 }

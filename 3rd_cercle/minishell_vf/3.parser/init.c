@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:31 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:34:33 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/15 20:50:28 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,7 @@ t_element	*create_element_arg(t_type type, const char *str)
 	{
 		if (arg->str)
 			free(arg->str);
-		free(arg);
-		return (NULL);
+		return (free(arg), NULL);
 	}
 	element->kind = ARG;
 	element->u_.arg = arg;
@@ -91,8 +90,7 @@ t_element	*create_element_redir(t_type type, const char *target,
 	{
 		if (redir->target)
 			free(redir->target);
-		free(redir);
-		return (NULL);
+		return (free(redir), NULL);
 	}
 	element->kind = REDIR;
 	element->u_.redirs = redir;

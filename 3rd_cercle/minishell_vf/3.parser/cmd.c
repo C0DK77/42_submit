@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:25 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:34:27 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/15 20:49:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,8 @@ t_command	*init_struct_globale(t_token *token_list)
 	if (!cmd)
 		return (NULL);
 	if (!parse_token(token_list))
-	{
-		cleanup(cmd);
-		return (NULL);
-	}
+		return (cleanup(cmd), NULL);
 	if (!save_all(cmd, token_list))
-	{
-		cleanup(cmd);
-		return (NULL);
-	}
+		return (cleanup(cmd), NULL);
 	return (cmd);
 }

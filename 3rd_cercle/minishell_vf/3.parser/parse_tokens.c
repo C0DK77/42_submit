@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:37 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:34:38 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/15 20:51:20 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,15 @@ static int	check_pipe(t_token *token_list)
 	if (!tkn)
 		return (1);
 	if (tkn->type == PIPE)
-	{
-		print_error("syntax error near unexpected token '|'");
-		return (0);
-	}
+		return (print_error("syntax error near unexpected token '|'"), 0);
 	while (tkn)
 	{
 		target = tkn->next;
 		if (tkn->type == PIPE)
 		{
 			if (!target || target->type == PIPE)
-			{
-				print_error("syntax error near unexpected token '|'");
-				return (0);
-			}
+				return (print_error("syntax error near unexpected token '|'"),
+					0);
 		}
 		tkn = target;
 	}

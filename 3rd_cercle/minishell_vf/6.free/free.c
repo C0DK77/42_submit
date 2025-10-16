@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:43:10 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:43:12 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/16 00:40:02 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,31 +23,6 @@ t_all	*get_all(int reset)
 		all.command_list = NULL;
 	}
 	return (&all);
-}
-
-void	free_env(t_shell *shell)
-{
-	size_t	i;
-
-	if (!shell || !shell->env)
-		return ;
-	i = 0;
-	while (shell->env[i] != NULL)
-		free(shell->env[i++]);
-	free(shell->env);
-	shell->env = NULL;
-}
-
-void	free_character_list(t_character *head)
-{
-	t_character	*tmp;
-
-	while (head)
-	{
-		tmp = head->next;
-		free(head);
-		head = tmp;
-	}
 }
 
 void	free_token_list(t_token *head)

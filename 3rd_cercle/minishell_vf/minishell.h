@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:44:32 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 11:16:57 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/16 00:57:04 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "1.lexer/lexer.h"
-# include "2.tokenizer/tokenize.h"
-# include "4.expander/expander.h"
 # include "libft.h"
 # include <dirent.h>
 # include <errno.h>
@@ -164,12 +161,33 @@ typedef struct s_pipeinfo
 	int					out_wr;
 }						t_pipeinfo;
 
+typedef struct s_build_state
+{
+	t_character			*head;
+	t_character			*tail;
+	int					word;
+}						t_build_state;
+
+typedef struct s_var_pos
+{
+	char				*name;
+	int					start;
+	int					end;
+}						t_var_pos;
+
 // ENV / ENV
 
 int						ft_env_set_env(char **env, t_shell *s);
 char					**ft_env_copy_env(char **env);
 char					**ft_env_init_env(void);
 char					**ft_env_check(char **env, int l);
+
+// ENV / SIGNALS
+
+void					ft_signal_init(void);
+void					ft_signal_handler(int i);
+int						ft_signal_check(void);
+void					ft_signal_reset(void);
 
 // ENV / UTILS 1
 
@@ -183,13 +201,6 @@ int						ft_env_count_var(char **env);
 
 int						get_shlvl_value(char **envp);
 char					*get_env_value(char **env, const char *var);
-
-// ENV / SIGNALS
-
-void					signal_handler(int sig);
-int						check_signals(void);
-void					reset_signals_for_child(void);
-void					setup_signals(void);
 
 // 1.Lexer / utils
 int						ft_isspace(char c);
@@ -240,10 +251,10 @@ int						is_command(t_type_cmd type);
 t_type_cmd				identify_builtin(const char *str);
 
 // 0.env / signals.c
-void					signal_handler(int sig);
-int						check_signals(void);
-void					reset_signals_for_child(void);
-void					setup_signals(void);
+void					ft_signal_init(void);
+void					ft_signal_handler(int i);
+int						ft_signal_check(void);
+void					ft_signal_reset(void);
 
 // expander.c
 void					expander(t_command **cmd_list, t_shell *shell);

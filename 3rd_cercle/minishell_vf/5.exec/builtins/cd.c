@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:41:36 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:41:38 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/16 00:02:31 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static const char	*cd_resolve_target(t_element *head, t_shell *sh)
+char	*cd_resolve_target(t_element *head, t_shell *sh)
 {
 	const char	*home;
 	t_element	*e;
@@ -27,11 +27,8 @@ static const char	*cd_resolve_target(t_element *head, t_shell *sh)
 	{
 		home = find_variable_in_env(sh->env, "HOME");
 		if (!home)
-		{
-			write(STDERR_FILENO, "minishell: cd: HOME not set\n",
-				sizeof("minishell: cd: HOME not set\n") - 1);
-			return (NULL);
-		}
+			return (ft_putstr_fd("minishell: cd: HOME not set\n",
+					STDERR_FILENO), NULL);
 		return (home);
 	}
 	return (e->u_.arg->str);
