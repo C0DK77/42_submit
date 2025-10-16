@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:38:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/09/30 17:45:17 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/16 16:23:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,6 @@ char				*ft_strjoin_three(char *s1, char *s2, char *s3);
 void				ft_free_tab(char **s);
 void				ft_putall_fd(int fd, int argc, ...);
 int					ft_strisquote(char *s);
+void				ft_free_all(int argc, ...);
 
 #endif

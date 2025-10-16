@@ -6,11 +6,43 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:04 by codk              #+#    #+#             */
-/*   Updated: 2025/10/15 20:46:27 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/16 19:09:10 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+t_token	*ft_token_add(t_type t, size_t i)
+{
+	t_token	*tk;
+
+	tk = (t_token *)malloc(sizeof(*tk));
+	if (!tk)
+		return (NULL);
+	tk->str = (char *)malloc(i + 1);
+	if (!tk->str)
+		return (free(tk), NULL);
+	tk->type = t;
+	tk->next = NULL;
+	tk->str[0] = '\0';
+	return (tk);
+}
+
+void	ft_token_append(t_token **hd, t_token **tl, t_token *tk)
+{
+	if (!tk)
+		return ;
+	if (!*hd)
+	{
+		*hd = tk;
+		*tl = tk;
+	}
+	else
+	{
+		(*tl)->next = tk;
+		*tl = tk;
+	}
+}
 
 int	ft_isoperator_type(t_type type)
 {
@@ -20,51 +52,24 @@ int	ft_isoperator_type(t_type type)
 	return (0);
 }
 
-int	valid_variable_char(char c)
+int	ft_isvalid_char(char c)
 {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')
 		return (1);
 	return (0);
 }
 
-int	ft_is_samewrd(t_character *a, t_character *b)
+size_t	ft_token_wordlen(t_character *ch)
 {
-	if (a->word_id != b->word_id)
-		return (0);
-	return (1);
-}
+	t_character	*t;
+	size_t		i;
 
-t_token	*new_token(t_type type, size_t len)
-{
-	t_token	*tkn;
-
-	tkn = (t_token *)malloc(sizeof(*tkn));
-	if (!tkn)
-		return (NULL);
-	tkn->str = (char *)malloc(len + 1);
-	if (!tkn->str)
+	t = ch;
+	i = 0;
+	while (t && ft_token_sameword(ch, t) && !ft_token_isoperator(t->type))
 	{
-		free(tkn);
-		return (NULL);
+		i++;
+		t = t->next;
 	}
-	tkn->type = type;
-	tkn->next = NULL;
-	tkn->str[0] = '\0';
-	return (tkn);
-}
-
-void	append_token(t_token **head, t_token **tail, t_token *node)
-{
-	if (!node)
-		return ;
-	if (!*head)
-	{
-		*head = node;
-		*tail = node;
-	}
-	else
-	{
-		(*tail)->next = node;
-		*tail = node;
-	}
+	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:43:58 by codk              #+#    #+#             */
-/*   Updated: 2025/10/16 15:13:24 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/16 19:16:20 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,48 +56,24 @@ int	ft_program_bis(char *l, t_shell *s)
 {
 	t_character	*c;
 	t_token		*t;
-	t_command	*cmd;
+	t_command	*l;
 	t_all		*a;
 	int			i;
 
-	a = get_all(1);
+	a = ft_init_all(1);
 	c = ft_lexer_init(l);
 	if (!c)
 		return (1);
-	a->char_list = c;
-	t = ft_token_init(a->char_list);
+	a->ch = c;
+	t = ft_token_init(a->ch);
 	if (!t)
 		return (ft_free_program(c, NULL, NULL, 1));
-	a->token_list = t;
-	cmd = init_struct_globale(a->token_list);
-	if (!cmd)
+	a->tk = t;
+	l = ft_parser_init(a->tk);
+	if (!l)
 		return (ft_free_program(c, t, NULL, 1));
-	a->command_list = cmd;
-	expander(&cmd, s);
-	i = run_pipeline(a, cmd, s);
-	return (ft_free_program(c, t, cmd, i));
-}
-
-int	ft_free_program(t_character *c, t_token *t, t_command *cmd, int i)
-{
-	if (cmd)
-		cleanup(cmd);
-	if (t)
-		free_token_list(t);
-	if (c)
-		free_character_list(c);
-	return (i);
-}
-
-void	ft_free_env(t_shell *s)
-{
-	size_t i;
-
-	if (!s || !s->env)
-		return ;
-	i = 0;
-	while (s->env[i] != NULL)
-		free(s->env[i++]);
-	free(s->env);
-	s->env = NULL;
+	a->cmd = l;
+	expander(&l, s);
+	i = run_pipeline(a, l, s);
+	return (ft_free_program(c, t, l, i));
 }

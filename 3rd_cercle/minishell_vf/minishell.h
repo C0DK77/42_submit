@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:44:32 by codk              #+#    #+#             */
-/*   Updated: 2025/10/16 00:57:04 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/16 19:10:31 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,9 +136,9 @@ typedef struct s_shell
 
 typedef struct s_all
 {
-	t_character			*char_list;
-	t_token				*token_list;
-	t_command			*command_list;
+	t_character			*ch;
+	t_token				*tk;
+	t_command			*cmd;
 }						t_all;
 
 typedef struct s_ios
@@ -202,19 +202,68 @@ int						ft_env_count_var(char **env);
 int						get_shlvl_value(char **envp);
 char					*get_env_value(char **env, const char *var);
 
-// 1.Lexer / utils
-int						ft_isspace(char c);
-int						is_operator_char(char c);
-t_ctx					get_ctx_type(char c);
-t_type					get_character_type(char c);
-int						handle_quote_context(char c, t_ctx *current_context);
+// LEXER / LEXER
 
-// 1.Lexer / char
-t_type					get_character_type(char c);
-t_character				*build_char_list(char *line);
+t_character				*ft_lexer_init(char *l);
+int						ft_lexer_parse_quote(char *l, int *i, t_ctx *ctx,
+							t_build_state *b);
+int						ft_lexer_parse_space(char *l, int *i, t_ctx ctx,
+							t_build_state *b);
+int						ft_lexer_parse_context(char c, t_ctx *ctx);
+int						ft_lexer_parse_token(char *s, int *i, t_ctx ctx,
+							t_build_state *b);
 
-// 2.tokenizer / tokenize.c
-t_token					*build_token_list(t_character *char_list);
+// LEXER / UTILS
+
+int						ft_lexer_empty_str(t_ctx ctx, char a, char b);
+t_type					ft_lexer_char_type(char c);
+int						ft_lexer_append(t_character **hd, t_character **tl,
+							char a, t_ctx ctx);
+t_character				*ft_lexer_new_node(char c, t_ctx ctx, t_character *tl);
+t_ctx					ft_lexer_ctx_type(char c);
+
+//	TOKEN / TOKEN
+
+t_token					*ft_token_init(t_character *c);
+int						ft_token_add_operator(t_token **hd, t_token **tl,
+							t_character **ch);
+int						ft_token_add_word(t_token **hd, t_token **tl,
+							t_character **ch);
+void					ft_token_operator(t_character *c, t_character *n,
+							t_type *t, size_t *i);
+int						ft_token_noword(t_token **hd, t_token **tl,
+							t_character **ch, t_character *t);
+
+//	TOKEN / UTILS 1
+
+int						ft_token_sameword(t_character *a, t_character *b);
+void					ft_token_add_word_token(t_token *tk, t_character *ch,
+							size_t i);
+int						ft_token_dollar(t_character *ch);
+int						ft_token_dollar_exp(t_character *c);
+int						ft_token_special_var(t_character *word_start);
+
+//	TOKEN / UTILS 2
+
+t_token					*ft_token_add(t_type t, size_t i);
+void					ft_token_append(t_token **hd, t_token **tl,
+							t_token *tk);
+int						ft_isoperator_type(t_type type);
+int						ft_isvalid_char(char c);
+size_t					ft_token_wordlen(t_character *ch);
+
+// UTILS / UTILS LIST
+
+t_all					*ft_init_all(int i);
+t_command				*ft_init_struct(t_token *t);
+void					ft_free_token(t_token *hd);
+
+// UTILS / FREE
+
+int						ft_free_program(t_character *c, t_token *t,
+							t_command *cmd, int i);
+void					ft_free_env(t_shell *s);
+void					ft_free_char(t_character *c);
 
 // 3.Parser / add.c
 int						add_cmd(t_command *cmd, char *str);

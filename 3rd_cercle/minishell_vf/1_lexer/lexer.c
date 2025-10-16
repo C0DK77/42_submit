@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:08 by codk              #+#    #+#             */
-/*   Updated: 2025/10/08 19:28:34 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/16 17:52:04 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,23 @@ t_character	*ft_lexer_init(char *l)
 	{
 		if (ft_lexer_parse_quote(l, &i, &ctx, &b))
 			continue ;
-		if (ft_lexer_parse_quote(l, &i, ctx, &b))
+		if (ft_lexer_parse_space(l, &i, ctx, &b))
 			continue ;
-		if (!ft_lexer_parse_quote(l, &i, ctx, &b))
+		if (!ft_lexer_parse_token(l, &i, ctx, &b))
 			return (NULL);
 	}
-	if (ft_lexer_isempty_quote(b.head, ctx))
-		return (NULL);
+	if (ctx != NONE)
+		return (print_error("Find orphan quote"), ft_free_char(b.head), NULL);
 	return (b.head);
 }
 
-int	ft_lexer_parse_quote(char *line, int *i, t_ctx *ctx, t_build_state *b)
+int	ft_lexer_parse_quote(char *l, int *i, t_ctx *ctx, t_build_state *b)
 {
-	if (ft_lexer_parse_context(line[*i], ctx))
+	if (ft_lexer_parse_context(l[*i], ctx))
 	{
-		if (*ctx != NONE && line[*i + 1] != '\0')
+		if (*ctx != NONE && l[*i + 1] != '\0')
 		{
-			if (ft_lexer_empty_str(*ctx, line[*i + 1], line[*i + 2]))
+			if (ft_lexer_empty_str(*ctx, l[*i + 1], l[*i + 2]))
 			{
 				if (!ft_lexer_append(&b->head, &b->tail, '\0', *ctx))
 					return (0);
@@ -61,11 +61,50 @@ int	ft_lexer_parse_quote(char *line, int *i, t_ctx *ctx, t_build_state *b)
 	return (0);
 }
 
+int	ft_lexer_parse_space(char *l, int *i, t_ctx ctx, t_build_state *b)
+{
+	if (ctx == NONE && ft_isspace(l[*i]))
+	{
+		if (b->tail && b->tail->word_id == b->word)
+			b->word++;
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}
+
+int	ft_lexer_parse_token(char *s, int *i, t_ctx ctx, t_build_state *b)
+{
+	if (ctx == NONE && ft_isoperator(s[*i]))
+	{
+		if (b->tail && b->tail->word_id == b->word
+			&& !ft_isoperator(b->tail->c))
+			b->word++;
+		else if (b->tail && b->tail->word_id == b->word
+			&& ft_isoperator(b->tail->c) && b->tail->c != s[*i])
+			b->word++;
+		if (!ft_lexer_append(&b->head, &b->tail, s[*i], ctx))
+			return (0);
+		b->tail->word_id = b->word;
+	}
+	else
+	{
+		if (b->tail && b->tail->word_id == b->word && b->tail->context == NONE
+			&& ft_isoperator(b->tail->c))
+			b->word++;
+		if (!ft_lexer_append(&b->head, &b->tail, s[*i], ctx))
+			return (0);
+		b->tail->word_id = b->word;
+	}
+	(*i)++;
+	return (1);
+}
+
 int	ft_lexer_parse_context(char c, t_ctx *ctx)
 {
 	if ((c == 34 || c == 39) && (*ctx == NONE))
 	{
-		*ctx = ft_lexer_get_type(c);
+		*ctx = ft_lexer_ctx_type(c);
 		return (1);
 	}
 	else if ((c == 34 || c == 39) && (*ctx != NONE))
@@ -81,32 +120,5 @@ int	ft_lexer_parse_context(char c, t_ctx *ctx)
 			return (1);
 		}
 	}
-	return (0);
-}
-
-t_type	ft_lexer_get_type(char c)
-{
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0'
-			&& c <= '9') || c == '.' || c == '/' || c == '_' || c == '*'
-		|| c == '[' || c == ']' || c == ',' || c == ':' || c == '+' || c == '='
-		|| c == '%' || c == '#' || c == '@' || c == '-' || c == '?' || c == '!'
-		|| c == '&')
-		return (LITERAL);
-	else if (c == '|')
-		return (PIPE);
-	else if (c == '<')
-		return (REDIR_IN);
-	else if (c == '>')
-		return (REDIR_OUT);
-	else if (c == '$')
-		return (DOLLAR);
-	return (UNKNOWN);
-}
-
-int	ft_lexer_isempty_quote(t_character *head, t_ctx ctx)
-{
-	if (ctx != NONE)
-		return (print_error("Find an orphan quote"), ft_free_character(head),
-			1);
 	return (0);
 }

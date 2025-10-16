@@ -80,7 +80,8 @@ SRC 			= 	ft_atoi.c					\
 					ft_strjoin_three.c 			\
 					ft_free_tab.c 				\
 					ft_putall_fd.c 				\
-					ft_strisquote.c
+					ft_strisquote.c				\
+					ft_free_all.c
 					
 OBJ_DIR 		= 	obj
 OBJ 			= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
