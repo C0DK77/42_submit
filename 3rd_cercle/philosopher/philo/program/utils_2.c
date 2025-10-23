@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 10:24:27 by corentindes       #+#    #+#             */
-/*   Updated: 2025/10/07 04:15:33 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/23 05:51:35 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosopher.h"
+#include "philo.h"
 
 uint64_t	ft_time(void)
 {
@@ -28,8 +28,8 @@ void	ft_print_action(t_philo *p, char *s, int i)
 		pthread_mutex_unlock(&p->data->print);
 		return ;
 	}
-	printf(TIME "%lu \033[0m %d %s\n", ft_time() - p->data->start_time, p->id
-		+ 1, s);
+	printf(TIME "%" PRIu64 " \033[0m %d %s\n", ft_time() - p->data->start_time,
+		p->id + 1, s);
 	pthread_mutex_unlock(&p->data->print);
 }
 

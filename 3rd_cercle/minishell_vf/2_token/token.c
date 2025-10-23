@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:47 by codk              #+#    #+#             */
-/*   Updated: 2025/10/16 18:58:25 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 07:20:12 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	ft_token_add_word(t_token **hd, t_token **tl, t_character **ch)
 	ft_token_add_word_token(tk, l, i);
 	ft_token_append(hd, tl, tk);
 	t = l;
-	while (t && ft_token_sameword(l, t) && !ft_token_isoperator(t->type))
+	while (t && ft_token_sameword(l, t) && !ft_isoperator_type(t->type))
 		t = t->next;
 	*ch = t;
 	return (1);

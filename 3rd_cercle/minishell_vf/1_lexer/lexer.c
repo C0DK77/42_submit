@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:08 by codk              #+#    #+#             */
-/*   Updated: 2025/10/16 17:52:04 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 07:15:39 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,10 @@ int	ft_lexer_parse_context(char c, t_ctx *ctx)
 {
 	if ((c == 34 || c == 39) && (*ctx == NONE))
 	{
-		*ctx = ft_lexer_ctx_type(c);
+		if (c == 34)
+			*ctx = D_QUOTE;
+		else if (c == 39)
+			*ctx = S_QUOTE;
 		return (1);
 	}
 	else if ((c == 34 || c == 39) && (*ctx != NONE))

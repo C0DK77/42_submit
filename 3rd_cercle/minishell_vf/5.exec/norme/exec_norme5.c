@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_norme5.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:39:54 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:39:56 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/23 07:04:00 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,7 @@ static char	**build_argv(const t_command *cmd)
 	if (!argv)
 		return (NULL);
 	if (!fill_argv_dup(cmd, argv))
-	{
-		free(argv);
-		return (NULL);
-	}
+		return (free(argv), NULL);
 	return (argv);
 }
 

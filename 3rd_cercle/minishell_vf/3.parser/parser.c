@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:37 by codk              #+#    #+#             */
-/*   Updated: 2025/10/16 19:44:25 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 06:40:24 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,13 @@ int	ft_parser_redir(t_token *tk)
 	t = tk;
 	while (t)
 	{
-		if (!is_redir(t->type))
+		if (t->type != HEREDOC || t->type != APPEND || t->type != REDIR_IN
+			|| t->type != REDIR_OUT)
 		{
 			t = t->next;
 			continue ;
 		}
-		if (!validate_redir_target(t, &t))
+		if (!ft_parser_valid_redir(t, &t))
 			return (0);
 	}
 	return (1);
@@ -54,14 +55,12 @@ int	ft_parser_pipe(t_token *tk)
 	if (!t)
 		return (1);
 	if (t->type == PIPE)
-		return (ft_putstr_fd("minishell: syntax error near unexpected token '|'\n",
-				2), 0);
+		return (ft_putstr_fd(SYNTAX "'|'\n", 2), 0);
 	while (t)
 	{
 		target = t->next;
 		if (t->type == PIPE && (!target || target->type == PIPE))
-			return (ft_putstr_fd("minishell: syntax error near unexpected token '|'\n",
-					2), 0);
+			return (ft_putstr_fd(SYNTAX "'|'\n", 2), 0);
 		t = target;
 	}
 	return (1);
@@ -75,36 +74,32 @@ int	ft_parser_save(t_command *cmd, t_token *tk)
 	t = cmd;
 	while (tk)
 	{
-		i = process_special_tokens(&tk, &t);
+		i = ft_parser_special_tokens(&tk, &t);
 		if (i == 0)
 			return (0);
 		if (i == 1)
 			continue ;
-		if (!add_argument(t, tk->type, tk->str))
+		if (!ft_parser_add_arg(t, tk->type, tk->str))
 			return (0);
 		tk = tk->next;
 	}
 	return (1);
 }
 
-int	validate_redir_target(t_token *tk, t_token **next)
+int	ft_parser_valid_redir(t_token *tk, t_token **next)
 {
 	t_token	*t;
 
 	t = tk->next;
 	if (!t)
-		return (ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n",
-				2), 0);
+		return (ft_putstr_fd(SYNTAX "`newline'\n", 2), 0);
 	if (!(t->type == LITERAL || t->type == DOLLAR
 			|| t->type == SPECIAL_VARIABLE))
 	{
 		if (t->str && t->str[0])
-			ft_putall_fd(2, 3,
-				"minishell: syntax error near unexpected token `", t->str,
-				"'\n");
+			ft_putall_fd(2, 3, SYNTAX "`", t->str, "'\n");
 		else
-			ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n",
-				2);
+			ft_putstr_fd(SYNTAX "`newline'\n", 2);
 		return (0);
 	}
 	*next = t->next;

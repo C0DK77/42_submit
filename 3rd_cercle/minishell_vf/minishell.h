@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:44:32 by codk              #+#    #+#             */
-/*   Updated: 2025/10/16 19:10:31 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 06:14:39 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
+
+#define SYNTAX "minishell: syntax error near unexpected token"
 
 extern int				g_signal_received;
 

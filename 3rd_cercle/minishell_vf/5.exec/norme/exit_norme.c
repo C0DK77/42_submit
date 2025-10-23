@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_norme.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:40:12 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:40:14 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/23 07:03:01 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,4 @@ int	is_numeric_word(const char *s)
 		p++;
 	}
 	return (1);
-}
-
-char	to_exit_u8(const char *s)
-{
-	int	v;
-
-	v = ft_atoi(s);
-	return ((unsigned char)v);
 }

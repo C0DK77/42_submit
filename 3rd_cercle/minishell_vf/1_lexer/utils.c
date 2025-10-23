@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_1.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:14 by codk              #+#    #+#             */
-/*   Updated: 2025/10/16 17:51:43 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 07:17:52 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,11 @@ int	ft_lexer_empty_str(t_ctx ctx, char a, char b)
 {
 	t_ctx	t;
 
-	t = ft_lexer_ctx_type(a);
+	t = NONE;
+	if (a == 34)
+		t = D_QUOTE;
+	else if (a == 39)
+		t = S_QUOTE;
 	if (ctx == t && (ft_isoperator(b) || ft_isspace(b) || b == '\0'))
 		return (1);
 	return (0);
@@ -80,13 +84,4 @@ t_character	*ft_lexer_new_node(char a, t_ctx ctx, t_character *tl)
 	if (tl)
 		tl->next = t;
 	return (t);
-}
-
-t_ctx	ft_lexer_ctx_type(char c)
-{
-	if (c == 34)
-		return (D_QUOTE);
-	else if (c == 39)
-		return (S_QUOTE);
-	return (NONE);
 }

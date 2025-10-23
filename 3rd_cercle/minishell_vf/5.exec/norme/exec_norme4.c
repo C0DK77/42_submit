@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_norme4.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:39:46 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:39:48 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/23 07:06:11 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,7 @@ int	child_prepare_fds(t_command *cmd, int prev_rd, int out_wr, t_shell *sh)
 	if (!collect_redirs_fds(cmd->element, &ios, sh))
 		return (0);
 	if (out_wr >= 0 && dup2(out_wr, STDOUT_FILENO) < 0)
-	{
-		perror("dup2");
-		close_redirs(&ios);
-		return (0);
-	}
+		return (perror("dup2"), close_redirs(&ios), 0);
 	if (!apply_redirs(&ios))
 	{
 		close_redirs(&ios);
@@ -73,6 +69,5 @@ int	child_prepare_fds(t_command *cmd, int prev_rd, int out_wr, t_shell *sh)
 		close(prev_rd);
 	if (out_wr >= 0)
 		close(out_wr);
-	close_redirs(&ios);
-	return (1);
+	return (close_redirs(&ios), 1);
 }

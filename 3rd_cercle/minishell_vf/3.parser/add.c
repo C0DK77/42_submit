@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:19 by codk              #+#    #+#             */
-/*   Updated: 2025/10/15 20:48:39 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 06:43:55 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ int	add_cmd(t_command *cmd, char *str)
 {
 	if (cmd->cmd == CMD_NONE)
 	{
-		cmd->cmd = identify_builtin(str);
+		cmd->cmd = ft_parser_add_cmd(str);
 		return (1);
 	}
 	return (0);
 }
 
-int	add_argument(t_command *cmd, t_type type, const char *str)
+int	ft_parser_add_arg(t_command *cmd, t_type type, const char *str)
 {
 	t_element	*element;
 
@@ -36,57 +36,57 @@ int	add_argument(t_command *cmd, t_type type, const char *str)
 	return (1);
 }
 
-int	add_redir(t_token **token_list, t_command **current)
+int	ft_parser_add_redir(t_token **tk, t_command **cmd)
 {
 	t_token		*redir;
-	t_token		*target;
+	t_token		*t;
 	t_element	*element;
 
-	if (!token_list || !*token_list || !current || !*current)
+	if (!tk || !*tk || !cmd || !*cmd)
 		return (0);
-	redir = *token_list;
-	target = redir->next;
-	if (!target)
+	redir = *tk;
+	t = redir->next;
+	if (!t)
 		return (0);
-	element = create_element_redir(redir->type, target->str, target->type);
+	element = create_element_redir(redir->type, t->str, t->type);
 	if (!element)
 		return (0);
-	add_element_to_command(*current, element);
-	*token_list = target->next;
+	add_element_to_command(*cmd, element);
+	*tk = t->next;
 	return (1);
 }
 
-int	handle_pipe(t_token **token_list, t_command **current)
+int	ft_parser_handle_pipe(t_token **tk, t_command **cmd)
 {
-	t_command	*new_node;
+	t_command	*t;
 
-	new_node = NULL;
-	if ((*token_list)->type == PIPE)
+	t = NULL;
+	if ((*tk)->type == PIPE)
 	{
-		new_node = create_new_command();
-		if (!new_node)
-			return (print_error("EXIT FAILURE"), 0);
-		(*current)->has_pipe_out = 1;
-		(*current)->next = new_node;
-		new_node->previous = *current;
-		(*current) = new_node;
-		*token_list = (*token_list)->next;
+		t = create_new_command();
+		if (!t)
+			return (ft_putstr_fd(2, "minishell: EXIT FAILURE \n"), 0);
+		(*cmd)->has_pipe_out = 1;
+		(*cmd)->next = t;
+		t->previous = *cmd;
+		(*cmd) = t;
+		*tk = (*tk)->next;
 		return (1);
 	}
 	return (0);
 }
 
-int	handle_cmd_or_arg(t_token **token_list, t_command **current)
+int	handle_cmd_or_arg(t_token **tk, t_command **cmd)
 {
 	t_type_cmd	b;
 
-	if ((*current)->cmd == CMD_NONE)
+	if ((*cmd)->cmd == CMD_NONE)
 	{
-		b = identify_builtin((*token_list)->str);
-		(*current)->cmd = b;
+		b = ft_parser_add_cmd((*tk)->str);
+		(*cmd)->cmd = b;
 	}
-	if (!add_argument(*current, (*token_list)->type, (*token_list)->str))
+	if (!ft_parser_add_arg(*cmd, (*tk)->type, (*tk)->str))
 		return (0);
-	*token_list = (*token_list)->next;
+	*tk = (*tk)->next;
 	return (1);
 }

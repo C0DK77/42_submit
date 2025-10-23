@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:41:55 by codk              #+#    #+#             */
-/*   Updated: 2025/10/16 00:07:19 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 07:01:48 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	builtin_exit(t_command *cmd, t_shell *s, t_all *a)
 		exit_no_arg(argv, s, a);
 	if (!is_numeric_word(argv[idx]))
 		exit_numeric_error(argv, idx, s, a);
-	code = to_exit_u8(argv[idx]);
+	code = ft_atoi(argv[idx]);
 	free(argv);
 	free_env(s);
 	cleanall(a->char_list, a->token_list, a->command_list);

@@ -3,33 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:43 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:34:45 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/23 06:42:46 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_element	*lst_last_node(t_element *head)
+t_element	*lst_last_node(t_element *lmt)
 {
-	t_element	*cur;
+	t_element	*t;
 
-	cur = head;
-	if (!cur)
+	t = lmt;
+	if (!t)
 		return (NULL);
-	while (cur->next)
-		cur = cur->next;
-	return (cur);
-}
-
-int	is_redir(t_type type)
-{
-	if (type == HEREDOC || type == APPEND || type == REDIR_IN
-		|| type == REDIR_OUT)
-		return (1);
-	return (0);
+	while (t->next)
+		t = t->next;
+	return (t);
 }
 
 int	is_operator(t_type type)
@@ -48,26 +40,26 @@ int	is_command(t_type_cmd type)
 	return (0);
 }
 
-t_type_cmd	identify_builtin(const char *str)
+t_type_cmd	ft_parser_add_cmd(char *s)
 {
-	int	len;
+	int	i;
 
-	if (!str)
+	if (!s)
 		return (NOT_BUILTIN);
-	len = ft_strlen(str);
-	if (len == 4 && (ft_strncmp(str, "echo", len) == 0))
+	i = ft_strlen(s);
+	if (i == 4 && (ft_strncmp(s, "echo", i) == 0))
 		return (T_ECHO);
-	if (len == 2 && (ft_strncmp(str, "cd", len) == 0))
+	if (i == 2 && (ft_strncmp(s, "cd", i) == 0))
 		return (T_CD);
-	if (len == 3 && (ft_strncmp(str, "pwd", len) == 0))
+	if (i == 3 && (ft_strncmp(s, "pwd", i) == 0))
 		return (T_PWD);
-	if (len == 6 && (ft_strncmp(str, "export", len) == 0))
+	if (i == 6 && (ft_strncmp(s, "export", i) == 0))
 		return (T_EXPORT);
-	if (len == 5 && (ft_strncmp(str, "unset", len) == 0))
+	if (i == 5 && (ft_strncmp(s, "unset", i) == 0))
 		return (T_UNSET);
-	if (len == 3 && (ft_strncmp(str, "env", len) == 0))
+	if (i == 3 && (ft_strncmp(s, "env", i) == 0))
 		return (T_ENV);
-	if (len == 4 && (ft_strncmp(str, "exit", len) == 0))
+	if (i == 4 && (ft_strncmp(s, "exit", i) == 0))
 		return (T_EXIT);
 	return (NOT_BUILTIN);
 }
