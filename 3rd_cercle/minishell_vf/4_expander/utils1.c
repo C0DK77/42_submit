@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:35:19 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:35:20 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/23 09:52:05 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,6 @@ int	valid_variable_char_number(char c)
 		|| (c >= '0' && c <= '9'))
 		return (1);
 	return (0);
-}
-
-char	*find_variable_in_env(char **env, char *variable)
-{
-	int	i;
-	int	len;
-
-	len = ft_strlen(variable);
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], variable, len) == 0 && env[i][len] == '=')
-			return (env[i] + len + 1);
-		i++;
-	}
-	return (NULL);
 }
 
 int	how_many_variable(char *str)

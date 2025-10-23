@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:47 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 07:20:12 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 10:51:44 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ t_token	*ft_token_init(t_character *c)
 	tl = NULL;
 	while (c)
 	{
-		if (ft_isoperator_type(c->type) && !ft_token_add_operator(&hd, &tl, &c))
+		if (ft_token_isoperator_type(c->type) && !ft_token_add_operator(&hd,
+				&tl, &c))
 			return (ft_free_token(hd), NULL);
 		else if (!ft_token_add_word(&hd, &tl, &c))
 			return (ft_free_token(hd), NULL);
@@ -80,7 +81,7 @@ int	ft_token_add_word(t_token **hd, t_token **tl, t_character **ch)
 	ft_token_add_word_token(tk, l, i);
 	ft_token_append(hd, tl, tk);
 	t = l;
-	while (t && ft_token_sameword(l, t) && !ft_isoperator_type(t->type))
+	while (t && l->word_id == t->word_id && !ft_token_isoperator_type(t->type))
 		t = t->next;
 	*ch = t;
 	return (1);
@@ -94,7 +95,7 @@ void	ft_token_operator(t_character *c, t_character *n, t_type *t, size_t *i)
 		*t = PIPE;
 	else if (c->c == '<')
 	{
-		if (n && ft_token_sameword(c, n) && n->c == '<')
+		if (n && c->word_id == n->word_id && n->c == '<')
 		{
 			*t = HEREDOC;
 			*i = 2;
@@ -104,7 +105,7 @@ void	ft_token_operator(t_character *c, t_character *n, t_type *t, size_t *i)
 	}
 	else if (c->c == '>')
 	{
-		if (n && ft_token_sameword(c, n) && n->c == '>')
+		if (n && c->word_id == n->word_id && n->c == '>')
 		{
 			*t = APPEND;
 			*i = 2;

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:38:07 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/16 11:41:51 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 10:27:23 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_strndup(char *s1, int n)
 
 	i = 0;
 	s2 = (char *)malloc(sizeof(char) * (n + 1));
-	if (s2 == NULL)
+	if (!s2)
 		return (NULL);
 	while (s1[i] && i < n)
 	{

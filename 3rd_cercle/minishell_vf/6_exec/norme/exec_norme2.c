@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_norme2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:39:30 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:39:32 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/23 08:44:05 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,23 +66,4 @@ int	is_simple_builtin_type(t_type_cmd c)
 int	is_builtin_cmd(t_type_cmd c)
 {
 	return (is_simple_builtin_type(c));
-}
-
-int	exec_builtin(t_command *cmd, t_shell *sh, t_all *all)
-{
-	if (cmd->cmd == T_ECHO)
-		return (builtin_echo(cmd, sh));
-	if (cmd->cmd == T_PWD)
-		return (builtin_pwd(cmd, sh));
-	if (cmd->cmd == T_CD)
-		return (builtin_cd(cmd, sh));
-	if (cmd->cmd == T_EXPORT)
-		return (builtin_export(cmd, sh));
-	if (cmd->cmd == T_UNSET)
-		return (builtin_unset(cmd, sh));
-	if (cmd->cmd == T_ENV)
-		return (builtin_env(cmd, sh));
-	if (cmd->cmd == T_EXIT)
-		return (builtin_exit(cmd, sh, all));
-	return (127);
 }

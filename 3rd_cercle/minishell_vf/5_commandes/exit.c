@@ -6,33 +6,39 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:41:55 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 07:01:48 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 09:44:29 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	exit_no_arg(char **argv, t_shell *sh, t_all *all)
+int	ft_cmd_exit(t_command *cmd, t_shell *sh, t_all *a)
 {
+	size_t			argc;
+	char			**argv;
+	int				i;
+	unsigned char	c;
+
+	argv = ft_cmd_exit_arg(cmd, &argc);
+	if (!argv)
+		return (1);
+	i = 0;
+	if (argv[0] && !ft_strncmp(argv[0], "exit", ft_strlen(argv[0]) + 1))
+		i = 1;
+	ft_putstr_fd("exit\n", STDOUT_FILENO);
+	if (!argv[i])
+		ft_cmd_exit_no_arg(argv, sh, a);
+	if (!ft_cmd_exit_isnum(argv[i]))
+		ft_cmd_exit_error(argv, i, sh, a);
+	c = ft_atoi(argv[i]);
 	free(argv);
-	free_env(sh);
-	cleanall(all->char_list, all->token_list, all->command_list);
+	ft_free_env(sh);
+	ft_free_all(a->ch, a->tk, a->cmd);
 	rl_clear_history();
-	exit(sh->last_exit);
+	exit(c);
 }
 
-static void	exit_numeric_error(char **argv, int idx, t_shell *sh, t_all *all)
-{
-	ft_putall_fd(STDERR_FILENO, 3, "minishell: exit: ", argv[idx],
-		": numeric argument required\n");
-	free(argv);
-	free_env(sh);
-	cleanall(all->char_list, all->token_list, all->command_list);
-	rl_clear_history();
-	exit(2);
-}
-
-static char	**collect_args(t_command *cmd, size_t *argc)
+char	**ft_cmd_exit_arg(t_command *cmd, size_t *argc)
 {
 	t_element	*e;
 	char		**argv;
@@ -61,28 +67,42 @@ static char	**collect_args(t_command *cmd, size_t *argc)
 	return (argv);
 }
 
-int	builtin_exit(t_command *cmd, t_shell *s, t_all *a)
+void	ft_cmd_exit_no_arg(char **s, t_shell *sh, t_all *a)
 {
-	size_t			argc;
-	char			**argv;
-	int				idx;
-	unsigned char	code;
-
-	argv = collect_args(cmd, &argc);
-	if (!argv)
-		return (1);
-	idx = 0;
-	if (argv[0] && !ft_strncmp(argv[0], "exit", ft_strlen(argv[0]) + 1))
-		idx = 1;
-	ft_putstr_fd("exit\n", STDOUT_FILENO);
-	if (!argv[idx])
-		exit_no_arg(argv, s, a);
-	if (!is_numeric_word(argv[idx]))
-		exit_numeric_error(argv, idx, s, a);
-	code = ft_atoi(argv[idx]);
-	free(argv);
-	free_env(s);
-	cleanall(a->char_list, a->token_list, a->command_list);
+	free(s);
+	ft_free_env(sh);
+	ft_free_all(a->ch, a->tk, a->cmd);
 	rl_clear_history();
-	exit(code);
+	exit(sh->last_exit);
+}
+
+int	ft_cmd_exit_isnum(char *s)
+{
+	char	*p;
+
+	p = s;
+	if (!s || !*s)
+		return (0);
+	if (*p == '+' || *p == '-')
+		p++;
+	if (!*p)
+		return (0);
+	while (*p)
+	{
+		if (*p < '0' || *p > '9')
+			return (0);
+		p++;
+	}
+	return (1);
+}
+
+void	ft_cmd_exit_error(char **argv, int i, t_shell *sh, t_all *a)
+{
+	ft_putall_fd(STDERR_FILENO, 3, "minishell: exit: ", argv[i],
+		": numeric argument required\n");
+	free(argv);
+	ft_free_env(sh);
+	ft_free_all(a->ch, a->tk, a->cmd);
+	rl_clear_history();
+	exit(2);
 }

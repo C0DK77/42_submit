@@ -6,13 +6,13 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:41:04 by codk              #+#    #+#             */
-/*   Updated: 2025/10/16 00:22:44 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 09:31:20 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../minishell.h"
 
-int	builtin_pwd(t_command *cmd, t_shell *s)
+int	ft_cmd_pwd(t_command *cmd, t_shell *s)
 {
 	char	buf[4096];
 

@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:32:24 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 11:17:30 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/23 10:44:30 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_env_set_env(char **env, t_shell *s)
+int	ft_env_set(char **env, t_shell *s)
 {
 	if (!env || !*env)
-		s->env = ft_env_init_env();
+		s->env = ft_env_init();
 	else
-		s->env = ft_env_copy_env(env);
+		s->env = ft_env_copy(env);
 	if (!s->env)
 		return (0);
 	return (ft_env_init_shlvl(s, env), s->last_exit = 0, 1);
 }
 
-char	**ft_env_init_env(void)
+char	**ft_env_init(void)
 {
 	char	**env;
 
@@ -38,7 +38,7 @@ char	**ft_env_init_env(void)
 	return (ft_env_check(env, 4));
 }
 
-char	**ft_env_copy_env(char **env)
+char	**ft_env_copy(char **env)
 {
 	int		i;
 	char	**n;

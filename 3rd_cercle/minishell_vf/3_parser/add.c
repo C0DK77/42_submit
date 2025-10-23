@@ -6,13 +6,13 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:19 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 06:43:55 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 08:34:10 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	add_cmd(t_command *cmd, char *str)
+int	ft_parser_add_cmd(t_command *cmd, char *str)
 {
 	if (cmd->cmd == CMD_NONE)
 	{

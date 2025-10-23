@@ -10,6 +10,7 @@ LIBFT_DIR 		:= 	Libft
 LIBFT 			:= 	$(LIBFT_DIR)/libft.a
 
 SRC_TEST_EXEC 	:= 	main.c \
+					env
 					1.lexer/char.c 1.lexer/utils.c 1.lexer/init.c \
 					6.free/free.c 6.free/free2.c 6.free/error.c \
 					2.tokenizer/tokenize.c 2.tokenizer/utils.c 2.tokenizer/local_utils.c \

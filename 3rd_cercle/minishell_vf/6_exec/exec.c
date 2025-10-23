@@ -3,14 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:24 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:42:25 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/23 10:30:19 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ft_exec(t_command *cmd, t_shell *sh, t_all *all)
+{
+	if (cmd->cmd == T_ECHO)
+		return (ft_cmd_echo(cmd, sh));
+	if (cmd->cmd == T_PWD)
+		return (ft_cmd_pwd(cmd, sh));
+	if (cmd->cmd == T_CD)
+		return (ft_cmd_cd(cmd, sh));
+	if (cmd->cmd == T_EXPORT)
+		return (ft_cmd_export(cmd, sh));
+	if (cmd->cmd == T_UNSET)
+		return (ft_cmd_unset(cmd, sh));
+	if (cmd->cmd == T_ENV)
+		return (ft_cmd_env(cmd, sh));
+	if (cmd->cmd == T_EXIT)
+		return (ft_cmd_exit(cmd, sh, all));
+	return (127);
+}
+
+int	run_single_builtin(t_command *cmd, t_shell *sh, t_all *all)
+{
+	int	saved_in;
+	int	saved_out;
+	int	code;
+
+	if (!save_stdio(&saved_in, &saved_out))
+		return (1);
+	if (!apply_redirs_for_single(cmd, saved_in, saved_out, sh))
+		return (1);
+	if (cmd->cmd == T_EXIT)
+	{
+		restore_stdio_and_close(saved_in, saved_out);
+		exec_builtin(cmd, sh, all);
+	}
+	code = exec_builtin(cmd, sh, all);
+	restore_stdio_and_close(saved_in, saved_out);
+	sh->last_exit = code;
+	return (code);
+}
 
 static int	setup_pipeinfo(t_command *cmd, int prev_rd, t_pipeinfo *pi)
 {

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:43:58 by codk              #+#    #+#             */
-/*   Updated: 2025/10/20 04:02:52 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 11:02:10 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	if (ac != 1)
 		return (1);
-	if (!ft_set_env(env, &s))
+	if (!ft_env_set(env, &s))
 		return (1);
 	return (ft_program(&s), ft_free_env(&s), s.last_exit);
 }
@@ -56,10 +56,13 @@ int	ft_program_bis(char *l, t_shell *s)
 {
 	t_character	*c;
 	t_token		*t;
-	t_command	*l;
-	t_all		*a;
+	t_command	*cmd;
 	int			i;
-
+	t_all		*a;
+	//xxx
+	i = 0;
+	(void)s;
+	cmd = NULL;
 	a = ft_init_all(1);
 	c = ft_lexer_init(l);
 	if (!c)
@@ -68,12 +71,12 @@ int	ft_program_bis(char *l, t_shell *s)
 	t = ft_token_init(a->ch);
 	if (!t)
 		return (ft_free_program(c, NULL, NULL, 1));
-	a->tk = t;
-	l = ft_parser_init(a->tk);
-	if (!l)
-		return (ft_free_program(c, t, NULL, 1));
-	a->cmd = l;
-	expander(&l, s);
-	i = run_pipeline(a, l, s);
-	return (ft_free_program(c, t, l, i));
+	// a->tk = t;
+	// cmd = ft_parser_init(a->tk);
+	// if (!cmd)
+	// 	return (ft_free_program(c, t, NULL, 1));
+	// a->cmd = cmd;
+	// expander(&cmd, s);
+	// i = run_pipeline(a, cmd, s);
+	return (ft_free_program(c, t, cmd, i));
 }

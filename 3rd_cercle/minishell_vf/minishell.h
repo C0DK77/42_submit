@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:44:32 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 06:14:39 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 10:57:59 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # include <termios.h>
 # include <unistd.h>
 
-#define SYNTAX "minishell: syntax error near unexpected token"
+# define SYNTAX "minishell: syntax error near unexpected token"
 
 extern int				g_signal_received;
 
@@ -177,12 +177,18 @@ typedef struct s_var_pos
 	int					end;
 }						t_var_pos;
 
+//	MAIN
+
+void					ft_program(t_shell *s);
+int						ft_program_bis(char *l, t_shell *s);
+
 // ENV / ENV
 
-int						ft_env_set_env(char **env, t_shell *s);
-char					**ft_env_copy_env(char **env);
-char					**ft_env_init_env(void);
+int						ft_env_set(char **env, t_shell *s);
+char					**ft_env_copy(char **env);
+char					**ft_env_init(void);
 char					**ft_env_check(char **env, int l);
+void					ft_env_init_shlvl(t_shell *s, char **env);
 
 // ENV / SIGNALS
 
@@ -191,18 +197,13 @@ void					ft_signal_handler(int i);
 int						ft_signal_check(void);
 void					ft_signal_reset(void);
 
-// ENV / UTILS 1
+// ENV / UTILS
 
 char					*ft_env_search_value(char **env, char *var);
 void					ft_env_set_var(char ***env, char *var, char *v);
 int						ft_env_replace_var(char ***env, char *var, char *n);
 void					ft_env_add_var(char ***env, char *n);
 int						ft_env_count_var(char **env);
-
-// ENV / UTILS 2
-
-int						get_shlvl_value(char **envp);
-char					*get_env_value(char **env, const char *var);
 
 // LEXER / LEXER
 
@@ -222,7 +223,6 @@ t_type					ft_lexer_char_type(char c);
 int						ft_lexer_append(t_character **hd, t_character **tl,
 							char a, t_ctx ctx);
 t_character				*ft_lexer_new_node(char c, t_ctx ctx, t_character *tl);
-t_ctx					ft_lexer_ctx_type(char c);
 
 //	TOKEN / TOKEN
 
@@ -238,7 +238,6 @@ int						ft_token_noword(t_token **hd, t_token **tl,
 
 //	TOKEN / UTILS 1
 
-int						ft_token_sameword(t_character *a, t_character *b);
 void					ft_token_add_word_token(t_token *tk, t_character *ch,
 							size_t i);
 int						ft_token_dollar(t_character *ch);
@@ -250,8 +249,7 @@ int						ft_token_special_var(t_character *word_start);
 t_token					*ft_token_add(t_type t, size_t i);
 void					ft_token_append(t_token **hd, t_token **tl,
 							t_token *tk);
-int						ft_isoperator_type(t_type type);
-int						ft_isvalid_char(char c);
+int						ft_token_isoperator_type(t_type type);
 size_t					ft_token_wordlen(t_character *ch);
 
 // UTILS / UTILS LIST
@@ -259,13 +257,6 @@ size_t					ft_token_wordlen(t_character *ch);
 t_all					*ft_init_all(int i);
 t_command				*ft_init_struct(t_token *t);
 void					ft_free_token(t_token *hd);
-
-// UTILS / FREE
-
-int						ft_free_program(t_character *c, t_token *t,
-							t_command *cmd, int i);
-void					ft_free_env(t_shell *s);
-void					ft_free_char(t_character *c);
 
 // 3.Parser / add.c
 int						add_cmd(t_command *cmd, char *str);
@@ -301,11 +292,12 @@ int						is_operator(t_type type);
 int						is_command(t_type_cmd type);
 t_type_cmd				identify_builtin(const char *str);
 
-// 0.env / signals.c
-void					ft_signal_init(void);
-void					ft_signal_handler(int i);
-int						ft_signal_check(void);
-void					ft_signal_reset(void);
+// UTILS / FREE
+
+int						ft_free_program(t_character *c, t_token *t,
+							t_command *cmd, int i);
+void					ft_free_env(t_shell *s);
+void					ft_free_char(t_character *c);
 
 // expander.c
 void					expander(t_command **cmd_list, t_shell *shell);
@@ -374,7 +366,25 @@ int						open_out_append(const char *path);
 // heredoc
 int						create_heredoc_fd(char *delim, t_shell *sh);
 
-// builtin
+//	COMMANDES CD
+int						ft_cmd_cd(t_command *cmd, t_shell *sh);
+int						ft_cmd_cd_check_arg(t_element *t);
+char					*ft_cmd_cd_arg(t_element *lmt, t_shell *sh);
+int						ft_cmd_set_env(char ***env, char *var, char *c);
+int						ft_cmd_cd_replace(char **env, char *var, char *value);
+
+//	COMMANDES CD UTILS
+
+int						ft_cmd_cd_append(char ***penv, char *var, char *a);
+int						ft_cmd_cd_check_arg(t_element *t);
+
+//	COMMANDES ECHO
+//	COMMANDES ENV
+//	COMMANDES EXIT
+//	COMMANDES EXPORT
+//	COMMANDES EXPORT UTILS
+//	COMMANDES PWD
+//	COMMANDES UNSET
 int						builtin_echo(t_command *cmd, t_shell *sh);
 int						builtin_pwd(t_command *cmd, t_shell *sh);
 int						builtin_cd(t_command *cmd, t_shell *sh);

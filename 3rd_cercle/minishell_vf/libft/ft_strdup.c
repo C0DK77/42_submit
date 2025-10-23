@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 19:10:18 by corentindes       #+#    #+#             */
-/*   Updated: 2024/11/20 17:23:46 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/23 10:25:05 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strdup(const char *s1)
 	i = 0;
 	j = ft_strlen(s1);
 	s2 = (char *)malloc(sizeof(char) * (j + 1));
-	if (s2 == NULL)
+	if (!s2)
 		return (NULL);
 	while (s1[i])
 	{

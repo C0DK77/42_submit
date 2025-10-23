@@ -1,16 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_norme2.c                                    :+:      :+:    :+:   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/07 04:40:25 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 04:40:26 by codk             ###   ########.fr       */
+/*   Created: 2025/10/23 09:29:32 by corentindes       #+#    #+#             */
+/*   Updated: 2025/10/23 10:28:00 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../minishell.h"
+
+char	*make_env_kv(const char *name, const char *value)
+{
+	size_t	ln;
+	size_t	lv;
+	char	*kv;
+
+	ln = ft_strlen(name);
+	lv = ft_strlen(value);
+	kv = (char *)malloc(ln + 1 + lv + 1);
+	if (!kv)
+		return (NULL);
+	ft_memcpy(kv, name, ln);
+	kv[ln] = '=';
+	ft_memcpy(kv + ln + 1, value, lv);
+	kv[ln + 1 + lv] = '\0';
+	return (kv);
+}
 
 static int	try_replace(char **env, const char *name, const char *value)
 {
@@ -66,31 +84,4 @@ int	setenv_in_vec(char ***penv, const char *name, const char *value)
 	if (try_replace(*penv, name, value))
 		return (1);
 	return (append_env(penv, name, value));
-}
-
-int	print_all_exports(t_shell *sh)
-{
-	int	i;
-
-	i = 0;
-	while (sh->env && sh->env[i])
-	{
-		print_export_line(sh->env[i]);
-		i++;
-	}
-	return (0);
-}
-
-int	process_export_args(char **argv, int idx, t_shell *sh)
-{
-	int	status;
-
-	status = 0;
-	while (argv[idx])
-	{
-		if (!handle_export_arg(argv[idx], sh))
-			status = 1;
-		idx++;
-	}
-	return (status);
 }

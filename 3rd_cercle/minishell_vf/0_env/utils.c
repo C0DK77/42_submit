@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_1.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:32:38 by codk              #+#    #+#             */
-/*   Updated: 2025/10/07 11:17:12 by codk             ###   ########.fr       */
+/*   Updated: 2025/10/23 10:44:20 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	ft_env_set_var(char ***env, char *var, char *v)
 		return (NULL);
 	n = ft_strjoin(t, v);
 	free(t);
-	n = create_env_string(var, v);
 	if (!n)
 		return ;
 	if (ft_env_replace_var(env, var, n))
