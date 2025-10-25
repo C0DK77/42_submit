@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:47 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 10:51:44 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/25 06:33:55 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@ t_token	*ft_token_init(t_character *c)
 	tl = NULL;
 	while (c)
 	{
-		if (ft_token_isoperator_type(c->type) && !ft_token_add_operator(&hd,
-				&tl, &c))
+		if ((c->type == PIPE || c->type == APPEND || c->type == HEREDOC
+				|| c->type == REDIR_IN || c->type == REDIR_OUT)
+			&& !ft_token_add_operator(&hd, &tl, &c))
 			return (ft_free_token(hd), NULL);
 		else if (!ft_token_add_word(&hd, &tl, &c))
 			return (ft_free_token(hd), NULL);
@@ -81,7 +82,9 @@ int	ft_token_add_word(t_token **hd, t_token **tl, t_character **ch)
 	ft_token_add_word_token(tk, l, i);
 	ft_token_append(hd, tl, tk);
 	t = l;
-	while (t && l->word_id == t->word_id && !ft_token_isoperator_type(t->type))
+	while (t && l->word_id == t->word_id && (t->type != PIPE
+			|| t->type != APPEND || t->type != HEREDOC || t->type != REDIR_IN
+			|| t->type != REDIR_OUT))
 		t = t->next;
 	*ch = t;
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:43:10 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 09:17:43 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/25 06:46:45 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_all	*ft_init_all(int i)
 
 size_t	ft_count_arg(t_element *e)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (e)
@@ -57,4 +57,16 @@ void	ft_fill_argv(t_element *e, char **argv)
 		e = e->next;
 	}
 	argv[i] = NULL;
+}
+
+t_element	*ft_element_last_node(t_element *lmt)
+{
+	t_element *t;
+
+	t = lmt;
+	if (!t)
+		return (NULL);
+	while (t->next)
+		t = t->next;
+	return (t);
 }

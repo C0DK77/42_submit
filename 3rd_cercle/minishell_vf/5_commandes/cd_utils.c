@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 10:07:59 by corentindes       #+#    #+#             */
-/*   Updated: 2025/10/23 10:08:11 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/25 06:56:03 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int	ft_cmd_cd_append(char ***penv, char *var, char *a)
 
 char	*ft_cmd_cd_create(char *var, char *a)
 {
-	size_t ln;
-	size_t lv;
-	char *kv;
+	size_t	ln;
+	size_t	lv;
+	char	*kv;
 
 	ln = ft_strlen(var);
 	lv = ft_strlen(a);

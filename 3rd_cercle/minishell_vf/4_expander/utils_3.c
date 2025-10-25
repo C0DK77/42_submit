@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:35:25 by codk              #+#    #+#             */
-/*   Updated: 2025/10/15 20:55:33 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/25 07:26:29 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,29 +49,7 @@ void	*cleanup_variables(char **variable, int index)
 	return (free(variable), NULL);
 }
 
-int	process_dollar(char *str, int i, char **variable, int *index)
-{
-	int		j;
-	int		new_pos;
-	char	*var;
 
-	j = i + 1;
-	if (!valid_variable_char(str[j]) && str[j] != '?')
-		return (i);
-	if (str[j] == '?')
-	{
-		var = create_special_var();
-		if (!var)
-			return (-1);
-		variable[(*index)++] = var;
-		return (j);
-	}
-	var = extract_normal_var(str, j, &new_pos);
-	if (!var)
-		return (-1);
-	variable[(*index)++] = var;
-	return (new_pos);
-}
 
 void	*cleanup_vars_pos(t_var_pos *vars, int index)
 {

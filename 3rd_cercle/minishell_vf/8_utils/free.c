@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:43:19 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 10:46:49 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/25 07:09:42 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,4 +123,32 @@ void	free_element_list(t_element *element)
 void	cleanall(t_character *ch, t_token *tk, t_command *cmd)
 {
 	ft_free_all(ch, tk, cmd);
+}
+
+void	ft_free_var(t_var_pos *var, char **a, int count)
+{
+	int i;
+
+	if (var)
+	{
+		i = 0;
+		while (i < count)
+		{
+			if (var[i].name)
+				free(var[i].name);
+			i++;
+		}
+		free(var);
+	}
+	if (a)
+	{
+		i = 0;
+		while (i < count)
+		{
+			if (a[i])
+				free(a[i]);
+			i++;
+		}
+		free(a);
+	}
 }

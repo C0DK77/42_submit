@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:04 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 10:51:10 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/25 06:34:35 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ size_t	ft_token_wordlen(t_character *ch)
 
 	t = ch;
 	i = 0;
-	while (t && ch->word_id == t->word_id && !ft_token_isoperator_type(t->type))
+	while (t && ch->word_id == t->word_id && (t->type != PIPE
+			|| t->type != APPEND || t->type != HEREDOC || t->type != REDIR_IN
+			|| t->type != REDIR_OUT))
 	{
 		i++;
 		t = t->next;

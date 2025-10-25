@@ -9,21 +9,59 @@ LDFLAGS 		:= 	-lreadline
 LIBFT_DIR 		:= 	Libft
 LIBFT 			:= 	$(LIBFT_DIR)/libft.a
 
-SRC_TEST_EXEC 	:= 	main.c \
-					env
-					1.lexer/char.c 1.lexer/utils.c 1.lexer/init.c \
-					6.free/free.c 6.free/free2.c 6.free/error.c \
-					2.tokenizer/tokenize.c 2.tokenizer/utils.c 2.tokenizer/local_utils.c \
-					3.parser/init.c 3.parser/utils.c 3.parser/parse_tokens.c 3.parser/cmd.c 3.parser/add.c \
-					0.env/env.c 0.env/utils.c 0.env/signals.c 0.env/shlvl.c \
-					4.expander/expander.c 4.expander/utils4.c 4.expander/utils0.c 4.expander/utils1.c 4.expander/utils2.c 4.expander/utils3.c \
-					5.exec/exec.c 5.exec/heredoc.c 5.exec/redir.c \
-					5.exec/builtins/echo.c 5.exec/builtins/cd.c 5.exec/builtins/pwd.c 5.exec/builtins/export.c 5.exec/builtins/unset.c \
-					5.exec/builtins/env.c 5.exec/builtins/exit.c \
-					5.exec/norme/redir_norme.c 5.exec/norme/redir_norme2.c 5.exec/norme/unset_norme.c 5.exec/norme/exit_norme.c \
-					5.exec/norme/export_norme.c 5.exec/norme/export_norme2.c 5.exec/norme/cd_norme.c \
-					5.exec/norme/exec_norme.c 5.exec/norme/exec_norme2.c 5.exec/norme/exec_norme3.c 5.exec/norme/exec_norme4.c \
-					5.exec/norme/exec_norme5.c 5.exec/norme/exec_norme6.c 5.exec/norme/exec_norme7.c
+SRC_TEST_EXEC 	:= 	main.c 							\
+					0_env/env.c 					\
+					0_env/signals.c 				\
+					0_env/utils.c 					\
+					1_lexer/lexer.c 				\
+					1_lexer/utils.c 				\
+					2_tokenizer/token.c   			\
+					2_tokenizer/utils_1.c 			\
+					2_tokenizer/utils_2.c 			\
+					3_parser/parser.c 				\
+					3_parser/utils_1.c 				\
+					3_parser/utils_2.c 				\
+					4_expander/expander.c 			\
+					4_expander/utils_1.c 			\
+					4_expander/utils_2.c 			\
+					4_expander/utils_3.c 			\
+					4_expander/utils_4.c 			\
+					5_commandes/cd_utils.c 			\
+					5_commandes/cd.c 				\
+					5_commandes/echo.c 				\
+					5_commandes/env.c 				\
+					5_commandes/exit.c 				\
+					5_commandes/export_utils.c 		\
+					5_commandes/export.c 			\
+					5_commandes/unset.c 			\
+					5_commandes/pwd.c 				\
+					5_exec/exec.c 					\
+					5_exec/heredoc.c 				\
+					5_exec/redir.c 					\
+					5_exec/builtins/echo.c 			\
+					5_exec/builtins/cd.c 			\
+					5_exec/builtins/pwd.c 			\
+					5_exec/builtins/export.c 		\
+					5_exec/builtins/unset.c 		\
+					5_exec/builtins/env.c 			\
+					5_exec/builtins/exit.c 			\
+					5_exec/norme/redir_norme.c 		\
+					5_exec/norme/redir_norme2.c 	\
+					5_exec/norme/unset_norme.c 		\
+					5_exec/norme/exit_norme.c 		\
+					5_exec/norme/export_norme.c 	\
+					5_exec/norme/export_norme2.c	\
+					5_exec/norme/cd_norme.c 		\
+					5_exec/norme/exec_norme.c 		\
+					5_exec/norme/exec_norme2.c 		\
+					5_exec/norme/exec_norme3.c 		\
+					5_exec/norme/exec_norme4.c 		\
+					5_exec/norme/exec_norme5.c		\
+					5_exec/norme/exec_norme6.c 		\
+					5_exec/norme/exec_norme7.c		\
+					6_free/free.c 					\
+					6_free/free2.c 					\
+					6_free/error.c 					
 
 
 OBJDIR 			:= 	obj

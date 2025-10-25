@@ -6,11 +6,18 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 09:29:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/10/23 10:28:00 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/25 07:54:54 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	ft_cmd_export_set_env(char ***env, char *a, char *s)
+{
+	if (try_replace(*env, a, s))
+		return (1);
+	return (append_env(env, a, s));
+}
 
 char	*make_env_kv(const char *name, const char *value)
 {
@@ -77,11 +84,4 @@ static int	append_env(char ***penv, const char *name, const char *value)
 	tmp[n] = nv;
 	tmp[n + 1] = NULL;
 	return (1);
-}
-
-int	setenv_in_vec(char ***penv, const char *name, const char *value)
-{
-	if (try_replace(*penv, name, value))
-		return (1);
-	return (append_env(penv, name, value));
 }

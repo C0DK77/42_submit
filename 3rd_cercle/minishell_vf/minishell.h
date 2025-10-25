@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:44:32 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 10:57:59 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/25 07:55:28 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,48 +249,40 @@ int						ft_token_special_var(t_character *word_start);
 t_token					*ft_token_add(t_type t, size_t i);
 void					ft_token_append(t_token **hd, t_token **tl,
 							t_token *tk);
-int						ft_token_isoperator_type(t_type type);
 size_t					ft_token_wordlen(t_character *ch);
+
+//	PARSER / PARSER
+
+t_command				*ft_parser_init(t_token *t);
+int						ft_parser_redir(t_token *tk);
+int						ft_parser_pipe(t_token *tk);
+int						ft_parser_save(t_command *cmd, t_token *tk);
+int						ft_parser_valid_redir(t_token *tk, t_token **next);
+
+//	PARSER / UTILS_1
+
+int						ft_parser_special_tokens(t_token **tk, t_command **cmd);
+int						ft_parser_add_redir(t_token **tk, t_command **cmd);
+int						ft_parser_handle_pipe(t_token **tk, t_command **cmd);
+int						ft_parser_handle_cmd_or_arg(t_token **tk,
+							t_command **cmd);
+t_element				*ft_parser_create_element_redir(t_type type, char *s,
+							t_type target);
+
+//	PARSER / UTILS_2
+
+t_redir					*ft_parser_create_redir(t_type type, char *s,
+							t_type target_type);
+t_element				*ft_parser_create_element_arg(t_type t, char *s);
+int						ft_parser_add_cmd(t_command *cmd, char *s);
+int						ft_parser_add_arg(t_command *cmd, t_type type, char *s);
+t_type_cmd				ft_parser_cmd(char *s);
 
 // UTILS / UTILS LIST
 
 t_all					*ft_init_all(int i);
 t_command				*ft_init_struct(t_token *t);
 void					ft_free_token(t_token *hd);
-
-// 3.Parser / add.c
-int						add_cmd(t_command *cmd, char *str);
-int						add_argument(t_command *cmd, t_type type,
-							const char *str);
-int						add_redir(t_token **token_list, t_command **current);
-int						handle_pipe(t_token **token_list, t_command **current);
-int						handle_cmd_or_arg(t_token **token_list,
-							t_command **current);
-
-// 3.Parser / cmd.c
-int						save_all(t_command *cmd, t_token *token_list);
-t_command				*create_new_command(void);
-t_command				*init_struct_globale(t_token *token_list);
-
-// 3.Parser / init.c
-t_arg					*create_arg(t_type type, const char *str);
-t_redir					*create_redir(t_type type, const char *target,
-							t_type target_type);
-t_element				*create_element_arg(t_type type, const char *str);
-t_element				*create_element_redir(t_type type, const char *target,
-							t_type target_type);
-void					add_element_to_command(t_command *cmd,
-							t_element *element);
-
-// 3.Parser / parse_token.c
-int						parse_token(t_token *token_list);
-
-// 3.Parser / utils.c
-t_element				*lst_last_node(t_element *head);
-int						is_redir(t_type type);
-int						is_operator(t_type type);
-int						is_command(t_type_cmd type);
-t_type_cmd				identify_builtin(const char *str);
 
 // UTILS / FREE
 
@@ -299,74 +291,8 @@ int						ft_free_program(t_character *c, t_token *t,
 void					ft_free_env(t_shell *s);
 void					ft_free_char(t_character *c);
 
-// expander.c
-void					expander(t_command **cmd_list, t_shell *shell);
-
-// norme
-int						apply_redir(t_ios *ios, t_redir *r, t_shell *sh);
-int						is_var_start(int c);
-int						is_var_continue(int c);
-int						is_valid_ident(const char *s);
-void					remove_env_var(char ***penv, const char *name);
-size_t					count_args(t_element *e);
-int						is_numeric_word(const char *s);
-char					to_exit_u8(const char *s);
-int						is_valid_ident_export(const char *s);
-char					*dup_n(const char *s, size_t n);
-char					*make_env_kv(const char *name, const char *value);
-int						setenv_in_vec(char ***penv, const char *name,
-							const char *value);
-void					fill_argv(t_element *e, char **argv);
-char					**build_export_argv(t_element *e);
-int						print_all_exports(t_shell *sh);
-int						process_export_args(char **argv, int idx, t_shell *sh);
-int						setenv_in_vec_cd(char ***penv, const char *name,
-							const char *value);
-int						exit_status_from_errno(int e);
-int						is_directory(const char *p);
-void					print_exec_error(const char *path, const char *argv0,
-							int e);
-char					*join_path(const char *dir, const char *cmd);
-char					*resolve_in_path(const char *cmd, char **env);
-int						is_last_cmd(t_command *cmd);
-int						is_simple_builtin_type(t_type_cmd c);
-int						exec_with_path(char **argv, t_shell *sh);
-void					print2_err(const char *a, const char *b);
-void					putstr_err(const char *s);
-size_t					count_args_nonempty(const t_command *cmd);
-void					free_argv_dup(char **argv);
-int						child_prepare_fds(t_command *cmd, int prev_rd,
-							int out_wr, t_shell *sh);
-pid_t					spawn_one(t_command *cmd, int prev_rd, int out_wr,
-							t_shell *sh);
-int						wait_all(pid_t *pids, int n);
-int						run_single_builtin(t_command *cmd, t_shell *sh,
-							t_all *all);
-void					restore_stdio_and_close(int saved_in, int saved_out);
-int						apply_redirs_for_single(t_command *cmd, int saved_in,
-							int saved_out, t_shell *sh);
-int						save_stdio(int *saved_in, int *saved_out);
-void					advance_pipe_state(int *prev_rd, t_pipeinfo *pi);
-void					cleanup_on_fail(int *prev_rd, t_pipeinfo *pi);
-
-// exec
-int						run_pipeline(t_all *all, t_command *cmd_list,
-							t_shell *sh);
-int						exec_builtin(t_command *cmd, t_shell *sh, t_all *all);
-
-// redic
-void					close_redirs(t_ios *ios);
-int						apply_redirs(const t_ios *ios);
-int						collect_redirs_fds(t_element *elem, t_ios *ios,
-							t_shell *sh);
-int						open_in(const char *path);
-int						open_out_trunc(const char *path);
-int						open_out_append(const char *path);
-
-// heredoc
-int						create_heredoc_fd(char *delim, t_shell *sh);
-
 //	COMMANDES CD
+
 int						ft_cmd_cd(t_command *cmd, t_shell *sh);
 int						ft_cmd_cd_check_arg(t_element *t);
 char					*ft_cmd_cd_arg(t_element *lmt, t_shell *sh);
@@ -379,41 +305,41 @@ int						ft_cmd_cd_append(char ***penv, char *var, char *a);
 int						ft_cmd_cd_check_arg(t_element *t);
 
 //	COMMANDES ECHO
+
+int						ft_cmd_echo(t_command *cmd, t_shell *s);
+int						ft_cmd_echo_arg(char *s);
+void					ft_cmd_echo_print_arg(t_element *e);
+
 //	COMMANDES ENV
+
+int						ft_cmd_env(t_command *cmd, t_shell *s);
+void					ft_cmd_env_print(char **e);
+
 //	COMMANDES EXIT
+int						ft_cmd_exit(t_command *cmd, t_shell *sh, t_all *a);
+char					**ft_cmd_exit_arg(t_command *cmd, size_t *argc);
+void					ft_cmd_exit_no_arg(char **s, t_shell *sh, t_all *a);
+int						ft_cmd_exit_isnum(char *s);
+void					ft_cmd_exit_error(char **argv, int i, t_shell *sh,
+							t_all *a);
+
 //	COMMANDES EXPORT
+
+int						ft_cmd_export(t_command *cmd, t_shell *sh);
+int						ft_cmd_export_print(t_shell *sh);
+int						ft_cmd_export_arg_create(char *a, t_shell *s);
+int						ft_cmd_export_arg(char *a, t_shell *s);
+int						ft_cmd_export_isval(char *s);
+
 //	COMMANDES EXPORT UTILS
 //	COMMANDES PWD
+int						ft_cmd_pwd(t_command *cmd, t_shell *s);
+
 //	COMMANDES UNSET
-int						builtin_echo(t_command *cmd, t_shell *sh);
-int						builtin_pwd(t_command *cmd, t_shell *sh);
-int						builtin_cd(t_command *cmd, t_shell *sh);
-int						builtin_export(t_command *cmd, t_shell *sh);
-int						builtin_unset(t_command *cmd, t_shell *sh);
-int						builtin_env(t_command *cmd, t_shell *sh);
-int						builtin_exit(t_command *cmd, t_shell *sh, t_all *all);
 
-// Helper de détection
-void					print_export_line(const char *entry);
-void					print_export_error(const char *s);
-int						handle_export_arg(const char *arg, t_shell *sh);
-int						is_builtin_cmd(t_type_cmd cmd);
-
-// 6.free/ free.c
-t_all					*get_all(int reset);
-void					free_env(t_shell *shell);
-void					free_character_list(t_character *head);
-void					free_token_list(t_token *head);
-
-// 6.free/ free2.c
-void					cleanup(t_command *cmd);
-void					cleanall(t_character *char_list, t_token *token_list,
-							t_command *cmd);
-
-// free/ 6.error
-void					ft_putstr_fd(char *s, int fd);
-void					print_error(char *msg);
-void					print_syntax_error(char *token);
-int						exit_too_many_args(void);
+int						ft_cmd_unset(t_command *cmd, t_shell *s);
+int						ft_cmd_unset_arg(char **args, t_shell *s);
+int						ft_cmd_unset_isid(char *s);
+void					ft_cmd_unset_remove_env(char ***a, char *name);
 
 #endif

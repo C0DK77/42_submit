@@ -6,101 +6,100 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:55 by codk              #+#    #+#             */
-/*   Updated: 2025/10/21 13:41:17 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/25 07:19:25 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char	*expand_string(t_shell *shell, char *str)
+void	ft_expander_init(t_command **cmd, t_shell *sh)
 {
-	t_var_pos	*vars;
-	char		**values;
-	char		*expanded;
-	int			var_count;
+	t_command	*t;
 
-	vars = find_variables_with_positions(str, &var_count);
-	if (!vars || var_count == 0)
-		return (ft_strdup(str));
-	values = get_all_values(shell, vars, var_count);
-	if (!values)
-		return (free_var_data(vars, NULL, var_count), NULL);
-	expanded = build_expanded_string(str, vars, values, var_count);
-	return (free_var_data(vars, values, var_count), expanded);
-}
-
-static void	expand_arg(t_element *element, t_shell *shell)
-{
-	char	*old_str;
-	char	*new_str;
-
-	if (ft_strchr(element->u_.arg->str, '$') && (element->u_.arg->type == DOLLAR
-			|| element->u_.arg->type == SPECIAL_VARIABLE))
+	t = *cmd;
+	while (t)
 	{
-		old_str = element->u_.arg->str;
-		new_str = expand_string(shell, old_str);
-		if (new_str)
-		{
-			element->u_.arg->str = new_str;
-			free(old_str);
-		}
+		ft_expander_cmd(t, sh);
+		t = t->next;
 	}
 }
 
-static void	expand_redir(t_element *element, t_shell *shell)
-{
-	char	*old_str;
-	char	*new_str;
-
-	if (ft_strchr(element->u_.redirs->target, '$')
-		&& (element->u_.redirs->target_type == DOLLAR
-			|| element->u_.redirs->target_type == SPECIAL_VARIABLE))
-	{
-		old_str = element->u_.redirs->target;
-		new_str = expand_string(shell, old_str);
-		if (new_str)
-		{
-			element->u_.redirs->target = new_str;
-			free(old_str);
-		}
-	}
-}
-
-void	process_command_elements(t_command *cmd, t_shell *shell)
+void	ft_expander_cmd(t_command *cmd, t_shell *sh)
 {
 	t_element	*e;
-	int			first_arg;
+	int			i;
 
-	first_arg = 1;
+	i = 1;
 	e = cmd->element;
 	while (e)
 	{
 		if (e->kind == ARG)
 		{
-			expand_arg(e, shell);
-			if (first_arg && e->u_.arg->str[0] == '\0'
-				&& (e->u_.arg->type == DOLLAR
+			ft_expander_arg(e, sh);
+			if (i && e->u_.arg->str[0] == '\0' && (e->u_.arg->type == DOLLAR
 					|| e->u_.arg->type == SPECIAL_VARIABLE))
 			{
-				e = remove_empty_var_arg(cmd, e);
+				e = ft_expander_empty_var(cmd, e);
 				continue ;
 			}
-			first_arg = 0;
+			i = 0;
 		}
 		else if (e->kind == REDIR)
-			expand_redir(e, shell);
+			ft_expander_redir(e, sh);
 		e = e->next;
 	}
 }
 
-void	expander(t_command **cmd_list, t_shell *shell)
+void	ft_expander_arg(t_element *lmt, t_shell *sh)
 {
-	t_command	*cmd;
+	char	*a;
+	char	*b;
 
-	cmd = *cmd_list;
-	while (cmd)
+	if (ft_strchr(lmt->u_.arg->str, '$') && (lmt->u_.arg->type == DOLLAR
+			|| lmt->u_.arg->type == SPECIAL_VARIABLE))
 	{
-		process_command_elements(cmd, shell);
-		cmd = cmd->next;
+		a = lmt->u_.arg->str;
+		b = ft_expander_string(sh, a);
+		if (b)
+		{
+			lmt->u_.arg->str = b;
+			free(a);
+		}
 	}
+}
+
+void	ft_expander_redir(t_element *lmt, t_shell *sh)
+{
+	char	*a;
+	char	*b;
+
+	if (ft_strchr(lmt->u_.redirs->target, '$')
+		&& (lmt->u_.redirs->target_type == DOLLAR
+			|| lmt->u_.redirs->target_type == SPECIAL_VARIABLE))
+	{
+		a = lmt->u_.redirs->target;
+		b = ft_expander_string(sh, a);
+		if (b)
+		{
+			lmt->u_.redirs->target = b;
+			free(a);
+		}
+	}
+}
+
+char	*ft_expander_string(t_shell *sh, char *s)
+{
+	t_var_pos	*var;
+	char		**val;
+	char		*a;
+	int			i;
+
+	var = ft_expander_var_pos(s, &i);
+	if (!var || i == 0)
+		return (ft_strdup(s));
+	val = ft_expander_value(sh, var, i);
+	if (!val)
+		return (ft_free_var(var, NULL, i), NULL);
+	a = ft_expander_string_create(s, var, val, i);
+	return (ft_free_var(var, val, i), a);
 }

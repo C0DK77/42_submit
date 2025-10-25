@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:43:58 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 11:02:10 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/25 07:01:58 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,7 @@ int	ft_program_bis(char *l, t_shell *s)
 	t_command	*cmd;
 	int			i;
 	t_all		*a;
-	//xxx
-	i = 0;
-	(void)s;
-	cmd = NULL;
+
 	a = ft_init_all(1);
 	c = ft_lexer_init(l);
 	if (!c)
@@ -71,12 +68,12 @@ int	ft_program_bis(char *l, t_shell *s)
 	t = ft_token_init(a->ch);
 	if (!t)
 		return (ft_free_program(c, NULL, NULL, 1));
-	// a->tk = t;
-	// cmd = ft_parser_init(a->tk);
-	// if (!cmd)
-	// 	return (ft_free_program(c, t, NULL, 1));
-	// a->cmd = cmd;
-	// expander(&cmd, s);
-	// i = run_pipeline(a, cmd, s);
+	a->tk = t;
+	cmd = ft_parser_init(a->tk);
+	if (!cmd)
+		return (ft_free_program(c, t, NULL, 1));
+	a->cmd = cmd;
+	ft_expander_init(&cmd, s);
+	i = run_pipeline(a, cmd, s);
 	return (ft_free_program(c, t, cmd, i));
 }

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:02 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 10:27:46 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/25 07:53:15 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,19 +65,19 @@ int	ft_cmd_export_arg(char **argv, int i, t_shell *sh)
 	status = 0;
 	while (argv[i])
 	{
-		if (!ft_cmd_export_handle_arg(argv[i], sh))
+		if (!ft_cmd_export_arg_create(argv[i], sh))
 			status = 1;
 		i++;
 	}
 	return (status);
 }
 
-int	ft_cmd_export_handle_arg(char *a, t_shell *s)
+int	ft_cmd_export_arg_create(char *a, t_shell *s)
 {
 	char	*eq;
 	char	*name;
 
-	if (!is_valid_ident_export(a))
+	if (!ft_cmd_export_isval(a))
 	{
 		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 		if (a)
@@ -90,16 +90,16 @@ int	ft_cmd_export_handle_arg(char *a, t_shell *s)
 		name = ft_strndup(a, (size_t)(eq - a));
 		if (!name)
 			return (0);
-		if (!setenv_in_vec(&s->env, name, eq + 1))
+		if (!ft_cmd_export_set_env(&s->env, name, eq + 1))
 			return (free(name), 0);
 		return (free(name), 1);
 	}
-	if (!setenv_in_vec(&s->env, a, ""))
+	if (!ft_cmd_export_set_env(&s->env, a, ""))
 		return (0);
 	return (1);
 }
 
-int	is_valid_ident_export(const char *s)
+int	ft_cmd_export_isval(char *s)
 {
 	size_t	i;
 
