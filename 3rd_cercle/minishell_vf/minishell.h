@@ -6,14 +6,14 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:44:32 by codk              #+#    #+#             */
-/*   Updated: 2025/10/25 07:55:28 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/30 02:00:40 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft.h"
+# include "libft/libft.h"
 # include <dirent.h>
 # include <errno.h>
 # include <fcntl.h>
@@ -33,6 +33,8 @@
 # include <unistd.h>
 
 # define SYNTAX "minishell: syntax error near unexpected token"
+# define EXIT "minishell: exit: "
+# define WARNING "warning: here-document delimited by end-of-file (wanted `"
 
 extern int				g_signal_received;
 
@@ -195,6 +197,7 @@ void					ft_env_init_shlvl(t_shell *s, char **env);
 void					ft_signal_init(void);
 void					ft_signal_handler(int i);
 int						ft_signal_check(void);
+int						ft_signal_wait(pid_t *p, int n);
 void					ft_signal_reset(void);
 
 // ENV / UTILS
@@ -278,18 +281,38 @@ int						ft_parser_add_cmd(t_command *cmd, char *s);
 int						ft_parser_add_arg(t_command *cmd, t_type type, char *s);
 t_type_cmd				ft_parser_cmd(char *s);
 
-// UTILS / UTILS LIST
+//	EXPANDER / EXPANDER
 
-t_all					*ft_init_all(int i);
-t_command				*ft_init_struct(t_token *t);
-void					ft_free_token(t_token *hd);
+void					ft_expander_init(t_command **cmd, t_shell *sh);
+void					ft_expander_cmd(t_command *cmd, t_shell *sh);
+void					ft_expander_arg(t_element *lmt, t_shell *sh);
+void					ft_expander_redir(t_element *lmt, t_shell *sh);
+t_element				*ft_expander_empty_var(t_command *cmd, t_element *e);
 
-// UTILS / FREE
+//	EXPANDER / UTILS_1
 
-int						ft_free_program(t_character *c, t_token *t,
-							t_command *cmd, int i);
-void					ft_free_env(t_shell *s);
-void					ft_free_char(t_character *c);
+char					*ft_expander_string(t_shell *sh, char *s);
+t_var_pos				*ft_expander_var_pos(char *s, int *count);
+char					**ft_expander_value(t_shell *sh, t_var_pos *var,
+							int count);
+char					*ft_expander_string_create(char *a, t_var_pos *var,
+							char **val, int i);
+int						ft_expander_var_count(char *s);
+
+//	EXPANDER / UTILS_2
+
+int						ft_expander_dollar_pos(char *s, int i, t_var_pos *var);
+void					*ft_expander_cleanup_var(t_var_pos *var, int i);
+char					*ft_expander_get_var_value(t_shell *sh, char *var);
+int						ft_expander_len(char *a, t_var_pos *var, char **s,
+							int count);
+void					ft_expander_copy_value(char *s, int *i, char *val);
+
+//	EXPANDER / UTILS_3
+
+int						ft_expander_extract_var(char *s, t_var_pos *var, int i,
+							int j);
+int						ft_expander_len_var(char *s, int j);
 
 //	COMMANDES CD
 
@@ -302,7 +325,7 @@ int						ft_cmd_cd_replace(char **env, char *var, char *value);
 //	COMMANDES CD UTILS
 
 int						ft_cmd_cd_append(char ***penv, char *var, char *a);
-int						ft_cmd_cd_check_arg(t_element *t);
+char					*ft_cmd_cd_create(char *var, char *a);
 
 //	COMMANDES ECHO
 
@@ -328,11 +351,16 @@ void					ft_cmd_exit_error(char **argv, int i, t_shell *sh,
 int						ft_cmd_export(t_command *cmd, t_shell *sh);
 int						ft_cmd_export_print(t_shell *sh);
 int						ft_cmd_export_arg_create(char *a, t_shell *s);
-int						ft_cmd_export_arg(char *a, t_shell *s);
+int						ft_cmd_export_arg(char **argv, int i, t_shell *sh);
 int						ft_cmd_export_isval(char *s);
 
 //	COMMANDES EXPORT UTILS
+
+int						ft_cmd_export_env(char ***env, char *a, char *s);
+char					*ft_cmd_export_make_kv(char *a, char *s);
+
 //	COMMANDES PWD
+
 int						ft_cmd_pwd(t_command *cmd, t_shell *s);
 
 //	COMMANDES UNSET
@@ -341,5 +369,93 @@ int						ft_cmd_unset(t_command *cmd, t_shell *s);
 int						ft_cmd_unset_arg(char **args, t_shell *s);
 int						ft_cmd_unset_isid(char *s);
 void					ft_cmd_unset_remove_env(char ***a, char *name);
+
+// EXEC / EXEC
+
+int						ft_exec_init(t_all *all, t_command *cmd, t_shell *sh);
+int						ft_exec_cmd_single(t_command *cmd, t_shell *sh,
+							t_all *all);
+int						ft_exec_cmd_all(t_command *cmd, t_shell *sh, pid_t *p,
+							int *out_n);
+int						ft_exec_save_stdio(int *saved_in, int *saved_out);
+void					ft_exec_restore_stdio_and_close(int saved_in,
+							int saved_out);
+
+// EXEC / UTILS_1
+
+int						ft_exec_cmd(t_command *cmd, t_shell *sh, t_all *all);
+int						ft_exec_cmd_one(t_command *cmd, int *i,
+							t_launch_ctx *ctx);
+pid_t					ft_exec_cmd_one_spawn(t_command *cmd, int i, int j,
+							t_shell *sh);
+void					ft_exec_clean(int *i, t_pipeinfo *pi);
+void					ft_exec_pipe_state(int *i, t_pipeinfo *pi);
+
+// EXEC / UTILS_2
+
+int						ft_exec_child_fds(t_command *cmd, int i, int j,
+							t_shell *sh);
+void					ft_exec_child(t_command *cmd, t_shell *sh, t_all *all);
+int						ft_exec_path(char **argv, t_shell *sh);
+void					ft_exec_handle_error(char **argv);
+int						ft_exec_path_check(char *path, char **argv, t_shell *sh,
+							int i);
+
+// EXEC / UTILS_3
+
+char					*ft_exec_path_res(char *cmd, char **env);
+int						ft_exec_isdirectory(char *p);
+char					*ft_exec_path_dir(char *s, char *cmd);
+void					ft_exec_print_error_1(char *path, char *s, int e);
+void					ft_exec_print_error_2(char *a, int e);
+
+// REDIR / REDIR
+
+int						ft_redir_fds(t_element *lmt, t_ios *ios, t_shell *sh);
+int						ft_redir_apply_1(t_ios *ios, t_redir *r, t_shell *sh);
+int						ft_redir_apply_2(t_ios *ios);
+int						ft_redir_apply_3(t_command *cmd, int saved_in,
+							int saved_out, t_shell *sh);
+void					ft_redir_close(t_ios *ios);
+
+// REDIR / HEREDOC
+
+int						ft_heredoc(char *s, t_shell *sh);
+void					ft_heredoc_process(int *fd, char *a);
+int						ft_heredoc_status(int status, int fd, t_shell *sh);
+
+// REDIR / UTILS
+
+int						ft_redir_set_in(t_ios *ios, t_redir *r, t_shell *sh);
+int						ft_redir_set_out(t_ios *ios, t_redir *r);
+int						ft_redir_replace_fd(int *dst, int newfd);
+char					*ft_join_path(char *dir, char *cmd);
+
+// UTILS / FREE_1
+
+int						ft_free_program(t_character *c, t_token *t,
+							t_command *cmd, int i);
+void					ft_free_cmd(t_command *cmd);
+void					ft_free_env(t_shell *s);
+void					ft_free_char(t_character *c);
+void					ft_free_token(t_token *tk);
+
+// UTILS / FREE_2
+
+void					ft_free_redir(t_redir *redir);
+void					ft_free_element(t_element *element);
+void					ft_free_var(t_var_pos *var, char **a, int count);
+void					ft_free_argv(char **argv);
+void					ft_debug_parsing(t_character *c, t_token *t,
+							t_command *cmd);
+void					ft_debug_expander(t_command *cmd);
+
+// UTILS / UTILS LIST
+
+t_all					*ft_init_all(int i);
+size_t					ft_count_arg(t_element *e);
+void					ft_fill_element(t_element *e, char **argv);
+t_element				*ft_element_last_node(t_element *lmt);
+int						ft_fill_argv(t_command *cmd, char **argv);
 
 #endif

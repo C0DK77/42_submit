@@ -6,149 +6,114 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:24 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 10:30:19 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/31 13:22:00 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-int	ft_exec(t_command *cmd, t_shell *sh, t_all *all)
+int	ft_exec_init(t_all *all, t_command *cmd, t_shell *sh)
 {
-	if (cmd->cmd == T_ECHO)
-		return (ft_cmd_echo(cmd, sh));
-	if (cmd->cmd == T_PWD)
-		return (ft_cmd_pwd(cmd, sh));
-	if (cmd->cmd == T_CD)
-		return (ft_cmd_cd(cmd, sh));
-	if (cmd->cmd == T_EXPORT)
-		return (ft_cmd_export(cmd, sh));
-	if (cmd->cmd == T_UNSET)
-		return (ft_cmd_unset(cmd, sh));
-	if (cmd->cmd == T_ENV)
-		return (ft_cmd_env(cmd, sh));
-	if (cmd->cmd == T_EXIT)
-		return (ft_cmd_exit(cmd, sh, all));
-	return (127);
+	pid_t		p[256];
+	int			i;
+	int			j;
+	t_command	*t;
+
+	t = cmd;
+	if (t && !t->next && (t->cmd == T_ECHO || t->cmd == T_PWD || t->cmd == T_CD
+			|| t->cmd == T_EXPORT || t->cmd == T_UNSET || t->cmd == T_ENV
+			|| t->cmd == T_EXIT))
+	{
+		if (t->cmd == T_EXIT && t->nb_args > 2)
+			return (ft_putall_fd(2, 2, EXIT, "too many arguments\n"), 1);
+		return (ft_exec_cmd_single(t, sh, all));
+	}
+	if (ft_exec_cmd_all(cmd, sh, p, &i) != 0)
+		return (1);
+	j = ft_signal_wait(p, i);
+	if (WIFSIGNALED(j))
+		sh->last_exit = 128 + WTERMSIG(j);
+	else if (WIFEXITED(j))
+		sh->last_exit = WEXITSTATUS(j);
+	else
+		sh->last_exit = 1;
+	if (ft_signal_check())
+		sh->last_exit = 130;
+	return (ft_signal_init(), sh->last_exit);
 }
 
-int	run_single_builtin(t_command *cmd, t_shell *sh, t_all *all)
+int	ft_exec_cmd_single(t_command *cmd, t_shell *sh, t_all *all)
 {
 	int	saved_in;
 	int	saved_out;
 	int	code;
 
-	if (!save_stdio(&saved_in, &saved_out))
+	if (!ft_exec_save_stdio(&saved_in, &saved_out))
 		return (1);
-	if (!apply_redirs_for_single(cmd, saved_in, saved_out, sh))
+	if (!ft_redir_apply_3(cmd, saved_in, saved_out, sh))
 		return (1);
 	if (cmd->cmd == T_EXIT)
 	{
-		restore_stdio_and_close(saved_in, saved_out);
-		exec_builtin(cmd, sh, all);
+		ft_exec_restore_stdio_and_close(saved_in, saved_out);
+		ft_exec_cmd(cmd, sh, all);
 	}
-	code = exec_builtin(cmd, sh, all);
-	restore_stdio_and_close(saved_in, saved_out);
+	code = ft_exec_cmd(cmd, sh, all);
+	ft_exec_restore_stdio_and_close(saved_in, saved_out);
 	sh->last_exit = code;
 	return (code);
 }
 
-static int	setup_pipeinfo(t_command *cmd, int prev_rd, t_pipeinfo *pi)
+int	ft_exec_cmd_all(t_command *cmd, t_shell *sh, pid_t *p, int *out_n)
 {
-	pi->need_pipe = !is_last_cmd(cmd);
-	pi->out_wr = -1;
-	if (!pi->need_pipe)
-		return (1);
-	if (pipe(pi->pfd) < 0)
-	{
-		perror("pipe");
-		if (prev_rd >= 0)
-			close(prev_rd);
-		return (0);
-	}
-	pi->out_wr = pi->pfd[1];
-	return (1);
-}
-
-static int	spawn_and_record(t_command *cmd, int *prev_rd, t_pipeinfo *pi,
-		t_launch_ctx *ctx)
-{
-	pid_t	pid;
-
-	pid = spawn_one(cmd, *prev_rd, pi->out_wr, ctx->sh);
-	if (pid < 0)
-	{
-		cleanup_on_fail(prev_rd, pi);
-		return (0);
-	}
-	ctx->pids[*ctx->out_n] = pid;
-	*ctx->out_n = *ctx->out_n + 1;
-	advance_pipe_state(prev_rd, pi);
-	return (1);
-}
-
-static int	launch_one_cmd(t_command *cmd, int *prev_rd, t_launch_ctx *ctx)
-{
-	t_pipeinfo	pi;
-
-	if (!setup_pipeinfo(cmd, *prev_rd, &pi))
-		return (1);
-	if (!spawn_and_record(cmd, prev_rd, &pi, ctx))
-		return (1);
-	return (0);
-}
-
-static int	launch_all(t_command *cmds, t_shell *sh, pid_t *pids, int *out_n)
-{
-	int				prev_rd;
-	t_command		*cmd;
+	int				i;
+	t_command		*t;
 	t_launch_ctx	ctx;
 
-	prev_rd = -1;
+	i = -1;
 	*out_n = 0;
-	ctx.pids = pids;
+	ctx.pids = p;
 	ctx.out_n = out_n;
 	ctx.sh = sh;
-	cmd = cmds;
-	while (cmd)
+	t = cmd;
+	while (t)
 	{
-		if (launch_one_cmd(cmd, &prev_rd, &ctx))
+		if (ft_exec_cmd_one(t, &i, &ctx))
 		{
-			if (prev_rd >= 0)
-				close(prev_rd);
+			if (i >= 0)
+				close(i);
 			return (1);
 		}
-		cmd = cmd->next;
+		t = t->next;
 	}
-	if (prev_rd >= 0)
-		close(prev_rd);
+	if (i >= 0)
+		close(i);
 	return (0);
 }
 
-int	run_pipeline(t_all *all, t_command *cmds, t_shell *sh)
+int	ft_exec_save_stdio(int *saved_in, int *saved_out)
 {
-	pid_t		pids[256];
-	int			n;
-	int			last;
-	t_command	*cmd_list;
-
-	cmd_list = cmds;
-	if (cmd_list && !cmd_list->next && is_builtin_cmd(cmd_list->cmd))
+	*saved_in = dup(STDIN_FILENO);
+	*saved_out = dup(STDOUT_FILENO);
+	if (*saved_in < 0 || *saved_out < 0)
 	{
-		if (cmd_list->cmd == T_EXIT && cmd_list->nb_args > 2)
-			return (exit_too_many_args());
-		return (run_single_builtin(cmd_list, sh, all));
+		perror("dup");
+		if (*saved_in >= 0)
+			close(*saved_in);
+		if (*saved_out >= 0)
+			close(*saved_out);
+		return (0);
 	}
-	if (launch_all(cmds, sh, pids, &n) != 0)
-		return (1);
-	last = wait_all(pids, n);
-	if (WIFSIGNALED(last))
-		sh->last_exit = 128 + WTERMSIG(last);
-	else if (WIFEXITED(last))
-		sh->last_exit = WEXITSTATUS(last);
-	else
-		sh->last_exit = 1;
-	if (check_signals())
-		sh->last_exit = 130;
-	setup_signals();
-	return (sh->last_exit);
+	return (1);
+}
+
+void	ft_exec_restore_stdio_and_close(int saved_in, int saved_out)
+{
+	if (dup2(saved_in, STDIN_FILENO) < 0)
+		perror("dup2");
+	if (dup2(saved_out, STDOUT_FILENO) < 0)
+		perror("dup2");
+	if (saved_in >= 0)
+		close(saved_in);
+	if (saved_out >= 0)
+		close(saved_out);
 }

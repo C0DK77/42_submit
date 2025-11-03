@@ -1,23 +1,37 @@
 
-NAME_EXEC 		:= 	minishell
+# ==== PROGRAM NAME ==== #
 
-CC 				:= 	cc
+NAME 				= 	minishell
 
-CFLAGS 			:= 	-Wall -Wextra -Werror -MMD -MP -I. -ILibft
-LDFLAGS 		:= 	-lreadline
+# ==== FLAGS AND COMPILER ==== #
+
+CC 					= 	cc
+CFLAGS 				= 	-Wall -Wextra -Werror							\
+						-MMD -MP -I.						 			\
+						-I$(LIBFT_DIR)
+
+
+# LINUX
+#CFLAGS 			:= 	-Wall -Wextra -Werror -MMD -MP -I. -ILibft
+#LDFLAGS 			:= 	-lreadline
+
+# MAC 
+BREW_PREFIX 	:= 	$(shell brew --prefix 2>/dev/null || echo /usr/local)
+CPPFLAGS 		:= 	-I$(BREW_PREFIX)/opt/readline/include
+LDFLAGS 		:= 	-L$(BREW_PREFIX)/opt/readline/lib -lreadline
 
 LIBFT_DIR 		:= 	Libft
 LIBFT 			:= 	$(LIBFT_DIR)/libft.a
 
-SRC_TEST_EXEC 	:= 	main.c 							\
+SRC 			:= 	main.c 							\
 					0_env/env.c 					\
 					0_env/signals.c 				\
 					0_env/utils.c 					\
 					1_lexer/lexer.c 				\
 					1_lexer/utils.c 				\
-					2_tokenizer/token.c   			\
-					2_tokenizer/utils_1.c 			\
-					2_tokenizer/utils_2.c 			\
+					2_token/token.c   				\
+					2_token/utils_1.c 				\
+					2_token/utils_2.c 				\
 					3_parser/parser.c 				\
 					3_parser/utils_1.c 				\
 					3_parser/utils_2.c 				\
@@ -25,7 +39,6 @@ SRC_TEST_EXEC 	:= 	main.c 							\
 					4_expander/utils_1.c 			\
 					4_expander/utils_2.c 			\
 					4_expander/utils_3.c 			\
-					4_expander/utils_4.c 			\
 					5_commandes/cd_utils.c 			\
 					5_commandes/cd.c 				\
 					5_commandes/echo.c 				\
@@ -35,65 +48,54 @@ SRC_TEST_EXEC 	:= 	main.c 							\
 					5_commandes/export.c 			\
 					5_commandes/unset.c 			\
 					5_commandes/pwd.c 				\
-					5_exec/exec.c 					\
-					5_exec/heredoc.c 				\
-					5_exec/redir.c 					\
-					5_exec/builtins/echo.c 			\
-					5_exec/builtins/cd.c 			\
-					5_exec/builtins/pwd.c 			\
-					5_exec/builtins/export.c 		\
-					5_exec/builtins/unset.c 		\
-					5_exec/builtins/env.c 			\
-					5_exec/builtins/exit.c 			\
-					5_exec/norme/redir_norme.c 		\
-					5_exec/norme/redir_norme2.c 	\
-					5_exec/norme/unset_norme.c 		\
-					5_exec/norme/exit_norme.c 		\
-					5_exec/norme/export_norme.c 	\
-					5_exec/norme/export_norme2.c	\
-					5_exec/norme/cd_norme.c 		\
-					5_exec/norme/exec_norme.c 		\
-					5_exec/norme/exec_norme2.c 		\
-					5_exec/norme/exec_norme3.c 		\
-					5_exec/norme/exec_norme4.c 		\
-					5_exec/norme/exec_norme5.c		\
-					5_exec/norme/exec_norme6.c 		\
-					5_exec/norme/exec_norme7.c		\
-					6_free/free.c 					\
-					6_free/free2.c 					\
-					6_free/error.c 					
+					6_exec/exec.c 					\
+					6_exec/utils_1.c 				\
+					6_exec/utils_2.c 				\
+					6_exec/utils_3.c 				\
+					7_redir/heredoc.c 				\
+					7_redir/redir.c 				\
+					7_redir/utils.c 				\
+					8_utils/free_1.c 				\
+					8_utils/free_2.c 				\
+					8_utils/utils_list.c 					
 
 
-OBJDIR 			:= 	obj
-OBJDIR_TEXEC 	:= 	$(OBJDIR)/test_exec
-OBJS_TEXEC 		:= 	$(SRC_TEST_EXEC:%.c=$(OBJDIR_TEXEC)/%.o)
+OBJ_DIR 			= 	obj
 
-DEPS 			:= 	$(OBJS_TEXEC:.o=.d)
+OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
 
-.PHONY			: 
-					all clean fclean re test-lexer test-tokenizer test-parser test-expander test-exec
+# ==== LIBFT ==== #
 
-all				: 	$(NAME_EXEC)
+LIBFT_DIR			= 	./libft
+LIBFT_A 			= 	$(LIBFT_DIR)/libft.a
 
-$(LIBFT)		:
-					$(MAKE) -C $(LIBFT_DIR)
+# ==== RULES ==== #
 
-test-exec		: 	$(NAME_EXEC)
-$(NAME_EXEC)	: 	$(LIBFT) $(OBJS_TEXEC)
-					$(CC) $(CFLAGS) $(OBJS_TEXEC) $(LIBFT) -o $@ $(LDFLAGS)
+all 				: 	$(LIBFT_A) $(NAME)
 
-$(OBJDIR_TEXEC)/%.o: %.c
-					@mkdir -p $(dir $@)
-					$(CC) $(CFLAGS) -c $< -o $@
+$(NAME) 			: 	$(OBJ)
+						@$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ $(LIBFT_A) $(LDFLAGS)
 
-clean			:
-					rm -rf $(OBJDIR)
-					$(MAKE) -C $(LIBFT_DIR) clean
+$(OBJ_DIR)/%.o		: 	%.c
+					  	@mkdir -p $(dir $@)
+			  		  	@echo "Compilation de $< → $@"
+			  		  	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
-fclean			: 	clean
-					rm -f $(NAME_EXEC)
-					$(MAKE) -C $(LIBFT_DIR) fclean
+$(LIBFT_A) 			:
+					  	@make -s -C $(LIBFT_DIR)
 
-re				: 	fclean all
+test				:	all
+						@echo "🚀 Lancement du script de test..."
+						@bash test/test_minishell.sh
 
--include $(DEPS)
+clean 				:
+					  	@make -s -C $(LIBFT_DIR) clean
+					  	@rm -rf $(OBJ_DIR)
+	
+fclean 				: 	clean 
+					  	@make -s -C $(LIBFT_DIR) fclean
+					  	@rm -f $(NAME)
+	
+re 					: 	fclean all
+	
+.PHONY 				: 	all clean fclean re test

@@ -6,28 +6,28 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:41 by codk              #+#    #+#             */
-/*   Updated: 2025/10/25 06:34:09 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 12:57:57 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_token_add_word_token(t_token *tk, t_character *ch, size_t i)
+void	ft_token_add_word_token(t_token *tk, t_character *ch, size_t len)
 {
 	t_character	*t;
 	size_t		i;
 
 	t = ch;
 	i = 0;
-	while (t && ch->word_id == t->word_id && (t->type != PIPE
-			|| t->type != APPEND || t->type != HEREDOC || t->type != REDIR_IN
-			|| t->type != REDIR_OUT))
+	while (t && ch->word_id == t->word_id && !(t->type == PIPE
+			|| t->type == APPEND || t->type == HEREDOC || t->type == REDIR_IN
+			|| t->type == REDIR_OUT))
 	{
 		tk->str[i] = t->c;
 		i++;
 		t = t->next;
 	}
-	tk->str[i] = '\0';
+	tk->str[len] = '\0';
 }
 
 int	ft_token_dollar(t_character *ch)

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:02 by codk              #+#    #+#             */
-/*   Updated: 2025/10/25 07:53:15 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/27 16:11:52 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	ft_cmd_export(t_command *cmd, t_shell *sh)
 	argc = ft_count_arg(cmd->element);
 	argv = (char **)ft_calloc(argc + 1, sizeof(char *));
 	if (!argv)
-		return (NULL);
-	argv = ft_fill_argv(cmd->element, argv);
+		return (1);
+	ft_fill_element(cmd->element, argv);
 	if (!argv)
 		return (1);
 	i = 0;
@@ -42,7 +42,6 @@ int	ft_cmd_export_print(t_shell *sh)
 {
 	int		i;
 	char	*eq;
-	size_t	ln;
 
 	i = 0;
 	while (sh->env && sh->env[i])
@@ -50,7 +49,6 @@ int	ft_cmd_export_print(t_shell *sh)
 		eq = ft_strchr(sh->env[i], '=');
 		if (!eq)
 			ft_putall_fd(STDOUT_FILENO, 3, "declare -x ", sh->env[i], "\n");
-		ln = (size_t)(eq - sh->env[i]);
 		ft_putall_fd(STDOUT_FILENO, 5, "declare -x ", sh->env[i], "=\"", eq + 1,
 			"\"\n");
 		i++;
@@ -90,11 +88,11 @@ int	ft_cmd_export_arg_create(char *a, t_shell *s)
 		name = ft_strndup(a, (size_t)(eq - a));
 		if (!name)
 			return (0);
-		if (!ft_cmd_export_set_env(&s->env, name, eq + 1))
+		if (!ft_cmd_export_env(&s->env, name, eq + 1))
 			return (free(name), 0);
 		return (free(name), 1);
 	}
-	if (!ft_cmd_export_set_env(&s->env, a, ""))
+	if (!ft_cmd_export_env(&s->env, a, ""))
 		return (0);
 	return (1);
 }
@@ -104,12 +102,12 @@ int	ft_cmd_export_isval(char *s)
 	size_t	i;
 
 	i = 0;
-	if (!s || !is_var_start(s[i]))
+	if (!s || !(ft_isalpha(s[i]) || s[i] == '_'))
 		return (0);
 	i = 1;
 	while (s[i] && s[i] != '=')
 	{
-		if (!is_var_continue(s[i]))
+		if (!(ft_isalnum(s[i]) || s[i] == '_'))
 			return (0);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:37 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 06:40:24 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 17:53:22 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	ft_parser_redir(t_token *tk)
 	t = tk;
 	while (t)
 	{
-		if (t->type != HEREDOC || t->type != APPEND || t->type != REDIR_IN
-			|| t->type != REDIR_OUT)
+		if (!(t->type == HEREDOC || t->type == APPEND || t->type == REDIR_IN
+				|| t->type == REDIR_OUT))
 		{
 			t = t->next;
 			continue ;

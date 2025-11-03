@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 10:07:59 by corentindes       #+#    #+#             */
-/*   Updated: 2025/10/25 06:56:03 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 20:46:19 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,40 +15,40 @@
 int	ft_cmd_cd_append(char ***penv, char *var, char *a)
 {
 	char	**env;
-	char	**tmp;
-	char	*nv;
+	char	**t;
+	char	*v;
 	int		i;
 
 	env = *penv;
 	i = 0;
 	while (env && env[i])
 		i++;
-	tmp = (char **)realloc(env, (i + 2) * sizeof(*tmp));
-	if (!tmp)
+	t = (char **)realloc(env, (i + 2) * sizeof(*t));
+	if (!t)
 		return (0);
-	*penv = tmp;
-	nv = make_env_kv_cd(var, a);
-	if (!nv)
+	*penv = t;
+	v = ft_cmd_cd_create(var, a);
+	if (!v)
 		return (0);
-	tmp[i] = nv;
-	tmp[i + 1] = NULL;
+	t[i] = v;
+	t[i + 1] = NULL;
 	return (1);
 }
 
 char	*ft_cmd_cd_create(char *var, char *a)
 {
-	size_t	ln;
-	size_t	lv;
+	size_t	i;
+	size_t	j;
 	char	*kv;
 
-	ln = ft_strlen(var);
-	lv = ft_strlen(a);
-	kv = (char *)malloc(ln + 1 + lv + 1);
+	i = ft_strlen(var);
+	j = ft_strlen(a);
+	kv = (char *)malloc(i + 1 + j + 1);
 	if (!kv)
 		return (NULL);
-	ft_memcpy(kv, var, ln);
-	kv[ln] = '=';
-	ft_memcpy(kv + ln + 1, a, lv);
-	kv[ln + 1 + lv] = '\0';
+	ft_memcpy(kv, var, i);
+	kv[i] = '=';
+	ft_memcpy(kv + i + 1, a, j);
+	kv[i + 1 + j] = '\0';
 	return (kv);
 }

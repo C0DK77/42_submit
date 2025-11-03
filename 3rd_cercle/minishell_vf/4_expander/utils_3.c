@@ -1,59 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils2.c                                           :+:      :+:    :+:   */
+/*   utils_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:35:25 by codk              #+#    #+#             */
-/*   Updated: 2025/10/25 07:26:29 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 07:30:08 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*create_special_var(void)
+int	ft_expander_extract_var(char *s, t_var_pos *var, int i, int j)
 {
-	char	*var;
+	int	len;
+	int	k;
 
-	var = malloc(sizeof(char) * 2);
-	if (!var)
-		return (NULL);
-	var[0] = '?';
-	var[1] = '\0';
-	return (var);
-}
-
-char	*extract_normal_var(char *str, int j, int *new_pos)
-{
-	char	*var;
-	int		var_len;
-	int		k;
-
-	var_len = strlen_variable(str, j);
-	var = malloc(sizeof(char) * (var_len + 1));
-	if (!var)
-		return (NULL);
+	var->start = i;
+	len = ft_expander_len_var(s, j);
+	var->name = malloc(sizeof(char) * (len + 1));
+	if (!var->name)
+		return (-1);
 	k = 0;
-	while (valid_variable_char(str[j]))
-		var[k++] = str[j++];
-	var[k] = '\0';
-	*new_pos = j - 1;
-	return (var);
+	while (ft_isalpha(s[j]) || s[j] == '_' || (k > 0 && (ft_isalnum(s[j])
+				|| s[j] == '_')))
+		var->name[k++] = s[j++];
+	var->name[k] = '\0';
+	var->end = j;
+	return (j - 1);
 }
 
-void	*cleanup_variables(char **variable, int index)
+int	ft_expander_len_var(char *s, int j)
 {
-	while (--index >= 0)
-		free(variable[index]);
-	return (free(variable), NULL);
-}
+	int	i;
 
-
-
-void	*cleanup_vars_pos(t_var_pos *vars, int index)
-{
-	while (--index >= 0)
-		free(vars[index].name);
-	return (free(vars), NULL);
+	i = 0;
+	if (s[j] == '?')
+		return (1);
+	while (s[j] && (ft_isalpha(s[j]) || s[j] == '_'))
+	{
+		i++;
+		j++;
+	}
+	return (i);
 }

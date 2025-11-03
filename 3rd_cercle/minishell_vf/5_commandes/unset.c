@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:40:56 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 09:42:29 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/27 16:12:42 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_cmd_unset(t_command *cmd, t_shell *s)
 	argv = (char **)ft_calloc(argc + 1, sizeof(char *));
 	if (!argv)
 		return (1);
-	ft_fill_argv(cmd->element, argv);
+	ft_fill_element(cmd->element, argv);
 	args = argv;
 	if (args[0] && ft_strncmp(args[0], "unset", 5) == 0)
 		args++;

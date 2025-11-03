@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:47 by codk              #+#    #+#             */
-/*   Updated: 2025/10/25 06:33:55 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 12:56:03 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,9 @@ int	ft_token_add_word(t_token **hd, t_token **tl, t_character **ch)
 	ft_token_add_word_token(tk, l, i);
 	ft_token_append(hd, tl, tk);
 	t = l;
-	while (t && l->word_id == t->word_id && (t->type != PIPE
-			|| t->type != APPEND || t->type != HEREDOC || t->type != REDIR_IN
-			|| t->type != REDIR_OUT))
+	while (t && l->word_id == t->word_id && !(t->type == PIPE
+			|| t->type == APPEND || t->type == HEREDOC || t->type == REDIR_IN
+			|| t->type == REDIR_OUT))
 		t = t->next;
 	*ch = t;
 	return (1);

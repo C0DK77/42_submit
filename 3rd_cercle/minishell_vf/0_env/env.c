@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:32:24 by codk              #+#    #+#             */
-/*   Updated: 2025/10/25 07:55:15 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/28 23:26:28 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,13 @@ char	**ft_env_check(char **env, int l)
 	if (!env)
 		return (NULL);
 	a = 0;
-	i = -1;
-	while (i++ < l)
+	i = 0;
+	while (i < l)
+	{
 		if (!env[i])
 			a = 1;
+		i++;
+	}
 	if (!a)
 		return (env);
 	i = -1;

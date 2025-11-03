@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:31 by codk              #+#    #+#             */
-/*   Updated: 2025/10/25 06:46:58 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 20:31:40 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,12 @@ int	ft_parser_handle_pipe(t_token **tk, t_command **cmd)
 	t = NULL;
 	if ((*tk)->type == PIPE)
 	{
-		t = ft_parser_create_new_command();
+		t = ft_calloc(1, sizeof(t_command));
 		if (!t)
-			return (ft_putstr_fd(2, "minishell: EXIT FAILURE \n"), 0);
+			return (0);
+		t->cmd = CMD_NONE;
+		if (!t)
+			return (ft_putstr_fd("minishell: EXIT FAILURE \n", 2), 0);
 		(*cmd)->has_pipe_out = 1;
 		(*cmd)->next = t;
 		t->previous = *cmd;
@@ -78,7 +81,7 @@ int	ft_parser_handle_cmd_or_arg(t_token **tk, t_command **cmd)
 
 	if ((*cmd)->cmd == CMD_NONE)
 	{
-		b = ft_parser_add_cmd((*tk)->str);
+		b = ft_parser_cmd((*tk)->str);
 		(*cmd)->cmd = b;
 	}
 	if (!ft_parser_add_arg(*cmd, (*tk)->type, (*tk)->str))
@@ -105,7 +108,7 @@ t_element	*ft_parser_create_element_redir(t_type type, char *s, t_type target)
 			free(t->target);
 		return (free(t), NULL);
 	}
-	lmt->kind = t;
+	lmt->kind = REDIR;
 	lmt->u_.redirs = t;
 	lmt->next = NULL;
 	return (lmt);

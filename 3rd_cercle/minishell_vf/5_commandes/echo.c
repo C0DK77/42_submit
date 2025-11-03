@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:41:43 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 08:49:05 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 20:50:00 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_cmd_echo(t_command *cmd, t_shell *s)
 	}
 	ft_cmd_echo_print_arg(e);
 	if (!i)
-		ft_putchar_fd("\n", STDOUT_FILENO);
+		ft_putchar_fd('\n', STDOUT_FILENO);
 	return (0);
 }
 
@@ -59,7 +59,7 @@ void	ft_cmd_echo_print_arg(t_element *e)
 		if (e->kind == ARG && e->u_.arg && e->u_.arg->str)
 		{
 			if (!i)
-				ft_putchar_fd(" ", STDOUT_FILENO);
+				ft_putchar_fd(' ', STDOUT_FILENO);
 			ft_putstr_fd(e->u_.arg->str, STDOUT_FILENO);
 			i = 0;
 		}

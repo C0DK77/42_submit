@@ -1,0 +1,6 @@
+=== TESTS COMPARATIFS MINISHELL vs BASH --POSIX - Ven 31 oct 2025 13:27:15 CET ===
+Minishell testé: ./minishell
+Référence: bash --posix
+Nombre de tests: 743
+Mode verbose: false
+

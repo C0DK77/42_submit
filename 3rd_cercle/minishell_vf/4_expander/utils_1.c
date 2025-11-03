@@ -6,42 +6,59 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:35:13 by codk              #+#    #+#             */
-/*   Updated: 2025/10/25 07:28:52 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 07:29:54 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_var_pos	*ft_expander_var_pos(char *str, int *count)
+char	*ft_expander_string(t_shell *sh, char *s)
 {
-	t_var_pos	*vars;
+	t_var_pos	*var;
+	char		**val;
+	char		*a;
+	int			i;
+
+	var = ft_expander_var_pos(s, &i);
+	if (!var || i == 0)
+		return (ft_strdup(s));
+	val = ft_expander_value(sh, var, i);
+	if (!val)
+		return (ft_free_var(var, NULL, i), NULL);
+	a = ft_expander_string_create(s, var, val, i);
+	return (ft_free_var(var, val, i), a);
+}
+
+t_var_pos	*ft_expander_var_pos(char *s, int *count)
+{
+	t_var_pos	*var;
 	int			i;
 	int			j;
 	int			res;
 
-	*count = ft_expander_var_count(str);
+	*count = ft_expander_var_count(s);
 	if (*count == 0)
 		return (NULL);
-	vars = malloc(sizeof(t_var_pos) * (*count));
-	if (!vars)
+	var = malloc(sizeof(t_var_pos) * (*count));
+	if (!var)
 		return (NULL);
 	i = -1;
 	j = 0;
-	while (str[++i])
+	while (s[++i])
 	{
-		if (str[i] == '$')
+		if (s[i] == '$')
 		{
-			res = ft_expander_dollar_pos(str, i, &vars[j]);
+			res = ft_expander_dollar_pos(s, i, &var[j]);
 			if (res == -1)
-				return (cleanup_vars_pos(vars, j));
+				return (ft_expander_cleanup_var(var, j));
 			if (res > 0)
 				i = res + (++j * 0);
 		}
 	}
-	return (vars);
+	return (var);
 }
 
-char	**ft_expander_value(t_shell *sh, t_var_pos *vars, int count)
+char	**ft_expander_value(t_shell *sh, t_var_pos *var, int count)
 {
 	char	**a;
 	int		i;
@@ -52,7 +69,7 @@ char	**ft_expander_value(t_shell *sh, t_var_pos *vars, int count)
 	i = 0;
 	while (i < count)
 	{
-		a[i] = get_variable_value(sh, vars[i].name);
+		a[i] = ft_expander_get_var_value(sh, var[i].name);
 		if (!a[i])
 		{
 			while (--i >= 0)
@@ -71,7 +88,7 @@ char	*ft_expander_string_create(char *a, t_var_pos *var, char **val, int i)
 	int		exp_i;
 	int		var_i;
 
-	ex = malloc(sizeof(char) * (calculate_expand_length(a, var, val, i) + 1));
+	ex = malloc(sizeof(char) * (ft_expander_len(a, var, val, i) + 1));
 	if (!ex)
 		return (NULL);
 	orig_i = 0;
@@ -81,7 +98,7 @@ char	*ft_expander_string_create(char *a, t_var_pos *var, char **val, int i)
 	{
 		if (var_i < i && orig_i == var[var_i].start)
 		{
-			copy_value(ex, &exp_i, val[var_i]);
+			ft_expander_copy_value(ex, &exp_i, val[var_i]);
 			orig_i = var[var_i].end;
 			var_i++;
 		}
@@ -90,15 +107,6 @@ char	*ft_expander_string_create(char *a, t_var_pos *var, char **val, int i)
 	}
 	ex[exp_i] = '\0';
 	return (ex);
-}
-
-t_element	*ft_expander_empty_var(t_command *cmd, t_element *e)
-{
-	t_element	*next;
-
-	next = e->next;
-	cmd->element = next;
-	return (free(e->u_.arg->str), free(e->u_.arg), free(e), next);
 }
 
 int	ft_expander_var_count(char *s)
@@ -114,10 +122,10 @@ int	ft_expander_var_count(char *s)
 		if (s[i] == '$')
 		{
 			j = i + 1;
-			if (valid_variable_char(s[j]) || s[j] == '?')
+			if (ft_isalnum(s[j]) || s[j] == '?' || s[j] == '_')
 			{
 				count++;
-				while (valid_variable_char(s[j]) || s[j] == '?')
+				while (ft_isalnum(s[j]) || s[j] == '_' || s[j] == '?')
 					j++;
 				i = j - 1;
 			}

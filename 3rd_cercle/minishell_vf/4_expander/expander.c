@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:55 by codk              #+#    #+#             */
-/*   Updated: 2025/10/25 07:19:25 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 06:44:15 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,19 +87,11 @@ void	ft_expander_redir(t_element *lmt, t_shell *sh)
 	}
 }
 
-char	*ft_expander_string(t_shell *sh, char *s)
+t_element	*ft_expander_empty_var(t_command *cmd, t_element *e)
 {
-	t_var_pos	*var;
-	char		**val;
-	char		*a;
-	int			i;
+	t_element	*t;
 
-	var = ft_expander_var_pos(s, &i);
-	if (!var || i == 0)
-		return (ft_strdup(s));
-	val = ft_expander_value(sh, var, i);
-	if (!val)
-		return (ft_free_var(var, NULL, i), NULL);
-	a = ft_expander_string_create(s, var, val, i);
-	return (ft_free_var(var, val, i), a);
+	t = e->next;
+	cmd->element = t;
+	return (free(e->u_.arg->str), free(e->u_.arg), free(e), t);
 }

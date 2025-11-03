@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:41:55 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 09:44:29 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 20:54:05 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	ft_cmd_exit(t_command *cmd, t_shell *sh, t_all *a)
 	c = ft_atoi(argv[i]);
 	free(argv);
 	ft_free_env(sh);
-	ft_free_all(a->ch, a->tk, a->cmd);
+	ft_free_all(3, a->ch, a->tk, a->cmd);
 	rl_clear_history();
 	exit(c);
 }
@@ -71,7 +71,7 @@ void	ft_cmd_exit_no_arg(char **s, t_shell *sh, t_all *a)
 {
 	free(s);
 	ft_free_env(sh);
-	ft_free_all(a->ch, a->tk, a->cmd);
+	ft_free_all(3, a->ch, a->tk, a->cmd);
 	rl_clear_history();
 	exit(sh->last_exit);
 }
@@ -102,7 +102,7 @@ void	ft_cmd_exit_error(char **argv, int i, t_shell *sh, t_all *a)
 		": numeric argument required\n");
 	free(argv);
 	ft_free_env(sh);
-	ft_free_all(a->ch, a->tk, a->cmd);
+	ft_free_all(3, a->ch, a->tk, a->cmd);
 	rl_clear_history();
 	exit(2);
 }

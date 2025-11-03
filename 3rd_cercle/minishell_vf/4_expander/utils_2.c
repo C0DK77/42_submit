@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:35:19 by codk              #+#    #+#             */
-/*   Updated: 2025/10/25 07:28:36 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 07:16:55 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,131 +17,71 @@ int	ft_expander_dollar_pos(char *s, int i, t_var_pos *var)
 	int	j;
 
 	j = i + 1;
-	if (!s[j] || (!valid_variable_char(s[j]) && s[j] != '?'))
+	if (!s[j] && ((!ft_isalpha(s[j]) || s[j] != '_' || s[j] != '?')))
 		return (0);
 	if (s[j] == '?')
-		return (extract_special_var_pos(var, i, j));
-	return (extract_variable_pos(s, var, i, j));
-}
-
-int	ft_expander_dollar(char *s, int i, char **a, int *count)
-{
-	int		j;
-	int		k;
-	char	*var;
-
-	j = i + 1;
-	if (!valid_variable_char(s[j]) && s[j] != '?')
-		return (i);
-	if (s[j] == '?')
 	{
-		var = create_special_var();
-		if (!var)
+		var->start = i;
+		var->name = malloc(sizeof(char) * 2);
+		if (!var->name)
 			return (-1);
-		a[(*count)++] = var;
+		var->name[0] = '?';
+		var->name[1] = '\0';
+		var->end = j + 1;
 		return (j);
 	}
-	var = extract_normal_var(s, j, &k);
-	if (!var)
-		return (-1);
-	a[(*count)++] = var;
-	return (k);
+	return (ft_expander_extract_var(s, var, i, j));
 }
 
-char	*get_variable_value(t_shell *shell, char *var_name)
+void	*ft_expander_cleanup_var(t_var_pos *var, int i)
 {
-	char	*buffer;
-	char	*value;
+	while (--i >= 0)
+		free(var[i].name);
+	return (free(var), NULL);
+}
 
-	if (ft_strncmp(var_name, "?", 1) == 0)
+char	*ft_expander_get_var_value(t_shell *sh, char *var)
+{
+	char	*a;
+	char	*s;
+
+	if (ft_strncmp(var, "?", 1) == 0)
 	{
-		buffer = ft_itoa(shell->last_exit);
-		return (buffer);
+		a = ft_itoa(sh->last_exit);
+		return (a);
 	}
-	value = find_variable_in_env(shell->env, var_name);
-	if (value)
-		return (ft_strdup(value));
+	s = ft_env_search_value(sh->env, var);
+	if (s)
+		return (ft_strdup(s));
 	return (ft_strdup(""));
 }
 
-int	calculate_expanded_length(char *original, t_var_pos *vars, char **values,
-		int var_count)
+int	ft_expander_len(char *a, t_var_pos *var, char **s, int count)
 {
-	int	new_len;
+	int	j;
 	int	i;
 
-	new_len = ft_strlen(original);
+	j = ft_strlen(a);
 	i = 0;
-	while (i < var_count)
+	while (i < count)
 	{
-		new_len -= (vars[i].end - vars[i].start);
-		new_len += ft_strlen(values[i]);
+		j -= (var[i].end - var[i].start);
+		j += ft_strlen(s[i]);
 		i++;
 	}
-	return (new_len);
+	return (j);
 }
 
-void	copy_value(char *expanded, int *exp_idx, char *value)
+void	ft_expander_copy_value(char *s, int *i, char *val)
 {
-	int	i;
+	int	j;
 	int	len;
 
-	len = ft_strlen(value);
-	i = 0;
-	while (i < len)
+	len = ft_strlen(val);
+	j = 0;
+	while (j < len)
 	{
-		expanded[(*exp_idx)++] = value[i];
-		i++;
-	}
-}
-
-int	valid_variable_char_number(char c)
-{
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_'
-		|| (c >= '0' && c <= '9'))
-		return (1);
-	return (0);
-}
-
-int	strlen_variable(char *str, int j)
-{
-	int	count;
-
-	count = 0;
-	if (str[j] == '?')
-		return (1);
-	while (str[j] && valid_variable_char(str[j]))
-	{
-		count++;
+		s[(*i)++] = val[j];
 		j++;
 	}
-	return (count);
-}
-
-char	**find_variable_in_str(char *str)
-{
-	char	**variable;
-	int		i;
-	int		index;
-	int		result;
-
-	if (how_many_variable(str) == 0)
-		return (NULL);
-	variable = malloc(sizeof(char *) * (how_many_variable(str) + 1));
-	if (!variable)
-		return (NULL);
-	i = -1;
-	index = 0;
-	while (str[++i])
-	{
-		if (str[i] == '$')
-		{
-			result = process_dollar(str, i, variable, &index);
-			if (result == -1)
-				return (cleanup_variables(variable, index));
-			i = result;
-		}
-	}
-	variable[index] = NULL;
-	return (variable);
 }

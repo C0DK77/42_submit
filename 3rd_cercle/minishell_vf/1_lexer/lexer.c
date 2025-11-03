@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:08 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 07:15:39 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 07:48:41 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ t_character	*ft_lexer_init(char *l)
 			return (NULL);
 	}
 	if (ctx != NONE)
-		return (print_error("Find orphan quote"), ft_free_char(b.head), NULL);
+		return (ft_putstr_fd("minishell: Find orphan quote\n", 2),
+			ft_free_char(b.head), NULL);
 	return (b.head);
 }
 

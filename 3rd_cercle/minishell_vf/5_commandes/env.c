@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:41:49 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 08:54:55 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 20:52:36 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_cmd_env(t_command *cmd, t_shell *s)
 	a = (char **)ft_calloc(i + 1, sizeof(char *));
 	if (!a)
 		return (1);
-	fill_a(cmd->element, a);
+	ft_fill_element(cmd->element, a);
 	j = 0;
 	if (a[0] && ft_strncmp(a[0], "env", ft_strlen(a[0])) == 0)
 		j = 1;
@@ -40,7 +40,7 @@ void	ft_cmd_env_print(char **e)
 	while (e && e[i])
 	{
 		if (ft_strchr(e[i], '='))
-			ft_putall_fd(STDOUT_FILENO, 2, e[i], "\n");
+			ft_putall_fd(STDOUT_FILENO, 2, e[i], '\n');
 		i++;
 	}
 }

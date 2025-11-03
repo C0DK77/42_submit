@@ -6,7 +6,7 @@
 /*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:32:38 by codk              #+#    #+#             */
-/*   Updated: 2025/10/23 10:44:20 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/10/26 07:46:13 by corentindes      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	ft_env_set_var(char ***env, char *var, char *v)
 		return ;
 	t = ft_strjoin(var, "=");
 	if (!t)
-		return (NULL);
+		return ;
 	n = ft_strjoin(t, v);
 	free(t);
 	if (!n)
