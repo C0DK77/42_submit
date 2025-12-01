@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:44:32 by codk              #+#    #+#             */
-/*   Updated: 2025/10/30 02:00:40 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/12/01 17:07:02 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,8 @@ void					ft_signal_reset(void);
 
 char					*ft_env_search_value(char **env, char *var);
 void					ft_env_set_var(char ***env, char *var, char *v);
-int						ft_env_replace_var(char ***env, char *var, char *n);
+int						ft_env_replace_var(char ***env, char *var, char *n,
+							int j);
 void					ft_env_add_var(char ***env, char *n);
 int						ft_env_count_var(char **env);
 

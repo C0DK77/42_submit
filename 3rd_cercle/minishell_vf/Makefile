@@ -12,13 +12,13 @@ CFLAGS 				= 	-Wall -Wextra -Werror							\
 
 
 # LINUX
-#CFLAGS 			:= 	-Wall -Wextra -Werror -MMD -MP -I. -ILibft
-#LDFLAGS 			:= 	-lreadline
+CFLAGS 			:= 	-Wall -Wextra -Werror -MMD -MP -I. -ILibft
+LDFLAGS 			:= 	-lreadline
 
 # MAC 
-BREW_PREFIX 	:= 	$(shell brew --prefix 2>/dev/null || echo /usr/local)
-CPPFLAGS 		:= 	-I$(BREW_PREFIX)/opt/readline/include
-LDFLAGS 		:= 	-L$(BREW_PREFIX)/opt/readline/lib -lreadline
+# BREW_PREFIX 	:= 	$(shell brew --prefix 2>/dev/null || echo /usr/local)
+# CPPFLAGS 		:= 	-I$(BREW_PREFIX)/opt/readline/include
+# LDFLAGS 		:= 	-L$(BREW_PREFIX)/opt/readline/lib -lreadline
 
 LIBFT_DIR 		:= 	Libft
 LIBFT 			:= 	$(LIBFT_DIR)/libft.a

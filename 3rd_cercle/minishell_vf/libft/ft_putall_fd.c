@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putall_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 19:39:31 by corentindes       #+#    #+#             */
-/*   Updated: 2025/08/27 19:41:15 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/11/28 13:56:10 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

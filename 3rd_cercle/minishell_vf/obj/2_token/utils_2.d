@@ -1,18 +1,6 @@
 obj/2_token/utils_2.o: 2_token/utils_2.c 2_token/../minishell.h \
-  2_token/../libft/libft.h \
-  /opt/homebrew/opt/readline/include/readline/history.h \
-  /opt/homebrew/opt/readline/include/readline/rlstdc.h \
-  /opt/homebrew/opt/readline/include/readline/rltypedefs.h \
-  /opt/homebrew/opt/readline/include/readline/readline.h \
-  /opt/homebrew/opt/readline/include/readline/keymaps.h \
-  /opt/homebrew/opt/readline/include/readline/chardefs.h \
-  /opt/homebrew/opt/readline/include/readline/tilde.h
+  libft/libft.h
+
 2_token/../minishell.h:
-2_token/../libft/libft.h:
-/opt/homebrew/opt/readline/include/readline/history.h:
-/opt/homebrew/opt/readline/include/readline/rlstdc.h:
-/opt/homebrew/opt/readline/include/readline/rltypedefs.h:
-/opt/homebrew/opt/readline/include/readline/readline.h:
-/opt/homebrew/opt/readline/include/readline/keymaps.h:
-/opt/homebrew/opt/readline/include/readline/chardefs.h:
-/opt/homebrew/opt/readline/include/readline/tilde.h:
+
+libft/libft.h:

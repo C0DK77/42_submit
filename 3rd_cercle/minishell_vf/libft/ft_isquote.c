@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isquote.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 11:20:20 by corentindes       #+#    #+#             */
-/*   Updated: 2025/07/03 19:11:31 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/12/01 17:04:51 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

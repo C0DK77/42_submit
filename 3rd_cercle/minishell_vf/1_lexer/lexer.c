@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:08 by codk              #+#    #+#             */
-/*   Updated: 2025/10/26 07:48:41 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/11/28 14:03:26 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,22 +107,12 @@ int	ft_lexer_parse_context(char c, t_ctx *ctx)
 	{
 		if (c == 34)
 			*ctx = D_QUOTE;
-		else if (c == 39)
+		if (c == 39)
 			*ctx = S_QUOTE;
 		return (1);
 	}
 	else if ((c == 34 || c == 39) && (*ctx != NONE))
-	{
-		if (c == 34 && *ctx == D_QUOTE)
-		{
-			*ctx = NONE;
-			return (1);
-		}
-		else if (c == 39 && *ctx == S_QUOTE)
-		{
-			*ctx = NONE;
-			return (1);
-		}
-	}
+		if ((c == 34 && *ctx == D_QUOTE) || (c == 39 && *ctx == S_QUOTE))
+			return (*ctx = NONE, 1);
 	return (0);
 }

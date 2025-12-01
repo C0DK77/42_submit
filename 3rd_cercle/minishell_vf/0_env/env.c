@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:32:24 by codk              #+#    #+#             */
-/*   Updated: 2025/10/28 23:26:28 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/12/01 15:35:02 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	ft_env_init_shlvl(t_shell *s, char **env)
 
 	v = 1;
 	if (ft_env_search_value(env, "SHLVL"))
-		v = ft_atoi(ft_env_search_value(env, "SHLVL") + 1);
+		v = ft_atoi(ft_env_search_value(env, "SHLVL")) + 1;
 	s->shlvl = v;
 	n = ft_itoa(v);
 	if (n)

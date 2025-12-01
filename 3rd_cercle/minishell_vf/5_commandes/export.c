@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:02 by codk              #+#    #+#             */
-/*   Updated: 2025/10/27 16:11:52 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/12/01 16:50:34 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,18 @@ int	ft_cmd_export_arg_create(char *a, t_shell *s)
 {
 	char	*eq;
 	char	*name;
+	int		i;
 
-	if (!ft_cmd_export_isval(a))
+	i = ft_cmd_export_isval(a);
+	if (i == 0)
 	{
 		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 		if (a)
 			ft_putstr_fd(a, STDERR_FILENO);
 		return (ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO), 0);
 	}
+	if (i == 2)
+		return (0);
 	eq = ft_strchr(a, '=');
 	if (eq)
 	{
@@ -111,5 +115,7 @@ int	ft_cmd_export_isval(char *s)
 			return (0);
 		i++;
 	}
-	return (1);
+	if (s[i] == '=')
+		return (1);
+	return (2);
 }

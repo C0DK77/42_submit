@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:32:38 by codk              #+#    #+#             */
-/*   Updated: 2025/10/26 07:46:13 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/12/01 16:32:08 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,27 +44,31 @@ void	ft_env_set_var(char ***env, char *var, char *v)
 	free(t);
 	if (!n)
 		return ;
-	if (ft_env_replace_var(env, var, n))
+	if (ft_env_replace_var(env, var, n, 1))
 		return ;
 	ft_env_add_var(env, n);
 }
 
-int	ft_env_replace_var(char ***env, char *var, char *n)
+int	ft_env_replace_var(char ***env, char *var, char *n, int j)
 {
-	int	i;
-	int	l;
+	int		i;
+	int		l;
+	char	*nv;
 
 	i = 0;
 	l = ft_strlen(var);
+	nv = n;
 	if (!*env)
 		return (0);
 	while ((*env)[i])
 	{
 		if (ft_strncmp((*env)[i], var, l) == 0 && (*env)[i][l] == '=')
 		{
-			free((*env)[i]);
-			(*env)[i] = n;
-			return (1);
+			if (j == 2)
+				nv = ft_cmd_export_make_kv(var, n);
+			if (!nv)
+				return (0);
+			return (free((*env)[i]), (*env)[i] = nv, 1);
 		}
 		i++;
 	}

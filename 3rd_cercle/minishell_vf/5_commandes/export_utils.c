@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 09:29:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/10/27 15:59:34 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/12/01 16:24:06 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	ft_cmd_export_env(char ***env, char *a, char *s)
 	char	*val;
 	int		i;
 
-	if (ft_env_replace_var(env, a, s))
-		return (1);
+	if (ft_env_replace_var(env, a, s, 2))
+		return (printf("OK \n"), 1);
 	penv = *env;
 	i = 0;
 	while (penv && penv[i])

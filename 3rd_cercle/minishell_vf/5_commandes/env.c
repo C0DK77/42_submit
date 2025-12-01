@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:41:49 by codk              #+#    #+#             */
-/*   Updated: 2025/10/26 20:52:36 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/11/28 13:55:45 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ft_cmd_env_print(char **e)
 	while (e && e[i])
 	{
 		if (ft_strchr(e[i], '='))
-			ft_putall_fd(STDOUT_FILENO, 2, e[i], '\n');
+			ft_putall_fd(STDOUT_FILENO, 2, e[i], "\n");
 		i++;
 	}
 }

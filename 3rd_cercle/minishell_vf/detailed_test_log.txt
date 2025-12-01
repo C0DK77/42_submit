@@ -1,8 +1,0 @@
-=== LOG DÉTAILLÉ DES 743 TESTS COMPARATIFS ===
-Date: Ven 31 oct 2025 13:27:15 CET
-Minishell: ./minishell
-Référence: bash --posix
-
-Ce fichier contient une comparaison détaillée de chaque test entre votre minishell
-et bash --posix pour vérifier la conformité POSIX.
-
