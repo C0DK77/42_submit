@@ -52,6 +52,7 @@ SRC 			:= 	main.c 							\
 					6_exec/utils_1.c 				\
 					6_exec/utils_2.c 				\
 					6_exec/utils_3.c 				\
+					6_exec/utils_4.c 				\
 					7_redir/heredoc.c 				\
 					7_redir/redir.c 				\
 					7_redir/utils.c 				\

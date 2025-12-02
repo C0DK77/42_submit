@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:44:32 by codk              #+#    #+#             */
-/*   Updated: 2025/12/02 12:45:27 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:47:43 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ int						ft_env_set(char **env, t_shell *s);
 char					**ft_env_copy(char **env);
 char					**ft_env_init(void);
 char					**ft_env_check(char **env, int l);
-void					ft_env_init_shlvl(t_shell *s, char **env);
+void					ft_env_init_shlvl(t_shell *s, char *o);
 
 // ENV / SIGNALS
 
@@ -254,7 +254,7 @@ t_token					*ft_token_add(t_type t, size_t i);
 void					ft_token_append(t_token **hd, t_token **tl,
 							t_token *tk);
 size_t					ft_token_wordlen(t_character *ch);
-char					*ft_token_add_type(t_character *l);
+t_type					ft_token_add_type(t_character *l);
 
 //	PARSER / PARSER
 
@@ -341,6 +341,7 @@ int						ft_cmd_env(t_command *cmd, t_shell *s);
 void					ft_cmd_env_print(char **e);
 
 //	COMMANDES EXIT
+
 int						ft_cmd_exit(t_command *cmd, t_shell *sh, t_all *a);
 char					**ft_cmd_exit_arg(t_command *cmd, size_t *argc);
 void					ft_cmd_exit_no_arg(char **s, t_shell *sh, t_all *a);
@@ -351,7 +352,7 @@ void					ft_cmd_exit_error(char **argv, int i, t_shell *sh,
 //	COMMANDES EXPORT
 
 int						ft_cmd_export(t_command *cmd, t_shell *sh);
-int						ft_cmd_export_print(t_shell *sh);
+int						ft_cmd_export_print(t_shell *sh, int j, char *a);
 int						ft_cmd_export_arg_create(char *a, t_shell *s);
 int						ft_cmd_export_arg(char **argv, int i, t_shell *sh);
 int						ft_cmd_export_isval(char *s);
@@ -410,6 +411,11 @@ int						ft_exec_isdirectory(char *p);
 char					*ft_exec_path_dir(char *s, char *cmd);
 void					ft_exec_print_error_1(char *path, char *s, int e);
 void					ft_exec_print_error_2(char *a, int e);
+
+// EXEC / UTILS_4
+
+void					ft_signal_config_last_exit(t_shell *sh, pid_t *p,
+							int i);
 
 // REDIR / REDIR
 

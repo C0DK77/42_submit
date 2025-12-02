@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:24 by codk              #+#    #+#             */
-/*   Updated: 2025/12/02 13:06:42 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:12:56 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	ft_exec_init(t_all *all, t_command *cmd, t_shell *sh)
 {
 	pid_t		p[256];
 	int			i;
-	int			j;
 	t_command	*t;
 
 	t = cmd;
@@ -30,33 +29,9 @@ int	ft_exec_init(t_all *all, t_command *cmd, t_shell *sh)
 	}
 	if (ft_exec_cmd_all(cmd, sh, p, &i) != 0)
 		return (1);
-	j = ft_signal_wait(p, i);
-	if (WIFSIGNALED(j))
-		sh->last_exit = 128 + WTERMSIG(j);
-	else if (WIFEXITED(j))
-		sh->last_exit = WEXITSTATUS(j);
-	else
-		sh->last_exit = 1;
-	if (ft_signal_check())
-		sh->last_exit = 130;
+	ft_signal_config_last_exit(sh, p, i);
 	return (ft_signal_init(), sh->last_exit);
 }
-
-ft_signal_config_last_exit(t_shell *sh, pid_t p, int i)
-{
-	int j;
-	j = ft_signal_wait(p, i);
-	if (WIFSIGNALED(j))
-		sh->last_exit = 128 + WTERMSIG(j);
-	else if (WIFEXITED(j))
-		sh->last_exit = WEXITSTATUS(j);
-	else
-		sh->last_exit = 1;
-	if (ft_signal_check())
-		sh->last_exit = 130;
-}
-
-
 
 int	ft_exec_cmd_single(t_command *cmd, t_shell *sh, t_all *all)
 {
@@ -67,11 +42,14 @@ int	ft_exec_cmd_single(t_command *cmd, t_shell *sh, t_all *all)
 	if (!ft_exec_save_stdio(&saved_in, &saved_out))
 		return (1);
 	if (!ft_redir_apply_3(cmd, saved_in, saved_out, sh))
+	{
+		ft_exec_restore_stdio_and_close(saved_in, saved_out);
 		return (1);
+	}
 	if (cmd->cmd == T_EXIT)
 	{
 		ft_exec_restore_stdio_and_close(saved_in, saved_out);
-		ft_exec_cmd(cmd, sh, all);
+		return (ft_exec_cmd(cmd, sh, all));
 	}
 	code = ft_exec_cmd(cmd, sh, all);
 	ft_exec_restore_stdio_and_close(saved_in, saved_out);

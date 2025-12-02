@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:35:19 by codk              #+#    #+#             */
-/*   Updated: 2025/10/26 07:16:55 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/12/02 16:58:37 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_expander_dollar_pos(char *s, int i, t_var_pos *var)
 	int	j;
 
 	j = i + 1;
-	if (!s[j] && ((!ft_isalpha(s[j]) || s[j] != '_' || s[j] != '?')))
+	if (!s[j])
 		return (0);
 	if (s[j] == '?')
 	{
@@ -30,6 +30,8 @@ int	ft_expander_dollar_pos(char *s, int i, t_var_pos *var)
 		var->end = j + 1;
 		return (j);
 	}
+	if (!ft_isalpha(s[j]) && s[j] != '_')
+		return (0);
 	return (ft_expander_extract_var(s, var, i, j));
 }
 

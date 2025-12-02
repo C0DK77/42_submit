@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:32:24 by codk              #+#    #+#             */
-/*   Updated: 2025/12/01 15:35:02 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:29:53 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	ft_env_set(char **env, t_shell *s)
 		s->env = ft_env_copy(env);
 	if (!s->env)
 		return (0);
-	return (ft_env_init_shlvl(s, env), s->last_exit = 0, 1);
+	return (ft_env_init_shlvl(s, ft_env_search_value(env, "SHLVL")),
+		s->last_exit = 0, 1);
 }
 
 char	**ft_env_init(void)
@@ -76,21 +77,32 @@ char	**ft_env_check(char **env, int l)
 	}
 	if (!a)
 		return (env);
-	i = -1;
-	while (i++ < l)
-		if (env[i])
-			free(env[i]);
+	i = 0;
+	while (i < l)
+	{
+		free(env[i]);
+		i++;
+	}
 	return (free(env), NULL);
 }
 
-void	ft_env_init_shlvl(t_shell *s, char **env)
+void	ft_env_init_shlvl(t_shell *s, char *o)
 {
 	int		v;
 	char	*n;
 
-	v = 1;
-	if (ft_env_search_value(env, "SHLVL"))
-		v = ft_atoi(ft_env_search_value(env, "SHLVL")) + 1;
+	if (!o || !*o)
+		v = 1;
+	else
+	{
+		v = ft_atoi(o);
+		if (v < 0)
+			v = 0;
+		else if (v > 1000)
+			v = 1;
+		else
+			v += 1;
+	}
 	s->shlvl = v;
 	n = ft_itoa(v);
 	if (n)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:31 by codk              #+#    #+#             */
-/*   Updated: 2025/10/28 10:25:08 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/12/02 17:24:14 by codk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,24 @@ int	ft_heredoc(char *s, t_shell *sh)
 	pid_t	pid;
 	int		status;
 
-	pid = fork();
-	if (pipe(fd) < 0 || pid < 0)
+	if (pipe(fd) < 0)
 		return (-1);
+	pid = fork();
+	if (pid < 0)
+		return (perror("fork"), close(fd[0]), close(fd[1]), sh->last_exit = 1,
+			-1);
 	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		close(fd[0]);
 		ft_heredoc_process(fd, s);
-	signal(SIGINT, SIG_IGN);
+	}
 	signal(SIGQUIT, SIG_IGN);
 	close(fd[1]);
 	if (waitpid(pid, &status, 0) == -1)
-		status = 1;
-	ft_signal_init();
-	return (ft_heredoc_status(status, fd[0], sh));
+		return (close(fd[0]), ft_signal_init(), sh->last_exit = 1, -1);
+	return (ft_signal_init(), ft_heredoc_status(status, fd[0], sh));
 }
 
 void	ft_heredoc_process(int *fd, char *a)
