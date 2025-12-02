@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:34:04 by codk              #+#    #+#             */
-/*   Updated: 2025/10/26 17:51:19 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/12/02 12:44:07 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,16 @@ size_t	ft_token_wordlen(t_character *ch)
 		t = t->next;
 	}
 	return (i);
+}
+
+char	*ft_token_add_type(t_character *l)
+{
+	t_type	type;
+
+	type = LITERAL;
+	if (ft_token_special_var(l))
+		type = SPECIAL_VARIABLE;
+	else if (ft_token_dollar(l))
+		type = DOLLAR;
+	return (type);
 }

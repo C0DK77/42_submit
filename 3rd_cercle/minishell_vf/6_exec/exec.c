@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:24 by codk              #+#    #+#             */
-/*   Updated: 2025/10/31 13:22:00 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/12/02 13:06:42 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,22 @@ int	ft_exec_init(t_all *all, t_command *cmd, t_shell *sh)
 		sh->last_exit = 130;
 	return (ft_signal_init(), sh->last_exit);
 }
+
+ft_signal_config_last_exit(t_shell *sh, pid_t p, int i)
+{
+	int j;
+	j = ft_signal_wait(p, i);
+	if (WIFSIGNALED(j))
+		sh->last_exit = 128 + WTERMSIG(j);
+	else if (WIFEXITED(j))
+		sh->last_exit = WEXITSTATUS(j);
+	else
+		sh->last_exit = 1;
+	if (ft_signal_check())
+		sh->last_exit = 130;
+}
+
+
 
 int	ft_exec_cmd_single(t_command *cmd, t_shell *sh, t_all *all)
 {

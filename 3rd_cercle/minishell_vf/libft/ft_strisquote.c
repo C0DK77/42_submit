@@ -6,7 +6,7 @@
 /*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:44:27 by codk              #+#    #+#             */
-/*   Updated: 2025/12/01 17:05:02 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/12/02 12:33:53 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ int	ft_strisquote(char *s)
 	size_t	len;
 
 	len = ft_strlen(s);
-	return ((s[0] == '\'' && s[len - 1] == '\'') || (s[0] == '"' && s[len
-			- 1] == '"'));
+	if ((s[0] == '\'' && s[len - 1] == '\''))
+		return (1);
+	if (s[0] == '"' && s[len - 1] == '"')
+		return (1);
+	return (0);
 }

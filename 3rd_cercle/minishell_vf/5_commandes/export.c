@@ -6,7 +6,7 @@
 /*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:02 by codk              #+#    #+#             */
-/*   Updated: 2025/12/01 16:50:34 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/12/02 12:55:30 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,36 @@ int	ft_cmd_export(t_command *cmd, t_shell *sh)
 		i = 1;
 	if (!argv[i])
 	{
-		status = ft_cmd_export_print(sh);
+		status = ft_cmd_export_print(sh, 1, "");
 		return (free(argv), status);
 	}
 	status = ft_cmd_export_arg(argv, i, sh);
 	return (free(argv), status);
 }
 
-int	ft_cmd_export_print(t_shell *sh)
+int	ft_cmd_export_print(t_shell *sh, int j, char *a)
 {
 	int		i;
 	char	*eq;
 
 	i = 0;
-	while (sh->env && sh->env[i])
+	if (j == 1)
 	{
-		eq = ft_strchr(sh->env[i], '=');
-		if (!eq)
-			ft_putall_fd(STDOUT_FILENO, 3, "declare -x ", sh->env[i], "\n");
-		ft_putall_fd(STDOUT_FILENO, 5, "declare -x ", sh->env[i], "=\"", eq + 1,
-			"\"\n");
-		i++;
+		while (sh->env && sh->env[i])
+		{
+			eq = ft_strchr(sh->env[i], '=');
+			if (!eq)
+				ft_putall_fd(STDOUT_FILENO, 3, "declare -x ", sh->env[i], "\n");
+			ft_putall_fd(STDOUT_FILENO, 5, "declare -x ", sh->env[i], "=\"", eq
+				+ 1, "\"\n");
+			i++;
+		}
+	}
+	if (j == 0)
+	{
+		if (a)
+			ft_putstr_fd(a, STDERR_FILENO);
+		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 	}
 	return (0);
 }
@@ -78,12 +87,8 @@ int	ft_cmd_export_arg_create(char *a, t_shell *s)
 
 	i = ft_cmd_export_isval(a);
 	if (i == 0)
-	{
-		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-		if (a)
-			ft_putstr_fd(a, STDERR_FILENO);
-		return (ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO), 0);
-	}
+		return (ft_putstr_fd("minishell: export: `", STDERR_FILENO),
+			ft_cmd_export_print(s, 0, a));
 	if (i == 2)
 		return (0);
 	eq = ft_strchr(a, '=');

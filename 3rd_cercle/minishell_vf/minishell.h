@@ -6,7 +6,7 @@
 /*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:44:32 by codk              #+#    #+#             */
-/*   Updated: 2025/12/01 17:07:02 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/12/02 12:45:27 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,6 +254,7 @@ t_token					*ft_token_add(t_type t, size_t i);
 void					ft_token_append(t_token **hd, t_token **tl,
 							t_token *tk);
 size_t					ft_token_wordlen(t_character *ch);
+char					*ft_token_add_type(t_character *l);
 
 //	PARSER / PARSER
 

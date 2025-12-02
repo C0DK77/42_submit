@@ -6,7 +6,7 @@
 /*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:33:47 by codk              #+#    #+#             */
-/*   Updated: 2025/12/01 17:09:05 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/12/02 12:43:16 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,7 @@ int	ft_token_add_word(t_token **hd, t_token **tl, t_character **ch)
 	i = ft_token_wordlen(l);
 	if (i == 0 && ft_token_noword(hd, tl, ch, l))
 		return (1);
-	type = LITERAL;
-	if (ft_token_special_var(l))
-		type = SPECIAL_VARIABLE;
-	else if (ft_token_dollar(l))
-		type = DOLLAR;
+	type = ft_token_add_type(l);
 	tk = ft_token_add(type, i);
 	if (!tk)
 		return (0);

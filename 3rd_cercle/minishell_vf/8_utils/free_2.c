@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:59 by codk              #+#    #+#             */
-/*   Updated: 2025/10/28 21:21:17 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/12/02 12:59:02 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	ft_free_element(t_element *element)
 
 void	ft_free_var(t_var_pos *var, char **a, int count)
 {
-	int i;
+	int	i;
 
 	if (var)
 	{
