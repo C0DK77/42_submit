@@ -1,3 +1,0 @@
-minishell$ echo "/home/codk" | cat
-/home/codk
-minishell$ exit

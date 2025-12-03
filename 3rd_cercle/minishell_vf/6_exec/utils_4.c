@@ -6,7 +6,7 @@
 /*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 15:26:11 by codk              #+#    #+#             */
-/*   Updated: 2025/12/03 12:20:35 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/12/03 14:10:56 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,17 @@ void	ft_signal_config_last_exit(t_shell *sh, pid_t *p, int i)
 		sh->last_exit = 1;
 	if (ft_signal_check())
 		sh->last_exit = 130;
+}
+
+int	ft_exec_cmd_count(t_command *cmd)
+{
+	size_t	i;
+
+	i = 0;
+	while (cmd)
+	{
+		i++;
+		cmd = cmd->next;
+	}
+	return (i);
 }

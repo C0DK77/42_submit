@@ -6,7 +6,7 @@
 /*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:44:32 by codk              #+#    #+#             */
-/*   Updated: 2025/12/03 12:19:58 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/12/03 14:09:24 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,6 +416,7 @@ void					ft_exec_print_error_2(char *a, int e);
 
 void					ft_signal_config_last_exit(t_shell *sh, pid_t *p,
 							int i);
+int						ft_exec_cmd_count(t_command *cmd);
 
 // REDIR / REDIR
 

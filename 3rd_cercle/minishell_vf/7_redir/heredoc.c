@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:31 by codk              #+#    #+#             */
-/*   Updated: 2025/12/02 17:24:14 by codk             ###   ########.fr       */
+/*   Updated: 2025/12/03 14:44:24 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_heredoc(char *s, t_shell *sh)
 	if (pid < 0)
 		return (perror("fork"), close(fd[0]), close(fd[1]), sh->last_exit = 1,
 			-1);
-	if (pid == 0)
+	if (pid == 0 && ft_strlen(s) != 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);

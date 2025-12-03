@@ -6,7 +6,7 @@
 /*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:42:24 by codk              #+#    #+#             */
-/*   Updated: 2025/12/03 12:26:49 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/12/03 15:22:02 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 int	ft_exec_init(t_all *all, t_command *cmd, t_shell *sh)
 {
-	pid_t		p[256];
+	pid_t		*p;
 	int			i;
+	int			l;
 	t_command	*t;
 
+	l = ft_exec_cmd_count(cmd);
 	t = cmd;
 	if (t && !t->next && (t->cmd == T_ECHO || t->cmd == T_PWD || t->cmd == T_CD
 			|| t->cmd == T_EXPORT || t->cmd == T_UNSET || t->cmd == T_ENV
@@ -27,10 +29,13 @@ int	ft_exec_init(t_all *all, t_command *cmd, t_shell *sh)
 			return (ft_putall_fd(2, 2, EXIT, "too many arguments\n"), 1);
 		return (ft_exec_cmd_single(t, sh, all));
 	}
+	p = malloc(sizeof(pid_t) * l);
+	if (!p)
+		return (1);
 	if (ft_exec_cmd_all(cmd, sh, p, &i) != 0)
 		return (1);
 	ft_signal_config_last_exit(sh, p, i);
-	return (ft_signal_init(), sh->last_exit);
+	return (ft_signal_init(), free(p), sh->last_exit);
 }
 
 int	ft_exec_cmd_single(t_command *cmd, t_shell *sh, t_all *all)
