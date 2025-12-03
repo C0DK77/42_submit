@@ -6,7 +6,7 @@
 /*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 09:29:32 by corentindes       #+#    #+#             */
-/*   Updated: 2025/12/01 16:24:06 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/12/03 12:26:15 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_cmd_export_env(char ***env, char *a, char *s)
 	int		i;
 
 	if (ft_env_replace_var(env, a, s, 2))
-		return (printf("OK \n"), 1);
+		return (1);
 	penv = *env;
 	i = 0;
 	while (penv && penv[i])

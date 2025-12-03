@@ -6,7 +6,7 @@
 /*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:40:56 by codk              #+#    #+#             */
-/*   Updated: 2025/12/01 17:02:53 by cdesjars         ###   ########.fr       */
+/*   Updated: 2025/12/03 12:26:33 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	ft_cmd_unset(t_command *cmd, t_shell *s)
 	int		i;
 
 	argc = ft_count_arg(cmd->element);
-	printf("%zu \n", argc);
 	argv = (char **)ft_calloc(argc + 1, sizeof(char *));
 	if (!argv)
 		return (1);
@@ -28,7 +27,6 @@ int	ft_cmd_unset(t_command *cmd, t_shell *s)
 	args = argv;
 	if (args[0] && ft_strncmp(args[0], "unset", 5) == 0)
 		args++;
-	printf("%s \n", args[0]);
 	i = ft_cmd_unset_arg(args, s);
 	return (free(argv), i);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codk <codk@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:43:58 by codk              #+#    #+#             */
-/*   Updated: 2025/12/02 17:28:09 by codk             ###   ########.fr       */
+/*   Updated: 2025/12/03 12:27:45 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ int	ft_program_bis(char *l, t_shell *s)
 	if (!cmd)
 		return (ft_free_program(c, t, NULL, 1));
 	a->cmd = cmd;
-	//ft_debug_parsing(c, t, cmd);
 	ft_expander_init(&cmd, s);
-	//ft_debug_expander(cmd);
+	ft_debug_parsing(c, t, cmd);
+	ft_debug_expander(cmd);
 	i = ft_exec_init(a, cmd, s);
 	return (ft_free_program(c, t, cmd, i));
 }

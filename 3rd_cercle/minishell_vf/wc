@@ -1,0 +1,22 @@
+total 236
+drwxr-xr-x  2 cdesjars 2024_paris     51 Dec  3 09:57 0_env
+drwxr-xr-x  2 cdesjars 2024_paris     36 Nov 28 11:55 1_lexer
+drwxr-xr-x  2 cdesjars 2024_paris     55 Dec  3 09:57 2_token
+drwxr-xr-x  2 cdesjars 2024_paris     56 Nov 28 11:55 3_parser
+drwxr-xr-x  2 cdesjars 2024_paris     75 Dec  3 09:57 4_expander
+drwxr-xr-x  2 cdesjars 2024_paris    143 Nov 28 11:55 5_commandes
+drwxr-xr-x  2 cdesjars 2024_paris    105 Dec  3 09:57 6_exec
+drwxr-xr-x  2 cdesjars 2024_paris     53 Dec  3 09:57 7_redir
+drwxr-xr-x  2 cdesjars 2024_paris     58 Dec  2 12:58 8_utils
+-rw-r--r--  1 cdesjars 2024_paris      0 Dec  3 10:30 coucou.txt
+drwxr-xr-x  2 cdesjars 2024_paris   4096 Dec  3 10:17 libft
+-rwxr-xr-x  1 cdesjars 2024_paris 138216 Dec  3 10:20 ls
+-rw-r--r--  1 cdesjars 2024_paris   2003 Dec  3 10:07 main.c
+-rw-r--r--  1 cdesjars 2024_paris   2391 Dec  3 09:57 Makefile
+-rw-r--r--  1 cdesjars 2024_paris     62 Dec  3 09:57 mini.out
+-rwxr-xr-x  1 cdesjars 2024_paris  67312 Dec  3 10:17 minishell
+-rw-r--r--  1 cdesjars 2024_paris  12556 Dec  3 09:57 minishell.h
+drwxr-xr-x 11 cdesjars 2024_paris    174 Dec  3 10:17 obj
+-rw-r--r--  1 cdesjars 2024_paris      0 Dec  3 10:30 test1.txt
+-rw-r--r--  1 cdesjars 2024_paris      0 Dec  3 10:29 test2.txt
+-rw-r--r--  1 cdesjars 2024_paris      0 Dec  3 10:30 wc

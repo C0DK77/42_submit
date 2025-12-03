@@ -1,19 +1,16 @@
 
 # ==== PROGRAM NAME ==== #
 
-NAME 				= 	minishell
+NAME 			:= 	minishell
 
 # ==== FLAGS AND COMPILER ==== #
 
-CC 					= 	cc
-CFLAGS 				= 	-Wall -Wextra -Werror							\
-						-MMD -MP -I.						 			\
-						-I$(LIBFT_DIR)
+CC 				:= 	cc
 
 
 # LINUX
-CFLAGS 			:= 	-Wall -Wextra -Werror -MMD -MP -I. -ILibft
-LDFLAGS 			:= 	-lreadline
+CFLAGS 			:= 	-Wall -Wextra -Werror -I. -ILibft
+LDFLAGS 		:= 	-lreadline
 
 # MAC 
 # BREW_PREFIX 	:= 	$(shell brew --prefix 2>/dev/null || echo /usr/local)
@@ -61,42 +58,38 @@ SRC 			:= 	main.c 							\
 					8_utils/utils_list.c 					
 
 
-OBJ_DIR 			= 	obj
+OBJ_DIR 		:= 	obj
 
-OBJ 				= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
+OBJ 			:= 	$(SRC:%.c=$(OBJ_DIR)/%.o)
 
 # ==== LIBFT ==== #
 
-LIBFT_DIR			= 	./libft
-LIBFT_A 			= 	$(LIBFT_DIR)/libft.a
+LIBFT_DIR		:= 	./libft
+LIBFT_A 		:= 	$(LIBFT_DIR)/libft.a
 
 # ==== RULES ==== #
 
-all 				: 	$(LIBFT_A) $(NAME)
+all 			: 	$(LIBFT_A) $(NAME)
 
-$(NAME) 			: 	$(OBJ)
-						@$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ $(LIBFT_A) $(LDFLAGS)
+$(NAME) 		: 	$(OBJ)
+					@$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ $(LIBFT_A) $(LDFLAGS)
 
-$(OBJ_DIR)/%.o		: 	%.c
-					  	@mkdir -p $(dir $@)
-			  		  	@echo "Compilation de $< → $@"
-			  		  	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+$(OBJ_DIR)/%.o	: 	%.c
+					@mkdir -p $(dir $@)
+			  		@echo "Compilation de $< → $@"
+			  		@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
-$(LIBFT_A) 			:
-					  	@make -s -C $(LIBFT_DIR)
+$(LIBFT_A) 		:
+					@make -s -C $(LIBFT_DIR)
 
-test				:	all
-						@echo "🚀 Lancement du script de test..."
-						@bash test/test_minishell.sh
-
-clean 				:
-					  	@make -s -C $(LIBFT_DIR) clean
-					  	@rm -rf $(OBJ_DIR)
+clean 			:
+					@make -s -C $(LIBFT_DIR) clean
+					@rm -rf $(OBJ_DIR)
 	
-fclean 				: 	clean 
-					  	@make -s -C $(LIBFT_DIR) fclean
-					  	@rm -f $(NAME)
+fclean 			: 	clean 
+					@make -s -C $(LIBFT_DIR) fclean
+					@rm -f $(NAME)
 	
-re 					: 	fclean all
+re 				: 	fclean all
 	
-.PHONY 				: 	all clean fclean re test
+.PHONY 			: 	all clean fclean re test

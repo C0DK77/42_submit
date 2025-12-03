@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: corentindesjars <corentindesjars@studen    +#+  +:+       +#+        */
+/*   By: cdesjars <cdesjars@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 04:43:10 by codk              #+#    #+#             */
-/*   Updated: 2025/10/30 01:59:12 by corentindes      ###   ########.fr       */
+/*   Updated: 2025/12/03 12:27:08 by cdesjars         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
